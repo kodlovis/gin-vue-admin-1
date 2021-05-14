@@ -57,34 +57,6 @@
         </el-col>
       </div>
     </el-row>
-    <el-row>
-      <el-card shadow="hover">
-          <h2>
-            使用教学：<a style="color:#409EFF"  target="view_window" href="https://www.bilibili.com/video/BV1fV411y7dT/">https://www.bilibili.com/video/BV1fV411y7dT/</a>
-          </h2>
-          <br>
-          <h2>
-            工作流教学：<a style="color:#409EFF"  target="view_window" href="https://www.bilibili.com/video/BV1Ka411F7Ji/">https://www.bilibili.com/video/BV1Ka411F7Ji/</a>
-          </h2>
-          <div></div>
-      </el-card>
-    </el-row>
-    <div class="shadow">
-      <el-row :gutter="20">
-        <el-col
-          :span="4"
-          v-for="(card, key) in toolCards"
-          :key="key"
-          @click.native="toTarget(card.name)"
-          :xs="8"
-        >
-          <el-card shadow="hover" class="grid-content">
-            <i :class="card.icon" :style="{ color: card.color }"></i>
-            <p>{{ card.label }}</p>
-          </el-card>
-        </el-col>
-      </el-row>
-    </div>
     <div class="bottom">
       <el-row :gutter="32">
         <el-col :xs="24" :sm="24" :lg="12">
