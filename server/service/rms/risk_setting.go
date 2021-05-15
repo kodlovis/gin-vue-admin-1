@@ -78,3 +78,16 @@ func GetRiskSettingInfoList(info rp.RiskSettingSearch) (err error, list interfac
 	err = db.Limit(limit).Offset(offset).Find(&RiskSettings).Error
 	return err, RiskSettings, total
 }
+
+func GetRSIList() (err error, list interface{}, total int64) {
+	var info rp.RiskSettingSearch
+	limit := info.PageSize
+	offset := info.PageSize * (info.Page - 1)
+    // 创建db
+	db := global.GVA_DB.Model(&mp.RiskSetting{})
+    var RiskSettings []mp.RiskSetting
+    // 如果有条件搜索 下方会自动创建搜索语句
+	err = db.Count(&total).Error
+	err = db.Limit(limit).Offset(offset).Find(&RiskSettings).Error
+	return err, RiskSettings, total
+}

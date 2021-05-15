@@ -30,6 +30,7 @@ func Routers() *gin.Engine {
 	{
 		router.InitBaseRouter(PublicGroup) // 注册基础功能路由 不做鉴权
 		router.InitInitRouter(PublicGroup) // 自动初始化相关
+		rms.InitExternalRiskSettingRouter(PublicGroup)
 	}
 	PrivateGroup := Router.Group("")
 	PrivateGroup.Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
