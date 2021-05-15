@@ -6,7 +6,7 @@
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item> -->
         <el-form-item>
-          <el-button @click="openDialog" type="primary">新增风险点</el-button>
+          <el-button @click="openDialog" type="primary">新增风险设置</el-button>
         </el-form-item>
         <el-form-item>
           <el-popover placement="top" v-model="deleteVisible" width="160">
@@ -31,9 +31,11 @@
     >
     <el-table-column type="selection" width="55"></el-table-column>
     
-    <el-table-column label="风险点" prop="riskSettingPoint" width="620"></el-table-column> 
-    <el-table-column label="阈值（券商）" prop="brokersValue" width="120"></el-table-column> 
-    <el-table-column label="阈值（内部）" prop="adminValue" width="120"></el-table-column> 
+    <el-table-column label="名称" prop="name" width="120"></el-table-column> 
+    <el-table-column label="代码" prop="code" width="220"></el-table-column> 
+    <el-table-column label="券商阈值" prop="brokersValue" width="120"></el-table-column> 
+    <el-table-column label="风控阈值" prop="adminValue" width="120"></el-table-column> 
+    <el-table-column label="描述" prop="description" width="220"></el-table-column> 
     
       <el-table-column label="按钮组">
         <template slot-scope="scope">
@@ -62,16 +64,22 @@
       layout="total, sizes, prev, pager, next, jumper"
     ></el-pagination>
 
-    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="编辑风险点">
+    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="编辑风险设置">
       <el-form :model="formData" label-position="right" label-width="80px">
-         <el-form-item label="风险点:">
-            <el-input v-model="formData.riskSettingPoint" type="textarea" :autosize="{ minRows: 5, maxRows: 10}" clearable placeholder="请输入" ></el-input>
+         <el-form-item label="名称:">
+            <el-input v-model="formData.name" clearable placeholder="请输入" ></el-input>
       </el-form-item>
-         <el-form-item label="阈值:">
+         <el-form-item label="代码:">
+            <el-input v-model="formData.code" type="textarea" :autosize="{ minRows: 5, maxRows: 10}" clearable placeholder="请输入" ></el-input>
+      </el-form-item>
+         <el-form-item label="券商阈值:">
             <el-input v-model="formData.brokersValue" clearable placeholder="请输入" ></el-input>
       </el-form-item>
-         <el-form-item label="阈值:">
+         <el-form-item label="风控阈值:">
             <el-input v-model="formData.adminValue" clearable placeholder="请输入" ></el-input>
+      </el-form-item>
+         <el-form-item label="描述:">
+            <el-input v-model="formData.description" clearable placeholder="请输入" ></el-input>
       </el-form-item>
        </el-form>
       <div class="dialog-footer" slot="footer">
@@ -104,7 +112,9 @@ export default {
       type: "",
       deleteVisible: false,
       multipleSelection: [],formData: {
-            riskSettingPoint:"",
+            name:"",
+            code:"",
+            description:"",
             brokersValue:0,
             adminValue:0,
       }
@@ -171,9 +181,11 @@ export default {
     closeDialog() {
       this.dialogFormVisible = false;
       this.formData = {
-          riskSettingPoint:"",
-          adminValue:0,
-          brokersValue:0,
+            name:"",
+            code:"",
+            description:"",
+            brokersValue:0,
+            adminValue:0,
           
       };
     },

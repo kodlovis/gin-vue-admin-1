@@ -9,6 +9,7 @@ import (
 type Role struct {
       global.GVA_MODEL
       Name  string `json:"name" form:"name" gorm:"column:name;comment:角色名称;type:varchar(255);size:255;"`
+      Description string `json:"description" form:"description" gorm:"column:description;comment:说明;type:varchar(255);size:900;"`
 }
 
 
