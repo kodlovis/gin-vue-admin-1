@@ -3,12 +3,12 @@
     <div>
       <span>Powered by</span>
       <span>
-      <a href="https://github.com/flipped-aurora/gin-vue-admin">gin-vue-admin</a>
+      上海汇朋信息技术有限公司
       </span>
       <el-divider direction="vertical"></el-divider>
       <span>Copyright</span>
       <span>
-      <a href="https://github.com/flipped-aurora">flipped-aurora团队</a>
+      云杉交易系统
       </span>
     </div>
   </div>
