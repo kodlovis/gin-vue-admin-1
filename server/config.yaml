@@ -5,7 +5,7 @@ aliyun-oss:
   bucket-name: yourBucketName
   bucket-url: yourBucketUrl
 autocode:
-  root: /Users/wood/go/src/github.com/flipped-aurora/gin-vue-admin
+  root: /root/ssmy/RMS/gin-vue-admin
   server: /server
   server-api: /api/v1
   server-initialize: /initialize
@@ -41,11 +41,11 @@ jwt:
 local:
   path: uploads/file
 mysql:
-  path: 127.0.0.1:3306
+  path: 106.14.23.61:13306
   config: charset=utf8mb4&parseTime=True&loc=Local
-  db-name: yunshan
+  db-name: risk_info
   username: root
-  password: lixx821207
+  password: Aa@6447985
   max-idle-conns: 0
   max-open-conns: 0
   log-mode: false
@@ -60,7 +60,7 @@ qiniu:
   use-cdn-domains: false
 redis:
   db: 0
-  addr: 127.0.0.1:6379
+  addr: 106.14.23.61:16379
   password: ""
 system:
   env: public
@@ -88,7 +88,7 @@ zap:
   prefix: '[GIN-VUE-ADMIN]'
   director: log
   link-name: latest_log
-  showLine: true
+  showLine: false
   encode-level: LowercaseColorLevelEncoder
   stacktrace-key: stacktrace
   log-in-console: true
