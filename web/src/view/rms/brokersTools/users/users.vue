@@ -6,7 +6,7 @@
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item> -->
         <el-form-item>
-          <el-button @click="openDialog" type="primary">新增风险设置</el-button>
+          <el-button @click="openDialog" type="primary">新增角色</el-button>
         </el-form-item>
         <el-form-item>
           <el-popover placement="top" v-model="deleteVisible" width="160">
@@ -31,20 +31,17 @@
     >
     <el-table-column type="selection" width="55"></el-table-column>
     
-    <el-table-column label="名称" prop="name" width="120"></el-table-column> 
-    <el-table-column label="代码" prop="code" width="220"></el-table-column> 
-    <el-table-column label="券商阈值" prop="brokersValue" width="120"></el-table-column> 
-    <el-table-column label="风控阈值" prop="adminValue" width="120"></el-table-column> 
-    <el-table-column label="描述" prop="description" width="220"></el-table-column> 
+    <el-table-column label="角色名称" prop="name" width="120"></el-table-column> 
+    <el-table-column label="mac地址" prop="Macs.name" width="120"></el-table-column> 
     
       <el-table-column label="按钮组">
         <template slot-scope="scope">
-          <el-button class="table-button" @click="updateRiskSetting(scope.row)" size="small" type="primary" icon="el-icon-edit">变更</el-button>
+          <el-button class="table-button" @click="updateUsers(scope.row)" size="small" type="primary" icon="el-icon-edit">变更</el-button>
           <el-popover placement="top" width="160" v-model="scope.row.visible">
             <p>确定要删除吗？</p>
             <div style="text-align: right; margin: 0">
               <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
-              <el-button type="primary" size="mini" @click="deleteRiskSetting(scope.row)">确定</el-button>
+              <el-button type="primary" size="mini" @click="deleteUsers(scope.row)">确定</el-button>
             </div>
             <el-button type="danger" icon="el-icon-delete" size="mini" slot="reference">删除</el-button>
           </el-popover>
@@ -64,22 +61,10 @@
       layout="total, sizes, prev, pager, next, jumper"
     ></el-pagination>
 
-    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="编辑风险设置">
+    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="编辑角色">
       <el-form :model="formData" label-position="right" label-width="80px">
-         <el-form-item label="名称:">
+         <el-form-item label="角色:">
             <el-input v-model="formData.name" clearable placeholder="请输入" ></el-input>
-      </el-form-item>
-         <el-form-item label="代码:">
-            <el-input v-model="formData.code" type="textarea" :autosize="{ minRows: 5, maxRows: 10}" clearable placeholder="请输入" ></el-input>
-      </el-form-item>
-         <el-form-item label="券商阈值:">
-            <el-input v-model="formData.brokersValue" clearable placeholder="请输入" ></el-input>
-      </el-form-item>
-         <el-form-item label="风控阈值:">
-            <el-input v-model="formData.adminValue" clearable placeholder="请输入" ></el-input>
-      </el-form-item>
-         <el-form-item label="描述:">
-            <el-input v-model="formData.description" clearable placeholder="请输入" ></el-input>
       </el-form-item>
        </el-form>
       <div class="dialog-footer" slot="footer">
@@ -92,31 +77,27 @@
 
 <script>
 import {
-    createRiskSetting,
-    deleteRiskSetting,
-    deleteRiskSettingByIds,
-    updateRiskSetting,
-    findRiskSetting,
-    getRiskSettingList
-} from "@/api/rms/riskSetting";  //  此处请自行替换地址
+    createUsers,
+    deleteUsers,
+    deleteUsersByIds,
+    updateUsers,
+    findUsers,
+    getUsersList
+} from "@/api/rms/users";  //  此处请自行替换地址
 import { formatTimeToStr } from "@/utils/date";
 import infoList from "@/mixins/infoList";
 export default {
-  name: "RiskSetting",
+  name: "Users",
   mixins: [infoList],
   data() {
     return {
-      listApi: getRiskSettingList,
+      listApi: getUsersList,
       dialogFormVisible: false,
       visible: false,
       type: "",
       deleteVisible: false,
       multipleSelection: [],formData: {
             name:"",
-            code:"",
-            description:"",
-            brokersValue:0,
-            adminValue:0,
       }
     };
   },
@@ -160,7 +141,7 @@ export default {
           this.multipleSelection.map(item => {
             ids.push(item.ID)
           })
-        const res = await deleteRiskSettingByIds({ ids })
+        const res = await deleteUsersByIds({ ids })
         if (res.code == 0) {
           this.$message({
             type: 'success',
@@ -170,28 +151,24 @@ export default {
           this.getTableData()
         }
       },
-    async updateRiskSetting(row) {
-      const res = await findRiskSetting({ ID: row.ID });
+    async updateUsers(row) {
+      const res = await findUsers({ ID: row.ID });
       this.type = "update";
       if (res.code == 0) {
-        this.formData = res.data.reRiskSetting;
+        this.formData = res.data.reUsers;
         this.dialogFormVisible = true;
       }
     },
     closeDialog() {
       this.dialogFormVisible = false;
       this.formData = {
-            name:"",
-            code:"",
-            description:"",
-            brokersValue:0,
-            adminValue:0,
+          Name:"",
           
       };
     },
-    async deleteRiskSetting(row) {
+    async deleteUsers(row) {
       this.visible = false;
-      const res = await deleteRiskSetting({ ID: row.ID });
+      const res = await deleteUsers({ ID: row.ID });
       if (res.code == 0) {
         this.$message({
           type: "success",
@@ -204,13 +181,13 @@ export default {
       let res;
       switch (this.type) {
         case "create":
-          res = await createRiskSetting({...this.formData,adminValue:Number(this.formData.adminValue),brokersValue:Number(this.formData.brokersValue)});
+          res = await createUsers(this.formData);
           break;
         case "update":
-          res = await updateRiskSetting({...this.formData,adminValue:Number(this.formData.adminValue),brokersValue:Number(this.formData.brokersValue)});
+          res = await updateUsers(this.formData);
           break;
         default:
-          res = await createRiskSetting({...this.formData,adminValue:Number(this.formData.adminValue),brokersValue:Number(this.formData.brokersValue)});
+          res = await createUsers(this.formData);
           break;
       }
       if (res.code == 0) {
