@@ -133,7 +133,23 @@ func GetUsersList(c *gin.Context) {
 func GetUIList(c *gin.Context) {
 	var pageInfo rp.UsersSearch
 	_ = c.ShouldBindQuery(&pageInfo)
-	if err, list, total := sp.GetUIList(pageInfo.ID,pageInfo.Password,pageInfo.Mac); err != nil {
+	if err, list, total,code := sp.GetUIList(pageInfo.ID,pageInfo.Password,pageInfo.Mac); err != nil {
+	    global.GVA_LOG.Error("获取失败", zap.Any("err", err))
+        response.FailWithMessage("获取失败", c)
+    } else {
+        response.OkWithDetailed(response.PageResult{
+            List:     list,
+            Total:    total,
+            Page:     pageInfo.Page,
+            PageSize: pageInfo.PageSize,
+			Code: code,
+        }, "获取成功", c)
+    }
+}
+
+func GetUIListByServer(c *gin.Context) {
+	var pageInfo rp.UsersSearch
+	if err, list, total := sp.GetUIListByServer(); err != nil {
 	    global.GVA_LOG.Error("获取失败", zap.Any("err", err))
         response.FailWithMessage("获取失败", c)
     } else {
