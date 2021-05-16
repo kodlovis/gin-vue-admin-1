@@ -76,11 +76,11 @@ func GetUsersInfoList(info rp.UsersSearch) (err error, list interface{}, total i
     // 如果有条件搜索 下方会自动创建搜索语句
 	err = db.Count(&total).Error
 	err = db.Limit(limit).Offset(offset).Find(&Users).Error
-	err = db.Preload("Macs").Find(&Users).Error
+	err = db.Preload("Macs").Preload("Products").Preload("Role").Find(&Users).Error
 	return err, Users, total
 }
 
-func GetUIList(userid string, password string, mac string) (err error, list interface{}, total int64) {
+func GetUIList(userid string, password string, mac string) (err error, list interface{}, total int64, code int64) {
 	var info rp.UsersSearch
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
@@ -90,6 +90,24 @@ func GetUIList(userid string, password string, mac string) (err error, list inte
     // 如果有条件搜索 下方会自动创建搜索语句
 	err = db.Count(&total).Error
 	err = db.Limit(limit).Offset(offset).Find(&Users).Error
-	err = db.Preload("Macs", "mac_address = ?", mac).Find(&Users).Error
+	err = db.Preload("Macs", "mac_address = ?", mac).Preload("Products").Preload("Role").Find(&Users).Error
+	var user mp.Users
+	err = db.Where("name = ?", userid).First(&user).Error
+	if user.Password != password{
+		code=1
+	}
+	return err, Users, total,code
+}
+func GetUIListByServer() (err error, list interface{}, total int64) {
+	var info rp.UsersSearch
+	limit := info.PageSize
+	offset := info.PageSize * (info.Page - 1)
+    // 创建db
+	db := global.GVA_DB.Model(&mp.Users{})
+    var Users []mp.Users
+    // 如果有条件搜索 下方会自动创建搜索语句
+	err = db.Count(&total).Error
+	err = db.Limit(limit).Offset(offset).Find(&Users).Error
+	err = db.Preload("Macs").Preload("Products").Preload("Role").Find(&Users).Error
 	return err, Users, total
 }

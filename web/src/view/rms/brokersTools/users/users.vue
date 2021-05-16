@@ -6,7 +6,7 @@
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item> -->
         <el-form-item>
-          <el-button @click="openDialog" type="primary">新增角色</el-button>
+          <el-button @click="openDialog" type="primary">新增用户</el-button>
         </el-form-item>
         <el-form-item>
           <el-popover placement="top" v-model="deleteVisible" width="160">
@@ -31,7 +31,7 @@
     >
     <el-table-column type="selection" width="55"></el-table-column>
     
-    <el-table-column label="角色名称" prop="name" width="120"></el-table-column> 
+    <el-table-column label="用户名称" prop="name" width="120"></el-table-column> 
     <el-table-column label="mac地址" prop="Macs.name" width="120"></el-table-column> 
     
       <el-table-column label="按钮组">
@@ -61,9 +61,9 @@
       layout="total, sizes, prev, pager, next, jumper"
     ></el-pagination>
 
-    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="编辑角色">
+    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="编辑用户">
       <el-form :model="formData" label-position="right" label-width="80px">
-         <el-form-item label="角色:">
+         <el-form-item label="用户:">
             <el-input v-model="formData.name" clearable placeholder="请输入" ></el-input>
       </el-form-item>
        </el-form>

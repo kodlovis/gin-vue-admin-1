@@ -9,7 +9,7 @@ import (
 type Mac struct {
       global.GVA_MODEL
       Name  string `json:"name" form:"name" gorm:"column:mac_address;comment:mac地址;type:varchar(255);size:255;"`
-      Users  []Users `gorm:"many2many:users_mac;"`
+      //Users  []Users `gorm:"many2many:users_mac;"`
 }
 
 

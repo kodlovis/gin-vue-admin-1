@@ -14,6 +14,8 @@ type Users struct {
       Password string `json:"password" form:"password" gorm:"column:password;comment:密码;type:varchar(255);size:255;"`
 
       Macs           []Mac         `gorm:"many2many:users_mac;"`
+      Products           []Product        `gorm:"many2many:users_product;"`
+      Role   Role `json:"role" gorm:"foreignKey:id;References:role_id;AssociationForeignKey:RoleID;"`
 }
 
 
