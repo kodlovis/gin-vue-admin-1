@@ -70,7 +70,8 @@
             <el-input v-model="formData.name" clearable placeholder="请输入" ></el-input>
       </el-form-item>
          <el-form-item label="代码:">
-            <el-input v-model="formData.code" clearable placeholder="请输入" ></el-input>
+            <el-input v-model="formData.code" clearable placeholder="请输入" 
+            :disabled="isDisable"></el-input>
       </el-form-item>
          <el-form-item label="券商阈值:">
             <el-input v-model="formData.brokersValue" clearable placeholder="请输入" ></el-input>
@@ -110,6 +111,7 @@ export default {
       dialogFormVisible: false,
       visible: false,
       type: "",
+      isDisable:false,
       deleteVisible: false,
       multipleSelection: [],formData: {
             name:"",
@@ -174,12 +176,14 @@ export default {
       const res = await findRiskSetting({ ID: row.ID });
       this.type = "update";
       if (res.code == 0) {
+        this.isDisable = true;
         this.formData = res.data.reRiskSetting;
         this.dialogFormVisible = true;
       }
     },
     closeDialog() {
       this.dialogFormVisible = false;
+      this.isDisable = false
       this.formData = {
             name:"",
             code:"",
