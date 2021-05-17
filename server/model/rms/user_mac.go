@@ -1,8 +1,11 @@
 
 package rms
-
+import (
+	"gin-vue-admin/global"
+)
 // 如果含有time.Time 请自行import time包
 type UserMac struct {
+      global.GVA_MODEL
       UserId  int `json:"userId" form:"userId" gorm:"column:users_id;comment:用户ID;type:int;"`
       MacId  int `json:"macId" form:"macId" gorm:"column:mac_id;comment:macID;type:int;"`
 }
