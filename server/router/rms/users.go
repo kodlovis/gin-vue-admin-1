@@ -15,5 +15,10 @@ func InitUsersRouter(Router *gin.RouterGroup) {
 		UsersRouter.PUT("updateUsers", rms.UpdateUsers)    // 更新Users
 		UsersRouter.GET("findUsers", rms.FindUsers)        // 根据ID获取Users
 		UsersRouter.GET("getUsersList", rms.GetUsersList)  // 获取Users列表
+		UsersRouter.GET("getLastUser", rms.GetLastUser)
+		UsersRouter.POST("createUserMac", rms.CreateUserMac)
+		UsersRouter.POST("createUserProduct", rms.CreateUserProduct)
+		UsersRouter.DELETE("removeUserMacProduct", rms.RemoveUserMacProduct)
+		
 	}
 }

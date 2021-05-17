@@ -161,3 +161,44 @@ func GetUIListByServer(c *gin.Context) {
         }, "获取成功", c)
     }
 }
+
+func GetLastUser(c *gin.Context) {
+	var User mp.Users
+	_ = c.ShouldBindQuery(&User)
+	if err, reUser := sp.GetLastUser(); err != nil {
+		global.GVA_LOG.Error("查询失败!", zap.Any("err", err))
+		response.FailWithMessage("查询失败", c)
+	} else {
+		response.OkWithData(gin.H{"reUser": reUser}, c)
+	}
+}
+func CreateUserMac(c *gin.Context) {
+	var res rp.UserMacList
+	_ = c.ShouldBindJSON(&res)
+	if err := sp.CreateUserMac(res.UserMacList); err != nil {
+        global.GVA_LOG.Error("创建失败!", zap.Any("err", err))
+		response.FailWithMessage("创建失败", c)
+	} else {
+		response.OkWithMessage("创建成功", c)
+	}
+}
+func CreateUserProduct(c *gin.Context) {
+	var res rp.UserProductList
+	_ = c.ShouldBindJSON(&res)
+	if err := sp.CreateUserProduct(res.UserProductList); err != nil {
+        global.GVA_LOG.Error("创建失败!", zap.Any("err", err))
+		response.FailWithMessage("创建失败", c)
+	} else {
+		response.OkWithMessage("创建成功", c)
+	}
+}
+func RemoveUserMacProduct(c *gin.Context) {
+	var User mp.Users
+	_ = c.ShouldBindJSON(&User)
+	if err := sp.RemoveUserMacProduct(User); err != nil {
+		global.GVA_LOG.Error("清除失败!", zap.Any("err", err))
+		response.FailWithMessage("清除失败", c)
+	} else {
+		response.OkWithMessage("清除成功", c)
+	}
+}

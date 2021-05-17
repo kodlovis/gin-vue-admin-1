@@ -17,6 +17,28 @@ func CreateUsers(Users mp.Users) (err error) {
 	return err
 }
 
+func GetLastUser() (err error, User mp.Users) {
+	err = global.GVA_DB.Last(&User).Error
+	return
+}
+
+func CreateUserMac(list []mp.UserMac) (err error) {
+	for i := 0; i < len(list); i++ {
+		err = global.GVA_DB.Create(&list[i]).Error
+	}
+	return err
+}
+func CreateUserProduct(list []mp.UserProduct) (err error) {
+	for i := 0; i < len(list); i++ {
+		err = global.GVA_DB.Create(&list[i]).Error
+	}
+	return err
+}
+func RemoveUserMacProduct(Users mp.Users) (err error) {
+	err = global.GVA_DB.Table("users_mac").Where("users_id = ?", Users.ID).Delete(&[]mp.UserMac{}).Error
+	err = global.GVA_DB.Table("users_product").Where("users_id = ?", Users.ID).Delete(&[]mp.UserProduct{}).Error
+	return err
+}
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: DeleteUsers
 //@description: 删除Users记录
@@ -57,7 +79,7 @@ func UpdateUsers(Users *mp.Users) (err error) {
 //@return: err error, Users model.Users
 
 func GetUsers(id uint) (err error, Users mp.Users) {
-	err = global.GVA_DB.Where("id = ?", id).First(&Users).Error
+	err = global.GVA_DB.Where("id = ?", id).Preload("Macs").Preload("Products").Preload("Role").First(&Users).Error
 	return
 }
 

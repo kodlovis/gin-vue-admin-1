@@ -98,3 +98,34 @@ export const createUsers = (data) => {
          params
      })
  }
+
+ export const getLastUser = (params) => {
+    return service({
+        url: "/Users/getLastUser",
+        method: 'get',
+        params
+    })
+}
+
+export const createUserMac = (data) => {
+    return service({
+        url: "/Users/createUserMac",
+        method: 'post',
+        data
+    })
+}
+export const createUserProduct= (data) => {
+    return service({
+        url: "/Users/createUserProduct",
+        method: 'post',
+        data
+    })
+}
+
+export const removeUserMacProduct = (data) => {
+    return service({
+        url: "/Users/removeUserMacProduct",
+        method: 'delete',
+        data
+    })
+}
