@@ -60,7 +60,7 @@ export const createMac = (data) => {
  export const updateMac = (data) => {
      return service({
          url: "/Mac/updateMac",
-         method: 'put',
+         method: 'post',
          data
      })
  }

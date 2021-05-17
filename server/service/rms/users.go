@@ -23,7 +23,12 @@ func GetLastUser() (err error, User mp.Users) {
 }
 
 func CreateUserMac(list []mp.UserMac) (err error) {
+	var Mac mp.Mac
+	err = global.GVA_DB.Last(&Mac).Error
+	//var num int
 	for i := 0; i < len(list); i++ {
+		// num =int(Mac.ID)-int(i)
+		// list[i].MacId=num
 		err = global.GVA_DB.Create(&list[i]).Error
 	}
 	return err
@@ -35,7 +40,7 @@ func CreateUserProduct(list []mp.UserProduct) (err error) {
 	return err
 }
 func RemoveUserMacProduct(Users mp.Users) (err error) {
-	err = global.GVA_DB.Table("users_mac").Where("users_id = ?", Users.ID).Delete(&[]mp.UserMac{}).Error
+	//err = global.GVA_DB.Table("users_mac").Where("users_id = ?", Users.ID).Delete(&[]mp.UserMac{}).Error
 	err = global.GVA_DB.Table("users_product").Where("users_id = ?", Users.ID).Delete(&[]mp.UserProduct{}).Error
 	return err
 }
@@ -47,6 +52,8 @@ func RemoveUserMacProduct(Users mp.Users) (err error) {
 
 func DeleteUsers(Users mp.Users) (err error) {
 	err = global.GVA_DB.Delete(Users).Error
+	
+	err = global.GVA_DB.Table("users_mac").Where("users_id = ?", Users.ID).Delete(&[]mp.UserMac{}).Error
 	return err
 }
 

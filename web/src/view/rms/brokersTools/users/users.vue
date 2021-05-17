@@ -80,9 +80,12 @@
          <el-form-item label="用户:">
             <el-input v-model="formData.name" clearable placeholder="请输入" ></el-input>
       </el-form-item>
+         <el-form-item label="密码:">
+            <el-input v-model="formData.password" clearable placeholder="请输入" ></el-input>
+      </el-form-item>
           <el-form-item label="添加角色" prop="roleid"> 
               <el-cascader
-                @change="(val)=>{handleOptionChange(val)}"
+                
                 v-model="formData.roleid"
                 :options="roleOptions"
                 clearable
@@ -92,7 +95,6 @@
           </el-form-item>
           <el-form-item label="添加产品"> 
               <el-cascader
-                @change="(val)=>{handleOptionChange(val)}"
                 v-model="formData.Products"
                 :options="productOptions"
                 clearable
@@ -101,7 +103,19 @@
               ></el-cascader>
           </el-form-item>
         <el-form-item label="mac地址一:">
-            <el-input v-model="formData.Macs.name" clearable placeholder="请输入" ></el-input>
+            <el-input v-model="formData.Macs[0].name" clearable placeholder="请输入" ></el-input>
+      </el-form-item>
+        <el-form-item label="mac地址二:">
+            <el-input v-model="formData.Macs[1].name" clearable placeholder="请输入" ></el-input>
+      </el-form-item>
+        <el-form-item label="mac地址三:">
+            <el-input v-model="formData.Macs[2].name" clearable placeholder="请输入" ></el-input>
+      </el-form-item>
+        <el-form-item label="mac地址四:">
+            <el-input v-model="formData.Macs[3].name" clearable placeholder="请输入" ></el-input>
+      </el-form-item>
+        <el-form-item label="mac地址五:">
+            <el-input v-model="formData.Macs[4].name" clearable placeholder="请输入" ></el-input>
       </el-form-item>
        </el-form>
       <div class="dialog-footer" slot="footer">
@@ -122,11 +136,11 @@ import {
     getUsersList,
 
     getLastUser,
-    createUserMac,
     createUserProduct,
     removeUserMacProduct,
 } from "@/api/rms/users";  //  此处请自行替换地址
 import {getProductList} from "@/api/rms/product";
+import {updateMac} from "@/api/rms/mac";
 import {getRoleList} from "@/api/rms/role";
 import { formatTimeToStr } from "@/utils/date";
 import infoList from "@/mixins/infoList";
@@ -145,12 +159,13 @@ export default {
       multipleSelection: [],formData: {
             name:"",
             roleid:0,
-            Macs:[{name:""}],
+            Macs:[{name:""},{name:""},{name:""},{name:""},{name:""}],
             Products:[{id:"",name:""}],
             role:[{name:""}],
       },
       productData:{name:""},
       roleData:{name:""},
+      macData:[{id:"",name:""}],
       rules: {
         name:[ { required: true, message: '请输入', trigger: 'blur' }],
       }
@@ -174,7 +189,6 @@ export default {
     }
   },
   methods: {
-      
       setProductOptions(productData) {
         this.productOptions = [];
         this.ids = [];
@@ -251,10 +265,15 @@ export default {
       if (res.code == 0) {
         this.formData = res.data.reUsers;
         const arr = []
+        const arr2 = []
         for (let index = 0; index < this.formData.Products.length; index++) {
           arr.push(this.formData.Products[index].ID)
         }
+        for (let index = 0; index < this.formData.Macs.length; index++) {
+          arr2.push(this.formData.Macs[index])
+        }
         this.formData.Products = arr
+        this.formData.Macs = arr2
         this.dialogFormVisible = true;
       }
     },
@@ -274,6 +293,7 @@ export default {
     // },
     closeDialog() {
       this.dialogFormVisible = false;
+          this.initForm();
       // this.formData = {
       //     name:"",
           
@@ -297,8 +317,9 @@ export default {
       }
       this.formData = {
             name:"",
-            Macs:[{name:""}],
-            Products:[{name:""}],
+            roleid:0,
+            Macs:[{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""}],
+            Products:[{id:"",name:""}],
             role:[{name:""}],
       };
     },
@@ -310,24 +331,25 @@ export default {
           var list = []
           switch (this.type) {
             case "create":
-              var re = await createUsers({...this.formData,roleid:Number(this.formData.roleid),Macs:[],Products:[]});
+              var re = await createUsers({...this.formData,roleid:Number(this.formData.roleid),Products:[]});
               if(re.code == 0){
                 var User = await getLastUser()
                 var lastUser = User.data.reUser
-                for (let i = 0; i < this.formData.Macs.length; i++) {
-                  item.push({
-                    macId:Number(this.formData.Macs[i]),
-                    userId:Number(lastUser.ID),
-                    })
-                }
+                 for (let i = 0; i < 6; i++) {
+                   item.push({
+                     macId:Number(this.formData.Macs[i]),
+                     userId:Number(lastUser.ID),
+                     })
+                 }
                 for (let i = 0; i < this.formData.Products.length; i++) {
                   list.push({
                     productId:Number(this.formData.Products[i]),
                     userId:Number(lastUser.ID),
                     })
                 } 
-                res = await createUserMac({item})
+                //res = await createUserMac({item})
                 res = await createUserProduct({list})
+
               }
               break;
             case "update":
@@ -335,11 +357,11 @@ export default {
               if (um.code == 0 && this.formData.Macs != null) {
                 for (let i = 0; i < this.formData.Macs.length; i++) {
                   item.push({
-                    macId:Number(this.formData.Macs[i]),
+                    macId:Number(this.formData.Macs[i].ID),
                     userId:Number(this.formData.ID),
                     })
                   }
-              createUserMac({item})
+              //createUserMac({item})
               }
               if (um.code == 0 && this.formData.Products != null) {
                 for (let i = 0; i < this.formData.Products.length; i++) {
@@ -350,10 +372,13 @@ export default {
                   }
               createUserProduct({list})
               }
+              var macs =[]
+              macs=this.formData.Macs
+              updateMac({macs})
               res = await updateUsers({...this.formData,roleid:Number(this.formData.roleid),Macs:[],Products:[]});
               break;
             default:
-              res = await createUsers({...this.formData,roleid:Number(this.formData.roleid),Macs:[],Products:[]});
+              res = await createUsers({...this.formData,roleid:Number(this.formData.roleid),Products:[]});
               break;
           }
       if (res.code == 0) {
