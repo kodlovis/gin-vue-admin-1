@@ -45,8 +45,10 @@ func DeleteMacByIds(ids rp.IdsReq) (err error) {
 //@param: Mac *model.Mac
 //@return: err error
 
-func UpdateMac(Mac *mp.Mac) (err error) {
-	err = global.GVA_DB.Save(Mac).Error
+func UpdateMac(list []mp.Mac) (err error) {
+	for i := 0; i < len(list); i++ {
+		err = global.GVA_DB.Save(list[i]).Error
+	}
 	return err
 }
 

@@ -76,9 +76,9 @@ func DeleteMacByIds(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /Mac/updateMac [put]
 func UpdateMac(c *gin.Context) {
-	var Mac mp.Mac
+	var Mac rp.MacList
 	_ = c.ShouldBindJSON(&Mac)
-	if err := sp.UpdateMac(&Mac); err != nil {
+	if err := sp.UpdateMac(Mac.MacList); err != nil {
         global.GVA_LOG.Error("更新失败!", zap.Any("err", err))
 		response.FailWithMessage("更新失败", c)
 	} else {
