@@ -47,10 +47,10 @@ export default {
       form: {
         sqlType: "mysql",
         host: "127.0.0.1",
-        port: "3306",
+        port: "13306",
         userName: "root",
         password: "",
-        dbName: "gva",
+        dbName: "internal_system",
       },
     };
   },

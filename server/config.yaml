@@ -41,9 +41,9 @@ jwt:
 local:
   path: uploads/file
 mysql:
-  path: 106.14.23.61:13306
+  path: 127.0.0.1:13306
   config: charset=utf8mb4&parseTime=True&loc=Local
-  db-name: risk_info
+  db-name: internal_system
   username: root
   password: Aa@6447985
   max-idle-conns: 0
@@ -60,7 +60,7 @@ qiniu:
   use-cdn-domains: false
 redis:
   db: 0
-  addr: 106.14.23.61:16379
+  addr: 127.0.0.1:16379
   password: ""
 system:
   env: public
