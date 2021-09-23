@@ -2,7 +2,7 @@
 
 module.exports = {
     title: '云杉交易系统',
-    vueClientPort: 8080,
+    vueClientPort: 8083,
     goServerPort: 8888,
     baseCdnUrl: '//cdn.staticfile.org',
     cdns: [
