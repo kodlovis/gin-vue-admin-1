@@ -3,8 +3,9 @@ package source
 import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
-	"github.com/gookit/color"
 	"time"
+
+	"github.com/gookit/color"
 
 	"gorm.io/gorm"
 )
@@ -86,13 +87,46 @@ var apis = []model.SysApi{
 	{global.GVA_MODEL{ID: 83, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/excel/exportExcel", "导出excel", "excel", "POST"},
 	{global.GVA_MODEL{ID: 84, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/excel/downloadTemplate", "下载excel模板", "excel", "GET"},
 	{global.GVA_MODEL{ID: 85, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/api/deleteApisByIds", "批量删除api", "api", "DELETE"},
+	{global.GVA_MODEL{ID: 86, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/RiskSetting/createRiskSetting", "创建风险点", "riskSetting", "POST"},
+	{global.GVA_MODEL{ID: 87, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/RiskSetting/deleteRiskSetting", "删除风险点", "riskSetting", "DELETE"},
+	{global.GVA_MODEL{ID: 88, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/RiskSetting/updateRiskSetting", "更新风险点", "riskSetting", "PUT"},
+	{global.GVA_MODEL{ID: 89, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/RiskSetting/findRiskSetting", "查询风险点", "riskSetting", "GET"},
+	{global.GVA_MODEL{ID: 90, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/RiskSetting/getRiskSettingList", "获取风险点list", "riskSetting", "GET"},
+	{global.GVA_MODEL{ID: 91, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Role/createRole", "创建角色", "role", "POST"},
+	{global.GVA_MODEL{ID: 92, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Role/deleteRole", "删除角色", "role", "DELETE"},
+	{global.GVA_MODEL{ID: 93, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Role/deleteRoleByIds", "通过ID删除", "role", "DELETE"},
+	{global.GVA_MODEL{ID: 94, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Role/updateRole", "更新角色", "role", "PUT"},
+	{global.GVA_MODEL{ID: 95, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Role/findRole", "查找角色", "role", "GET"},
+	{global.GVA_MODEL{ID: 96, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Role/getRoleList", "获取角色list", "role", "GET"},
+	{global.GVA_MODEL{ID: 97, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Users/createUsers", "创建用户", "users", "POST"},
+	{global.GVA_MODEL{ID: 98, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Users/deleteUsers", "删除用户", "users", "DELETE"},
+	{global.GVA_MODEL{ID: 99, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Users/deleteUsersByIds", "通过ids删除", "users", "DELETE"},
+	{global.GVA_MODEL{ID: 100, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Users/updateUsers", "更新用户", "users", "PUT"},
+	{global.GVA_MODEL{ID: 101, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Users/findUsers", "查询用户", "users", "GET"},
+	{global.GVA_MODEL{ID: 102, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Users/getUsersList", "获取用户list", "users", "GET"},
+	{global.GVA_MODEL{ID: 103, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Mac/createMac", "创建mac", "mac", "POST"},
+	{global.GVA_MODEL{ID: 104, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Mac/deleteMac", "删除mac", "mac", "DELETE"},
+	{global.GVA_MODEL{ID: 105, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Mac/deleteMacByIds", "通过ids删除", "mac", "DELETE"},
+	{global.GVA_MODEL{ID: 106, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Mac/updateMac", "更新mac", "mac", "POST"},
+	{global.GVA_MODEL{ID: 107, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Mac/findMac", "查找mac", "mac", "GET"},
+	{global.GVA_MODEL{ID: 108, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Mac/getMacList", "获取maclist", "mac", "GET"},
+	{global.GVA_MODEL{ID: 109, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Product/createProduct", "创建product", "product", "POST"},
+	{global.GVA_MODEL{ID: 110, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Product/deleteProduct", "删除product", "product", "DELETE"},
+	{global.GVA_MODEL{ID: 111, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Product/deleteProductByIds", "通过ids删除product", "product", "DELETE"},
+	{global.GVA_MODEL{ID: 112, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Product/updateProduct", "更新product", "product", "PUT"},
+	{global.GVA_MODEL{ID: 113, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Product/findProduct", "查找product", "product", "GET"},
+	{global.GVA_MODEL{ID: 114, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Product/getProductList", "获取productlist", "product", "GET"},
+	{global.GVA_MODEL{ID: 115, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Users/getLastUser", "获取最后一条user", "users", "GET"},
+	{global.GVA_MODEL{ID: 116, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Users/createUserMac", "创建user_mac关联", "users", "POST"},
+	{global.GVA_MODEL{ID: 117, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Users/createUserProduct", "创建user_product关联", "users", "POST"},
+	{global.GVA_MODEL{ID: 118, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/Users/removeUserMacProduct", "移除user,mac,product关系", "users", "DELETE"},
 }
 
 //@author: [SliverHorn](https://github.com/SliverHorn)
 //@description: sys_apis 表数据初始化
 func (a *api) Init() error {
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		if tx.Where("id IN ?", []int{1, 67}).Find(&[]model.SysApi{}).RowsAffected == 2 {
+		if tx.Where("id IN ?", []int{1, 118}).Find(&[]model.SysApi{}).RowsAffected == 2 {
 			color.Danger.Println("\n[Mysql] --> sys_apis 表的初始数据已存在!")
 			return nil
 		}
