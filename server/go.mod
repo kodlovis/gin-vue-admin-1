@@ -26,6 +26,7 @@ require (
 	github.com/gookit/color v1.3.1
 	github.com/jackc/pgconn v1.6.1 // indirect
 	github.com/jehiah/go-strftime v0.0.0-20171201141054-1d33003b3869 // indirect
+	github.com/jinzhu/gorm v1.9.16 // indirect
 	github.com/jordan-wright/email v0.0.0-20200824153738-3f5bafa1cd84
 	github.com/json-iterator/go v1.1.10 // indirect
 	github.com/lestrrat-go/file-rotatelogs v2.3.0+incompatible
@@ -61,5 +62,6 @@ require (
 	google.golang.org/protobuf v1.24.0 // indirect
 	gopkg.in/ini.v1 v1.55.0 // indirect
 	gorm.io/driver/mysql v1.0.1
+	gorm.io/driver/postgres v0.2.6 // indirect
 	gorm.io/gorm v1.20.7
 )
