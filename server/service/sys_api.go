@@ -99,7 +99,7 @@ func GetAllApis() (err error, apis []model.SysApi) {
 //@param: id float64
 //@return: err error, api model.SysApi
 
-func GetApiById(id float64) (err error, api model.SysApi) {
+func GetApiById(id int) (err error, api model.SysApi) {
 	err = global.GVA_DB.Where("id = ?", id).First(&api).Error
 	return
 }

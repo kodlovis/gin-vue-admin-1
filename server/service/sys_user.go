@@ -88,7 +88,7 @@ func SetUserAuthority(uuid uuid.UUID, authorityId string) (err error) {
 //@param: id float64
 //@return: err error
 
-func DeleteUser(id float64) (err error) {
+func DeleteUser(id int) (err error) {
 	var user model.SysUser
 	err = global.GVA_DB.Where("id = ?", id).Delete(&user).Error
 	return err

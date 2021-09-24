@@ -8,7 +8,7 @@ type PageInfo struct {
 
 // Find by id structure
 type GetById struct {
-	ID float64 `json:"id" form:"id"` // 主键ID
+	ID int `json:"id" form:"id"` // 主键ID
 }
 
 type IdsReq struct {
