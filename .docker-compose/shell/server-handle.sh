@@ -71,6 +71,20 @@ mysql:
   log-mode: false
   log-zap: ""
 
+# pgsql connect configuration
+pgsql:
+  host: 192.168.11.251
+  port: 5432
+  timeZone: Asia/Shanghai
+  db-name: future
+  username: postgres
+  password: shan3353
+  max-idle-conns: 0
+  max-open-conns: 0
+  log-mode: false
+  log-zap: ""
+  sslmode: disable
+
 # local configuration
 local:
   path: 'uploads/file'
