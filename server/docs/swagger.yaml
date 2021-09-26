@@ -141,6 +141,38 @@ definitions:
         description: 数据库用户名
         type: string
     type: object
+  config.Pgsql:
+    properties:
+      config:
+        type: string
+      host:
+        description: 服务器地址
+        type: string
+      dbname:
+        description: 数据库名
+        type: string
+      logMode:
+        type: boolean
+      logZap:
+        type: string
+      maxIdleConns:
+        type: integer
+      maxOpenConns:
+        type: integer
+      password:
+        description: 数据库密码
+        type: string
+      port:
+        description: 端口
+        type: string
+      username:
+        description: 数据库用户名
+        type: string
+      timeZone:
+        type: string
+      sslmode:
+        type: string
+    type: object
   config.Qiniu:
     properties:
       accessKey:
