@@ -70,6 +70,21 @@
          <el-form-item label="产品名称:">
             <el-input v-model="formData.name" clearable placeholder="请输入" ></el-input>
       </el-form-item>
+         <el-form-item label="账号:">
+            <el-input v-model="formData.accountid" clearable placeholder="请输入" ></el-input>
+      </el-form-item>
+         <el-form-item label="柜台信息:">
+            <el-input v-model="formData.counterInfo" clearable placeholder="请输入" ></el-input>
+      </el-form-item>
+         <el-form-item label="节点信息:">
+            <el-input v-model="formData.nodeInfo" clearable placeholder="请输入" ></el-input>
+      </el-form-item>
+         <el-form-item label="备注:">
+            <el-input v-model="formData.comment" clearable placeholder="请输入" ></el-input>
+      </el-form-item>
+         <el-form-item label="描述:">
+            <el-input v-model="formData.description" clearable placeholder="请输入" ></el-input>
+      </el-form-item>
        </el-form>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
