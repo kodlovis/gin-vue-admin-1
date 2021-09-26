@@ -15,7 +15,8 @@ type Users struct {
 
 	Macs     []Mac     `gorm:"many2many:users_mac;"`
 	Products []Product `gorm:"many2many:users_product;"`
-	Role     Role      `json:"role" gorm:"foreignKey:id;AssociationForeignKey:RoleID;"`
+	//Role     Role      `json:"role" gorm:"foreignKey:id;AssociationForeignKey:RoleID;"`
+	Role Role `json:"role" gorm:"AssociationForeignKey:RoleID;"`
 }
 
 func (Users) TableName() string {
