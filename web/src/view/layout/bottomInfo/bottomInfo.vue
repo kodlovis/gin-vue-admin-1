@@ -3,12 +3,12 @@
     <div>
       <span>Powered by</span>
       <span>
-      上海汇朋信息技术有限公司
+      上海杉杉贸易有限公司
       </span>
       <el-divider direction="vertical"></el-divider>
       <span>Copyright</span>
       <span>
-      云杉交易系统
+      上海杉杉贸易
       </span>
     </div>
   </div>

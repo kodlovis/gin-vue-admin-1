@@ -7,7 +7,7 @@
         </div>
         <div class="header">
           <a href="/">
-            <span class="title">云杉交易系统</span>
+            <span class="title">上海杉杉贸易</span>
           </a>
         </div>
       </div>

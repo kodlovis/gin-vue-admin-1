@@ -4,8 +4,8 @@
       <el-row :class="[isShadowBg?'shadowBg':'']" @click.native="changeShadow()"></el-row>
       <el-aside class="main-cont main-left">
         <div class="tilte">
-          <img alt class="logoimg" src="~@/assets/shanyang.png" />
-          <h2 class="tit-text" v-if="isSider">云杉交易系统</h2>
+          <img alt class="logoimg" src="~@/assets/ssmy.png" />
+          <h2 class="tit-text" v-if="isSider">上海杉杉贸易</h2>
         </div>
         <Aside class="aside" />
       </el-aside>
