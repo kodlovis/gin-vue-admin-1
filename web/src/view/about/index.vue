@@ -3,7 +3,7 @@
     <el-row :gutter="10">
       <el-col :span="12">
         <el-card>
-          <div slot="header">云杉交易系统</div>
+          <div slot="header">上海杉杉贸易</div>
           <div>
             <el-row>
               <el-col :span="8" :offset="8">

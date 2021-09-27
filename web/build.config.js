@@ -1,7 +1,7 @@
 'use strict'
 
 module.exports = {
-    title: '云杉交易系统',
+    title: '上海杉杉贸易',
     vueClientPort: 8083,
     goServerPort: 8888,
     baseCdnUrl: '//cdn.staticfile.org',

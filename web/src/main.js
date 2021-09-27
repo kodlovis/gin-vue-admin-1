@@ -148,5 +148,5 @@ export default new Vue({
 
 
 console.log(`
-       云杉交易系统
+       上海杉杉贸易
 `)
