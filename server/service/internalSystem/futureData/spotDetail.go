@@ -57,7 +57,8 @@ func UpdateSpotDetail(spotDetail mif.SpotDetail) (err error) {
 //@return: err error, spotDetail model.SpotDetail
 
 func GetSpotDetail(id uint) (err error, spotDetail mif.SpotDetail) {
-	err = global.GVA_DB.Where("id = ?", id).First(&spotDetail).Error
+	err = global.GVA_DB.Where("id = ?", id).Order("time desc, department_name, product_name, account_id, profit_by_float, profit_by_trade, trade_fee").First(&spotDetail).Error
+
 	return
 }
 
@@ -71,10 +72,10 @@ func GetSpotDetailInfoList(info rif.SpotDetailSearch) (err error, list interface
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.GVA_DB.Model(&mif.SpotDetail{})
+	db := global.GVA_DB.Model(&mif.SpotDetail{}).Order("time desc, department_name, product_name, account_id, profit_by_float, profit_by_trade, trade_fee")
 	var spotDetails []mif.SpotDetail
 	// 如果有条件搜索 下方会自动创建搜索语句
-	if !info.Time.IsZero() {
+	if info.Time != "" {
 		db = db.Where("time = ?", info.Time)
 	}
 	if info.ProductName != "" {
