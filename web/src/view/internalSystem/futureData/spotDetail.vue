@@ -3,8 +3,15 @@
     <div class="search-term">
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
         <el-form-item label="时间">
-          <el-input placeholder="搜索条件" v-model="searchInfo.time"></el-input>
-        </el-form-item>    
+          <div class="block">
+            <el-date-picker
+              v-model="searchInfo.time"
+              type="datetime"
+              placeholder="选择日期时间"
+              default-time="12:00:00">
+            </el-date-picker>
+          </div>
+        </el-form-item>       
         <el-form-item label="品种">
           <el-input placeholder="搜索条件" v-model="searchInfo.productName"></el-input>
         </el-form-item>    
@@ -46,7 +53,7 @@
          <template slot-scope="scope">{{scope.row.CreatedAt|formatDate}}</template>
     </el-table-column> -->
     
-    <el-table-column label="时间" prop="time" width="120"></el-table-column> 
+    <el-table-column label="时间" prop="time" width="220"></el-table-column> 
     
     <el-table-column label="品种" prop="productName" width="120"></el-table-column> 
     
@@ -136,7 +143,7 @@ export default {
       type: "",
       deleteVisible: false,
       multipleSelection: [],formData: {
-            time:new Date(),
+            time:"",
             productName:"",
             accountId:0,
             profitByFloat:0,
