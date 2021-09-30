@@ -201,7 +201,7 @@ export default {
         }
         this.multipleSelection &&
           this.multipleSelection.map(item => {
-            ids.push(item.ID)
+            ids.push(item.id)
           })
         const res = await deleteSpotDetailByIds({ ids })
         if (res.code == 0) {

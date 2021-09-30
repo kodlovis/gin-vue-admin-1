@@ -13,10 +13,10 @@
                 </el-col>
                 <el-col :xs="20" :lg="12" :md="12">
                   <div class="text">
-                    <h4>早安，管理员， 请开始您一天的工作吧！</h4>
+                    <h4>欢迎 {{this.userInfo.nickName}}， 请开始您一天的工作吧！</h4>
                     <p class="tips-text">
                       <i class="el-icon-sunny el-icon"></i>
-                      <span>今日晴，0℃ - 10℃，天气寒冷，注意添加衣物。</span>
+                      <span>今日一定晴，25℃ - 25℃，天气不冷，不用添加衣物。</span>
                     </p>
                   </div>
                 </el-col>
@@ -31,7 +31,7 @@
                 ><div class="car-item">
                   <span class="flow"><i class="el-icon-s-grid"></i></span>
                   <span>今日流量 </span>
-                  <b>13260</b>
+                  <b>0</b>
                 </div></el-col
               >
               <el-col :span="8"
@@ -40,7 +40,7 @@
                     <i class="el-icon-s-custom"></i>
                   </span>
                   <span>总用户 </span>
-                  <b>48286</b>
+                  <b>72</b>
                 </div></el-col
               >
               <el-col :span="8"
@@ -49,7 +49,7 @@
                     <i class="el-icon-star-on"></i>
                   </span>
                   <span>好评率 </span>
-                  <b>98%</b>
+                  <b>101%</b>
                 </div></el-col
               >
             </el-row>
@@ -57,7 +57,7 @@
         </el-col>
       </div>
     </el-row>
-    <div class="bottom">
+    <!-- <div class="bottom">
       <el-row :gutter="32">
         <el-col :xs="24" :sm="24" :lg="12">
           <div class="chart-player">
@@ -70,7 +70,7 @@
           </div>
         </el-col>
       </el-row>
-    </div>
+    </div> -->
   </div>
 </template>
 
