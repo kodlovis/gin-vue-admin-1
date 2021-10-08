@@ -81,7 +81,7 @@
     ></el-pagination>
 
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
-      <el-form :model="formData" label-position="right" label-width="80px">
+      <el-form :model="formData" label-position="right" label-width="100px">
          <el-form-item label="时间:">
             <el-input v-model="formData.time" clearable placeholder="请输入" ></el-input>
       </el-form-item>
@@ -94,14 +94,22 @@
             <el-input v-model="formData.departmentName" clearable placeholder="请输入" ></el-input>
       </el-form-item>
        
-         <el-form-item label="三大费用:"></el-form-item>
+         <el-form-item label="三大费用:">
+           <el-input-number v-model="formData.threeCharges" clearable placeholder="请输入" ></el-input-number>
+      </el-form-item>
        
-         <el-form-item label="杂项费用:"></el-form-item>
+         <el-form-item label="杂项费用:">
+           <el-input-number v-model="formData.sundryExpense" clearable placeholder="请输入" ></el-input-number>
+      </el-form-item>
        
-         <el-form-item label="期货费用:"></el-form-item>
+         <el-form-item label="期货费用:">
+           <el-input-number v-model="formData.futureCharges" clearable placeholder="请输入" ></el-input-number>
+      </el-form-item>
        
-         <el-form-item label="品种累计权益:"></el-form-item>
-       </el-form>
+         <el-form-item label="品种累计权益:">
+           <el-input-number v-model="formData.cumulativeRights" clearable placeholder="请输入" ></el-input-number>
+      </el-form-item>
+      </el-form>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
         <el-button @click="enterDialog" type="primary">确 定</el-button>
@@ -134,6 +142,10 @@ export default {
             time:"",
             productName:"",
             departmentName:"",
+            cumulativeRights:"",
+            futureCharges:"",
+            sundryExpense:"",
+            threeCharges:"",
             
       }
     };
@@ -214,6 +226,10 @@ export default {
           time:"",
           productName:"",
           departmentName:"",
+          cumulativeRights:"",
+          futureCharges:"",
+          sundryExpense:"",
+          threeCharges:"",
           
       };
     },

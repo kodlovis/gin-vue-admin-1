@@ -1,6 +1,6 @@
 <template>
   <div class="bottom-info">
-    <div>
+    <!-- <div>
       <span>Powered by</span>
       <span>
       上海杉杉贸易有限公司
@@ -10,7 +10,7 @@
       <span>
       上海杉杉贸易
       </span>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>

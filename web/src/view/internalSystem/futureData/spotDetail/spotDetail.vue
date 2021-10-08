@@ -87,7 +87,7 @@
     ></el-pagination>
 
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
-      <el-form :model="formData" label-position="right" label-width="80px">
+      <el-form :model="formData" label-position="right" label-width="100px">
          <el-form-item label="时间:">
               <el-date-picker type="date" placeholder="选择日期" v-model="formData.time" clearable></el-date-picker>
        </el-form-item>
@@ -145,11 +145,11 @@ export default {
       multipleSelection: [],formData: {
             time:"",
             productName:"",
-            accountId:0,
+            accountId:"",
             profitByFloat:0,
             profitByTrade:0,
             tradeFee:0,
-            departmentName:0,
+            departmentName:"",
             
       }
     };
