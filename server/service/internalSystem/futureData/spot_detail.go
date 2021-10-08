@@ -4,6 +4,7 @@ import (
 	"gin-vue-admin/global"
 	mif "gin-vue-admin/model/internalSystem/futureData"
 	rif "gin-vue-admin/model/request/internalSystem/futureData"
+	"math"
 )
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -89,5 +90,10 @@ func GetSpotDetailInfoList(info rif.SpotDetailSearch) (err error, list interface
 	}
 	err = db.Count(&total).Error
 	err = db.Limit(limit).Offset(offset).Find(&spotDetails).Error
+	for i := 0; i < len(spotDetails); i++ {
+		spotDetails[i].ProfitByFloat = (math.Floor(spotDetails[i].ProfitByFloat*10 + 0.5)) / 10
+		spotDetails[i].ProfitByTrade = (math.Floor(spotDetails[i].ProfitByTrade*10 + 0.5)) / 10
+		spotDetails[i].TradeFee = (math.Floor(spotDetails[i].TradeFee*10 + 0.5)) / 10
+	}
 	return err, spotDetails, total
 }
