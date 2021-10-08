@@ -79,10 +79,10 @@ func GetRightsDetailInfoList(info rif.RightsDetailSearch) (err error, list inter
 		db = db.Where("time = ?", info.Time)
 	}
 	if info.ProductName != "" {
-		db = db.Where("`product_name` LIKE ?", "%"+info.ProductName+"%")
+		db = db.Where("product_name LIKE ?", "%"+info.ProductName+"%")
 	}
 	if info.DepartmentName != "" {
-		db = db.Where("`department_name` LIKE ?", "%"+info.DepartmentName+"%")
+		db = db.Where("department_name LIKE ?", "%"+info.DepartmentName+"%")
 	}
 	err = db.Count(&total).Error
 	err = db.Limit(limit).Offset(offset).Find(&rightsDetails).Error
