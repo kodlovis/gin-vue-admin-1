@@ -89,7 +89,7 @@
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
       <el-form :model="formData" label-position="right" label-width="100px">
          <el-form-item label="时间:">
-              <el-date-picker type="date" placeholder="选择日期" v-model="formData.time" clearable></el-date-picker>
+              <el-date-picker type="datetime" placeholder="选择日期" v-model="formData.time" clearable default-time="12:00:00"></el-date-picker>
        </el-form-item>
        
          <el-form-item label="品种:">
@@ -133,6 +133,7 @@ import {
 } from "@/api/internalSystem/futureData/spotDetail";  //  此处请自行替换地址
 import { formatTimeToStr } from "@/utils/date";
 import infoList from "@/mixins/infoList";
+import { mapGetters } from "vuex";
 export default {
   name: "SpotDetail",
   mixins: [infoList],
@@ -153,6 +154,9 @@ export default {
             
       }
     };
+  },
+  computed: {
+    ...mapGetters("user", ["userInfo", "token"])
   },
   filters: {
     formatDate: function(time) {
