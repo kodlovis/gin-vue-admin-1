@@ -216,7 +216,7 @@ export default {
         }
       },
     async updateForexFutureDetail(row) {
-      const res = await findForexFutureDetail({ ID: row.ID });
+      const res = await findForexFutureDetail({ ID: row.id });
       this.type = "update";
       if (res.code == 0) {
         this.formData = res.data.reforexFutureDetail;
@@ -237,7 +237,7 @@ export default {
       };
     },
     async deleteForexFutureDetail(row) {
-      const res = await deleteForexFutureDetail({ ID: row.ID });
+      const res = await deleteForexFutureDetail({ ID: row.id });
       if (res.code == 0) {
         this.$message({
           type: "success",
