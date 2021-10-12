@@ -83,8 +83,8 @@
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
       <el-form :model="formData" label-position="right" label-width="100px">
          <el-form-item label="时间:">
-            <el-input v-model="formData.time" clearable placeholder="请输入" ></el-input>
-      </el-form-item>
+              <el-date-picker type="date" placeholder="选择日期" v-model="formData.time" clearable></el-date-picker>
+       </el-form-item>
        
          <el-form-item label="品种:">
             <el-input v-model="formData.productName" clearable placeholder="请输入" ></el-input>
