@@ -11,6 +11,8 @@ type RightsDetail struct {
 	SundryExpense    float64 `json:"sundryExpense" form:"sundryExpense" gorm:"column:sundry_expense;comment:;type:double precision;size:53;"`
 	FutureCharges    float64 `json:"futureCharges" form:"futureCharges" gorm:"column:future_charges;comment:;type:double precision;size:53;"`
 	CumulativeRights float64 `json:"cumulativeRights" form:"cumulativeRights" gorm:"column:cumulative_rights;comment:;type:double precision;size:53;"`
+	AdjustExpense    float64 `json:"adjustExpense" form:"adjustExpense" gorm:"column:adjust_expense;comment:;type:double precision;size:53;"`
+	CustomerProfit   float64 `json:"customerProfit" form:"customerProfit" gorm:"column:customer_profit;comment:;type:double precision;size:53;"`
 }
 
 func (RightsDetail) TableName() string {
