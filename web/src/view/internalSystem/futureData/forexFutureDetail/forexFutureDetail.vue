@@ -83,7 +83,7 @@
       layout="total, sizes, prev, pager, next, jumper"
     ></el-pagination>
 
-    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
+    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作" v-dialogDrag>
       <el-form :model="formData" label-position="right" label-width="100px">
          <el-form-item label="时间:">
           <div class="block">

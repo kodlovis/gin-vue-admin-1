@@ -1,4 +1,6 @@
 import { getDict } from "@/utils/dictionary";
+
+import { mapGetters } from "vuex";
 export default {
     data() {
         return {
@@ -6,8 +8,11 @@ export default {
             total: 10,
             pageSize: 10,
             tableData: [],
-            searchInfo: {}
+            searchInfo: {},
         }
+    },
+    computed: {
+      ...mapGetters("user", ["userInfo", "token"])
     },
     methods: {
         filterDict(value, type) {

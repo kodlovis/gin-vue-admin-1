@@ -113,7 +113,7 @@ Dialog.props.closeOnClickModal.default = false
 
 // 引入封装的router
 import router from '@/router/index'
-
+import '@/utils/directives.js'
 // time line css
 import '../node_modules/timeline-vuejs/dist/timeline-vuejs.css'
 

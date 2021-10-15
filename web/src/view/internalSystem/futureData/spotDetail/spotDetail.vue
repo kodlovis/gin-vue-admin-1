@@ -25,7 +25,7 @@
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button @click="openDialog" type="primary">新增现货数据</el-button>
+          <el-button @click="openDialog" type="primary">新增数据</el-button>
         </el-form-item>
         <el-form-item>
           <el-popover placement="top" v-model="deleteVisible" width="160">
@@ -57,7 +57,7 @@
     
     <el-table-column label="品种" prop="productName" width="120"></el-table-column> 
     
-    <el-table-column label="账户" prop="accountId" width="120"></el-table-column> 
+    <el-table-column label="抬头" prop="accountId" width="120"></el-table-column> 
     
     <el-table-column label="浮动盈亏" prop="profitByFloat" width="120"></el-table-column> 
     
@@ -86,7 +86,7 @@
       layout="total, sizes, prev, pager, next, jumper"
     ></el-pagination>
 
-    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
+    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作" v-dialogDrag>
       <el-form :model="formData" label-position="right" label-width="100px">
          <el-form-item label="时间:">
               <el-date-picker type="datetime" placeholder="选择日期" v-model="formData.time" clearable default-time="12:00:00"></el-date-picker>
@@ -96,7 +96,7 @@
             <el-input v-model="formData.productName" clearable placeholder="请输入" ></el-input>
       </el-form-item>
        
-         <el-form-item label="账户:"><el-input v-model.number="formData.accountId" clearable placeholder="请输入"></el-input>
+         <el-form-item label="抬头:"><el-input v-model.number="formData.accountId" clearable placeholder="请输入"></el-input>
       </el-form-item>
        
          <el-form-item label="浮动盈亏:">
