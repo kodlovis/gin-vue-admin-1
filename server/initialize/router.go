@@ -33,6 +33,7 @@ func Routers() *gin.Engine {
 		router.InitInitRouter(PublicGroup) // 自动初始化相关
 		rms.InitExternalRiskSettingRouter(PublicGroup)
 		rms.InitExternalUsersRouter(PublicGroup)
+
 	}
 	PrivateGroup := Router.Group("")
 	PrivateGroup.Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
@@ -54,6 +55,7 @@ func Routers() *gin.Engine {
 		router.InitFileUploadAndDownloadRouter(PrivateGroup) // 文件上传下载功能路由
 		router.InitExcelRouter(PrivateGroup)                 // 表格导入导出
 		rms.InitRiskSettingRouter(PrivateGroup)
+		rms.InitProductLeveragePrivateEquityRouter(PrivateGroup)
 		rms.InitRoleRouter(PrivateGroup)
 		rms.InitUsersRouter(PrivateGroup)
 		rms.InitMacRouter(PrivateGroup)
