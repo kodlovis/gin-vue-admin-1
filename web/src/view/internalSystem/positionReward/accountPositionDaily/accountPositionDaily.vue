@@ -33,9 +33,6 @@
       tooltip-effect="dark"
     >
     <el-table-column type="selection" width="55"></el-table-column>
-    <el-table-column label="日期" width="180">
-         <template slot-scope="scope">{{scope.row.CreatedAt|formatDate}}</template>
-    </el-table-column>
     
     <el-table-column label="tradingDate字段" prop="tradingDate" width="120"></el-table-column> 
     
@@ -73,26 +70,28 @@
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
       <el-form :model="formData" label-position="right" label-width="80px">
          <el-form-item label="tradingDate字段:">
-            <el-input v-model="formData.tradingDate" clearable placeholder="请输入" ></el-input>
+          <div class="block">
+              <el-date-picker type="datetime" placeholder="选择日期" v-model="formData.tradingDate" clearable default-time="12:00:00"></el-date-picker>
+          </div>
       </el-form-item>
        
-         <el-form-item label="brokerId字段:">
+         <el-form-item label="brokerId:">
             <el-input v-model="formData.brokerId" clearable placeholder="请输入" ></el-input></el-form-item>
        
-         <el-form-item label="accountId字段:">
+         <el-form-item label="accountId:">
             <el-input v-model="formData.accountId" clearable placeholder="请输入" ></el-input></el-form-item>
        
-         <el-form-item label="instrument字段:">
+         <el-form-item label="instrument:">
             <el-input v-model="formData.instrument" clearable placeholder="请输入" ></el-input></el-form-item>
        
-         <el-form-item label="direction字段:">
-            <el-input v-model="formData.direction" clearable placeholder="请输入" ></el-input></el-form-item>
+         <el-form-item label="direction:">
+            <el-input-number v-model="formData.direction" clearable placeholder="请输入" ></el-input-number></el-form-item>
        
-         <el-form-item label="hedgeFlag字段:">
-            <el-input v-model="formData.hedgeFlag" clearable placeholder="请输入" ></el-input></el-form-item>
+         <el-form-item label="hedgeFlag:">
+            <el-input-number v-model="formData.hedgeFlag" clearable placeholder="请输入" ></el-input-number></el-form-item>
        
-         <el-form-item label="amount字段:">
-            <el-input v-model="formData.amount" clearable placeholder="请输入" ></el-input></el-form-item>
+         <el-form-item label="amount:">
+            <el-input-number v-model="formData.amount" clearable placeholder="请输入" ></el-input-number></el-form-item>
        </el-form>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
@@ -124,7 +123,12 @@ export default {
       deleteVisible: false,
       multipleSelection: [],formData: {
             tradingDate:"",
-            
+            brokerId:"",
+            accountId:"",
+            instrument:"",
+            direction:"",
+            hedgeFlag:"",
+            amount:"",
       }
     };
   },
@@ -175,7 +179,7 @@ export default {
         }
         this.multipleSelection &&
           this.multipleSelection.map(item => {
-            ids.push(item.ID)
+            ids.push(item.id)
           })
         const res = await deleteAccountPositionDailyByIds({ ids })
         if (res.code == 0) {
@@ -191,10 +195,10 @@ export default {
         }
       },
     async updateAccountPositionDaily(row) {
-      const res = await findAccountPositionDaily({ ID: row.ID });
+      const res = await findAccountPositionDaily({ ID: row.id });
       this.type = "update";
       if (res.code == 0) {
-        this.formData = res.data.reus001AccountPositionDaily;
+        this.formData = res.data.reAccountPositionDaily;
         this.dialogFormVisible = true;
       }
     },
@@ -202,6 +206,12 @@ export default {
       this.dialogFormVisible = false;
       this.formData = {
           tradingDate:"",
+          brokerId:"",
+          accountId:"",
+          instrument:"",
+          direction:"",
+          hedgeFlag:"",
+          amount:"",
           
       };
     },
