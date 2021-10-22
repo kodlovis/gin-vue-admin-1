@@ -34,21 +34,21 @@
     >
     <el-table-column type="selection" width="55"></el-table-column>
     
-    <el-table-column label="tradingDate字段" prop="tradingDate" width="120"></el-table-column> 
+    <el-table-column label="交易日期" prop="tradingDate" width="120"></el-table-column> 
     
-    <el-table-column label="brokerId字段" prop="brokerId" width="120"></el-table-column> 
+    <el-table-column label="期货公司" prop="brokerId" width="120"></el-table-column> 
     
-    <el-table-column label="productCode字段" prop="productCode" width="120"></el-table-column> 
+    <el-table-column label="品种" prop="productCode" width="120"></el-table-column> 
     
-    <el-table-column label="totalTradingFee字段" prop="totalTradingFee" width="120"></el-table-column> 
+    <el-table-column label="总上缴手续费" prop="totalTradingFee" width="120"></el-table-column> 
     
-    <el-table-column label="specialTradingFee字段" prop="specialTradingFee" width="120"></el-table-column> 
+    <el-table-column label="量化客户手续费" prop="specialTradingFee" width="120"></el-table-column> 
     
-    <el-table-column label="averageDailyPosition字段" prop="averageDailyPosition" width="120"></el-table-column> 
+    <el-table-column label="日均持仓" prop="averageDailyPosition" width="120"></el-table-column> 
     
-    <el-table-column label="maximumToOpen字段" prop="maximumToOpen" width="120"></el-table-column> 
+    <el-table-column label="最大可操作量" prop="maximumToOpen" width="120"></el-table-column> 
     
-    <el-table-column label="currentPosition字段" prop="currentPosition" width="120"></el-table-column> 
+    <el-table-column label="最新持仓" prop="currentPosition" width="120"></el-table-column> 
     
       <el-table-column label="按钮组">
         <template slot-scope="scope">
@@ -71,37 +71,37 @@
 
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
       <el-form :model="formData" label-position="right" label-width="80px">
-         <el-form-item label="tradingDate字段:">
+         <el-form-item label="交易日期:">
           <div class="block">
               <el-date-picker type="datetime" placeholder="选择日期" v-model="formData.tradingDate" clearable default-time="12:00:00"></el-date-picker>
           </div>
       </el-form-item>
        
-         <el-form-item label="brokerId字段:">
+         <el-form-item label="期货公司:">
             <el-input v-model="formData.brokerId" clearable placeholder="请输入" ></el-input>
       </el-form-item>
        
-         <el-form-item label="productCode字段:">
+         <el-form-item label="品种:">
             <el-input v-model="formData.productCode" clearable placeholder="请输入" ></el-input>
       </el-form-item>
        
-         <el-form-item label="totalTradingFee字段:">
+         <el-form-item label="交易手续费:">
               <el-input-number v-model="formData.totalTradingFee" :precision="2" clearable></el-input-number>
        </el-form-item>
        
-         <el-form-item label="specialTradingFee字段:">
+         <el-form-item label="特殊交易费用:">
               <el-input-number v-model="formData.specialTradingFee" :precision="2" clearable></el-input-number>
        </el-form-item>
        
-         <el-form-item label="averageDailyPosition字段:">
+         <el-form-item label="日均持仓:">
               <el-input-number v-model="formData.averageDailyPosition" :precision="2" clearable></el-input-number>
        </el-form-item>
        
-         <el-form-item label="maximumToOpen字段:">
+         <el-form-item label="最大可操作量:">
               <el-input-number v-model="formData.maximumToOpen" :precision="2" clearable></el-input-number>
        </el-form-item>
        
-         <el-form-item label="currentPosition字段:">
+         <el-form-item label="最新持仓:">
               <el-input-number v-model="formData.currentPosition" :precision="2" clearable></el-input-number>
        </el-form-item>
        </el-form>

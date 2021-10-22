@@ -1,10 +1,13 @@
 <template>
   <div>
     <div class="search-term">
-      <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
-        <el-form-item label="tradingDate字段">
-          <el-input placeholder="搜索条件" v-model="searchInfo.tradingDate"></el-input>
-        </el-form-item>                
+      <el-form :inline="true" :model="searchInfo" class="demo-form-inline">            
+        <el-form-item label="生效日期">
+          <el-input placeholder="搜索条件" v-model="searchInfo.effectiveDate"></el-input>
+        </el-form-item>    
+        <el-form-item label="失效日期">
+          <el-input placeholder="搜索条件" v-model="searchInfo.expirationDate"></el-input>
+        </el-form-item>    
         <el-form-item>
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>
@@ -34,23 +37,25 @@
     >
     <el-table-column type="selection" width="55"></el-table-column>
     
-    <el-table-column label="交易日期" prop="tradingDate" width="120"></el-table-column> 
+    <el-table-column label="交易所" prop="exchangeId" width="120"></el-table-column> 
     
     <el-table-column label="期货公司" prop="brokerId" width="120"></el-table-column> 
     
-    <el-table-column label="账户" prop="accountId" width="120"></el-table-column> 
+    <el-table-column label="品种" prop="productCode" width="120"></el-table-column> 
     
-    <el-table-column label="合约" prop="instrument" width="120"></el-table-column> 
+    <el-table-column label="基准日均持仓" prop="basePosition" width="120"></el-table-column> 
     
-    <el-table-column label="方向" prop="direction" width="120"></el-table-column> 
+    <el-table-column label="返还类型" prop="rewardType" width="120"></el-table-column> 
     
-    <el-table-column label="套保" prop="hedgeFlag" width="120"></el-table-column> 
+    <el-table-column label="返还数量" prop="rewardAmount" width="120"></el-table-column> 
     
-    <el-table-column label="数量" prop="amount" width="120"></el-table-column> 
+    <el-table-column label="生效日期" prop="effectiveDate" width="120"></el-table-column> 
+    
+    <el-table-column label="失效日期" prop="expirationDate" width="120"></el-table-column> 
     
       <el-table-column label="按钮组">
         <template slot-scope="scope">
-          <el-button class="table-button" @click="updateAccountPositionDaily(scope.row)" size="small" type="primary" icon="el-icon-edit">变更</el-button>
+          <el-button class="table-button" @click="updatePositionRewardRule(scope.row)" size="small" type="primary" icon="el-icon-edit">变更</el-button>
           <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteRow(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -69,29 +74,40 @@
 
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
       <el-form :model="formData" label-position="right" label-width="80px">
-         <el-form-item label="交易日期:">
-          <div class="block">
-              <el-date-picker type="datetime" placeholder="选择日期" v-model="formData.tradingDate" clearable default-time="12:00:00"></el-date-picker>
-          </div>
+         <el-form-item label="交易所:">
+            <el-input v-model="formData.exchangeId" clearable placeholder="请输入" ></el-input>
       </el-form-item>
        
          <el-form-item label="期货公司:">
-            <el-input v-model="formData.brokerId" clearable placeholder="请输入" ></el-input></el-form-item>
+            <el-input v-model="formData.brokerId" clearable placeholder="请输入" ></el-input>
+      </el-form-item>
        
-         <el-form-item label="账户:">
-            <el-input v-model="formData.accountId" clearable placeholder="请输入" ></el-input></el-form-item>
+         <el-form-item label="品种:">
+            <el-input v-model="formData.productCode" clearable placeholder="请输入" ></el-input>
+      </el-form-item>
        
-         <el-form-item label="合约:">
-            <el-input v-model="formData.instrument" clearable placeholder="请输入" ></el-input></el-form-item>
+         <el-form-item label="基准日均持仓:">
+              <el-input-number v-model="formData.basePosition" :precision="2" clearable></el-input-number>
+       </el-form-item>
        
-         <el-form-item label="方向:">
-            <el-input-number v-model="formData.direction" clearable placeholder="请输入" ></el-input-number></el-form-item>
+         <el-form-item label="返还类型:"><el-input v-model.number="formData.rewardType" clearable placeholder="请输入"></el-input>
+      </el-form-item>
        
-         <el-form-item label="套保:">
-            <el-input-number v-model="formData.hedgeFlag" clearable placeholder="请输入" ></el-input-number></el-form-item>
+         <el-form-item label="返还数量:">
+              <el-input-number v-model="formData.rewardAmount" :precision="2" clearable></el-input-number>
+       </el-form-item>
        
-         <el-form-item label="数量:">
-            <el-input-number v-model="formData.amount" clearable placeholder="请输入" ></el-input-number></el-form-item>
+         <el-form-item label="生效日期:">
+          <div class="block">
+              <el-date-picker type="datetime" placeholder="选择日期" v-model="formData.effectiveDate" clearable default-time="12:00:00"></el-date-picker>
+          </div>
+      </el-form-item>
+       
+         <el-form-item label="失效日期:">
+          <div class="block">
+              <el-date-picker type="datetime" placeholder="选择日期" v-model="formData.expirationDate" clearable default-time="12:00:00"></el-date-picker>
+          </div>
+      </el-form-item>
        </el-form>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
@@ -103,32 +119,34 @@
 
 <script>
 import {
-    createAccountPositionDaily,
-    deleteAccountPositionDaily,
-    deleteAccountPositionDailyByIds,
-    updateAccountPositionDaily,
-    findAccountPositionDaily,
-    getAccountPositionDailyList
-} from "@/api/internalSystem/positionReward/accountPositionDaily";  //  此处请自行替换地址
+    createPositionRewardRule,
+    deletePositionRewardRule,
+    deletePositionRewardRuleByIds,
+    updatePositionRewardRule,
+    findPositionRewardRule,
+    getPositionRewardRuleList
+} from "@/api/internalSystem/positionReward/positionRewardRule";  //  此处请自行替换地址
 import { formatTimeToStr } from "@/utils/date";
 import infoList from "@/mixins/infoList";
 export default {
-  name: "AccountPositionDaily",
+  name: "PositionRewardRule",
   mixins: [infoList],
   data() {
     return {
-      listApi: getAccountPositionDailyList,
+      listApi: getPositionRewardRuleList,
       dialogFormVisible: false,
       type: "",
       deleteVisible: false,
       multipleSelection: [],formData: {
-            tradingDate:"",
+            exchangeId:"",
             brokerId:"",
-            accountId:"",
-            instrument:"",
-            direction:"",
-            hedgeFlag:"",
-            amount:"",
+            productCode:"",
+            basePosition:0,
+            rewardType:0,
+            rewardAmount:0,
+            effectiveDate:"",
+            expirationDate:"",
+            
       }
     };
   },
@@ -153,7 +171,7 @@ export default {
       //条件搜索前端看此方法
       onSubmit() {
         this.page = 1
-        this.pageSize = 10           
+        this.pageSize = 10            
         this.getTableData()
       },
       handleSelectionChange(val) {
@@ -165,7 +183,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-           this.deleteAccountPositionDaily(row);
+           this.deletePositionRewardRule(row);
         });
       },
       async onDelete() {
@@ -181,7 +199,7 @@ export default {
           this.multipleSelection.map(item => {
             ids.push(item.id)
           })
-        const res = await deleteAccountPositionDailyByIds({ ids })
+        const res = await deletePositionRewardRuleByIds({ ids })
         if (res.code == 0) {
           this.$message({
             type: 'success',
@@ -194,29 +212,30 @@ export default {
           this.getTableData()
         }
       },
-    async updateAccountPositionDaily(row) {
-      const res = await findAccountPositionDaily({ ID: row.id });
+    async updatePositionRewardRule(row) {
+      const res = await findPositionRewardRule({ ID: row.id });
       this.type = "update";
       if (res.code == 0) {
-        this.formData = res.data.reAccountPositionDaily;
+        this.formData = res.data.repositionRewardRule;
         this.dialogFormVisible = true;
       }
     },
     closeDialog() {
       this.dialogFormVisible = false;
       this.formData = {
-          tradingDate:"",
+          exchangeId:"",
           brokerId:"",
-          accountId:"",
-          instrument:"",
-          direction:"",
-          hedgeFlag:"",
-          amount:"",
+          productCode:"",
+          basePosition:0,
+          rewardType:0,
+          rewardAmount:0,
+          effectiveDate:"",
+          expirationDate:"",
           
       };
     },
-    async deleteAccountPositionDaily(row) {
-      const res = await deleteAccountPositionDaily({ ID: row.ID });
+    async deletePositionRewardRule(row) {
+      const res = await deletePositionRewardRule({ ID: row.id });
       if (res.code == 0) {
         this.$message({
           type: "success",
@@ -232,13 +251,13 @@ export default {
       let res;
       switch (this.type) {
         case "create":
-          res = await createAccountPositionDaily(this.formData);
+          res = await createPositionRewardRule(this.formData);
           break;
         case "update":
-          res = await updateAccountPositionDaily(this.formData);
+          res = await updatePositionRewardRule(this.formData);
           break;
         default:
-          res = await createAccountPositionDaily(this.formData);
+          res = await createPositionRewardRule(this.formData);
           break;
       }
       if (res.code == 0) {
