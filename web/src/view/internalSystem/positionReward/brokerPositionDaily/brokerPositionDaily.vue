@@ -2,7 +2,7 @@
   <div>
     <div class="search-term">
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
-        <el-form-item label="tradingDate字段">
+        <el-form-item label="交易日期">
           <el-input placeholder="搜索条件" v-model="searchInfo.tradingDate"></el-input>
         </el-form-item>                  
         <el-form-item>
@@ -193,7 +193,7 @@ export default {
         }
         this.multipleSelection &&
           this.multipleSelection.map(item => {
-            ids.push(item.ID)
+            ids.push(item.id)
           })
         const res = await deleteBrokerPositionDailyByIds({ ids })
         if (res.code == 0) {
@@ -209,7 +209,7 @@ export default {
         }
       },
     async updateBrokerPositionDaily(row) {
-      const res = await findBrokerPositionDaily({ ID: row.ID });
+      const res = await findBrokerPositionDaily({ ID: row.id });
       this.type = "update";
       if (res.code == 0) {
         this.formData = res.data.reBrokerPositionDaily;
@@ -231,7 +231,7 @@ export default {
       };
     },
     async deleteBrokerPositionDaily(row) {
-      const res = await deleteBrokerPositionDaily({ ID: row.ID });
+      const res = await deleteBrokerPositionDaily({ ID: row.id });
       if (res.code == 0) {
         this.$message({
           type: "success",

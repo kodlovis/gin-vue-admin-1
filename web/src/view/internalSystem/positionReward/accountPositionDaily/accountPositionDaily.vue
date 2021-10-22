@@ -2,7 +2,7 @@
   <div>
     <div class="search-term">
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
-        <el-form-item label="tradingDate字段">
+        <el-form-item label="交易日期">
           <el-input placeholder="搜索条件" v-model="searchInfo.tradingDate"></el-input>
         </el-form-item>                
         <el-form-item>
@@ -44,7 +44,7 @@
     
     <el-table-column label="方向" prop="direction" width="120"></el-table-column> 
     
-    <el-table-column label="套保" prop="hedgeFlag" width="120"></el-table-column> 
+    <el-table-column label="投机/套保" prop="hedgeFlag" width="120"></el-table-column> 
     
     <el-table-column label="数量" prop="amount" width="120"></el-table-column> 
     
