@@ -102,7 +102,7 @@ func FindAccountPositionDaily(c *gin.Context) {
 		global.GVA_LOG.Error("查询失败!", zap.Any("err", err))
 		response.FailWithMessage("查询失败", c)
 	} else {
-		response.OkWithData(gin.H{"reus001AccountPositionDaily": reus001AccountPositionDaily}, c)
+		response.OkWithData(gin.H{"reAccountPositionDaily": reus001AccountPositionDaily}, c)
 	}
 }
 
