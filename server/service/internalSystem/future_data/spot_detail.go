@@ -1,9 +1,9 @@
-package futureData
+package future_data
 
 import (
 	"gin-vue-admin/global"
-	mif "gin-vue-admin/model/internalSystem/futureData"
-	rif "gin-vue-admin/model/request/internalSystem/futureData"
+	mif "gin-vue-admin/model/internalSystem/future_data"
+	rif "gin-vue-admin/model/request/internalSystem/future_data"
 	"math"
 )
 
