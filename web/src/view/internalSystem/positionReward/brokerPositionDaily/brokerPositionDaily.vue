@@ -36,7 +36,10 @@
     
     <el-table-column label="交易日期" prop="tradingDate" width="120"></el-table-column> 
     
-    <el-table-column label="期货公司" prop="brokerId" width="120"></el-table-column> 
+    <el-table-column label="期货公司" prop="brokerId" width="120">
+      <template slot-scope="scope">
+          <span>{{brokerfilterDict(scope.row.brokerId)}}</span>
+      </template></el-table-column> 
     
     <el-table-column label="品种" prop="productCode" width="120"></el-table-column> 
     
@@ -123,6 +126,7 @@ import {
     getBrokerPositionDailyList
 } from "@/api/internalSystem/positionReward/brokerPositionDaily";  //  此处请自行替换地址
 import { formatTimeToStr } from "@/utils/date";
+import { getDict } from "@/utils/dictionary";
 import infoList from "@/mixins/infoList";
 export default {
   name: "BrokerPositionDaily",
@@ -133,6 +137,7 @@ export default {
       dialogFormVisible: false,
       type: "",
       deleteVisible: false,
+      brokerDictList:[],
       multipleSelection: [],formData: {
             tradingDate:"",
             brokerId:"",
@@ -169,6 +174,17 @@ export default {
         this.page = 1
         this.pageSize = 10            
         this.getTableData()
+      },
+      brokerfilterDict(brokerId){
+        const re = this.brokerDictList.filter(item=>{
+          return item.value == brokerId
+        })[0]
+        if(re){
+          return re.label
+          }
+        else{
+          return""
+          }
       },
       handleSelectionChange(val) {
         this.multipleSelection = val
@@ -272,6 +288,10 @@ export default {
   },
   async created() {
     await this.getTableData();
+    //获取期货公司字典
+    const broker = await getDict("broker");
+    broker.map(item=>item.value)
+    this.brokerDictList = broker
   
 }
 };

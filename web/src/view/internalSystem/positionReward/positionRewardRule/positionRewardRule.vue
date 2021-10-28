@@ -39,13 +39,21 @@
     
     <el-table-column label="交易所" prop="exchangeId" width="120"></el-table-column> 
     
-    <el-table-column label="期货公司" prop="brokerId" width="120"></el-table-column> 
+    <el-table-column label="期货公司" prop="brokerId" width="120">
+      <template slot-scope="scope">
+          <span>{{brokerfilterDict(scope.row.brokerId)}}</span>
+      </template>
+    </el-table-column> 
     
     <el-table-column label="品种" prop="productCode" width="120"></el-table-column> 
     
     <el-table-column label="基准日均持仓" prop="basePosition" width="120"></el-table-column> 
     
-    <el-table-column label="返还类型" prop="rewardType" width="120"></el-table-column> 
+    <el-table-column label="返还类型" prop="rewardType" width="120">
+      <template slot-scope="scope">
+          <span>{{rewardTypefilterDict(scope.row.rewardType)}}</span>
+      </template>
+    </el-table-column> 
     
     <el-table-column label="返还数量" prop="rewardAmount" width="120"></el-table-column> 
     
@@ -73,13 +81,20 @@
     ></el-pagination>
 
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
-      <el-form :model="formData" label-position="right" label-width="80px">
+      <el-form :model="formData" label-position="right" label-width="120px">
          <el-form-item label="交易所:">
             <el-input v-model="formData.exchangeId" clearable placeholder="请输入" ></el-input>
       </el-form-item>
        
          <el-form-item label="期货公司:">
-            <el-input v-model="formData.brokerId" clearable placeholder="请输入" ></el-input>
+          <el-select v-model="formData.brokerId" placeholder="请选择">
+            <el-option
+              v-for="item in brokerDictList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>  
       </el-form-item>
        
          <el-form-item label="品种:">
@@ -90,7 +105,15 @@
               <el-input-number v-model="formData.basePosition" :precision="2" clearable></el-input-number>
        </el-form-item>
        
-         <el-form-item label="返还类型:"><el-input v-model.number="formData.rewardType" clearable placeholder="请输入"></el-input>
+         <el-form-item label="返还类型:">
+          <el-select v-model="formData.rewardType" placeholder="请选择">
+            <el-option
+              v-for="item in rewardTypeDictList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
       </el-form-item>
        
          <el-form-item label="返还数量:">
@@ -126,6 +149,7 @@ import {
     findPositionRewardRule,
     getPositionRewardRuleList
 } from "@/api/internalSystem/positionReward/positionRewardRule";  //  此处请自行替换地址
+import { getDict } from "@/utils/dictionary";
 import { formatTimeToStr } from "@/utils/date";
 import infoList from "@/mixins/infoList";
 export default {
@@ -137,12 +161,14 @@ export default {
       dialogFormVisible: false,
       type: "",
       deleteVisible: false,
+      rewardTypeDictList:[],
+      brokerDictList:[],
       multipleSelection: [],formData: {
             exchangeId:"",
             brokerId:"",
             productCode:"",
             basePosition:0,
-            rewardType:0,
+            rewardType:"",
             rewardAmount:0,
             effectiveDate:"",
             expirationDate:"",
@@ -176,6 +202,28 @@ export default {
       },
       handleSelectionChange(val) {
         this.multipleSelection = val
+      },
+      rewardTypefilterDict(rewardType){
+        const re = this.rewardTypeDictList.filter(item=>{
+          return item.value == rewardType
+        })[0]
+        if(re){
+          return re.label
+          }
+        else{
+          return""
+          }
+      },
+      brokerfilterDict(brokerId){
+        const re = this.brokerDictList.filter(item=>{
+          return item.value == brokerId
+        })[0]
+        if(re){
+          return re.label
+          }
+        else{
+          return""
+          }
       },
       deleteRow(row){
         this.$confirm('确定要删除吗?', '提示', {
@@ -227,7 +275,7 @@ export default {
           brokerId:"",
           productCode:"",
           basePosition:0,
-          rewardType:0,
+          rewardType:"",
           rewardAmount:0,
           effectiveDate:"",
           expirationDate:"",
@@ -276,6 +324,14 @@ export default {
   },
   async created() {
     await this.getTableData();
+    //获取返还类型字典
+    const rewardType = await getDict("rewardType");
+    rewardType.map(item=>item.value)
+    this.rewardTypeDictList = rewardType
+    //获取期货公司字典
+    const broker = await getDict("broker");
+    broker.map(item=>item.value)
+    this.brokerDictList = broker
   
 }
 };

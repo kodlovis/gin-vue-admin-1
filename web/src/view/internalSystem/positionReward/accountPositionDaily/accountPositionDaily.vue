@@ -36,15 +36,25 @@
     
     <el-table-column label="交易日期" prop="tradingDate" width="120"></el-table-column> 
     
-    <el-table-column label="期货公司" prop="brokerId" width="120"></el-table-column> 
+    <el-table-column label="期货公司" prop="brokerId" width="120">
+      <template slot-scope="scope">
+          <span>{{brokerfilterDict(scope.row.brokerId)}}</span>
+      </template>
+    </el-table-column> 
     
     <el-table-column label="账户" prop="accountId" width="120"></el-table-column> 
     
     <el-table-column label="合约" prop="instrument" width="120"></el-table-column> 
     
-    <el-table-column label="方向" prop="direction" width="120"></el-table-column> 
+    <el-table-column label="方向" prop="direction" width="120">
+      <template slot-scope="scope">
+          <span>{{directionfilterDict(scope.row.direction)}}</span>
+      </template></el-table-column> 
     
-    <el-table-column label="投机/套保" prop="hedgeFlag" width="120"></el-table-column> 
+    <el-table-column label="投机/套保" prop="hedgeFlag" width="120">
+      <template slot-scope="scope">
+          <span>{{hedgeFlagfilterDict(scope.row.hedgeFlag)}}</span>
+      </template></el-table-column> 
     
     <el-table-column label="数量" prop="amount" width="120"></el-table-column> 
     
@@ -76,7 +86,15 @@
       </el-form-item>
        
          <el-form-item label="期货公司:">
-            <el-input v-model="formData.brokerId" clearable placeholder="请输入" ></el-input></el-form-item>
+          <el-select v-model="formData.brokerId" placeholder="请选择">
+            <el-option
+              v-for="item in brokerDictList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>  
+          </el-form-item>
        
          <el-form-item label="账户:">
             <el-input v-model="formData.accountId" clearable placeholder="请输入" ></el-input></el-form-item>
@@ -85,10 +103,24 @@
             <el-input v-model="formData.instrument" clearable placeholder="请输入" ></el-input></el-form-item>
        
          <el-form-item label="方向:">
-            <el-input-number v-model="formData.direction" clearable placeholder="请输入" ></el-input-number></el-form-item>
+          <el-select v-model="formData.direction" placeholder="请选择">
+            <el-option
+              v-for="item in directionDictList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>  </el-form-item>
        
          <el-form-item label="套保:">
-            <el-input-number v-model="formData.hedgeFlag" clearable placeholder="请输入" ></el-input-number></el-form-item>
+          <el-select v-model="formData.hedgeFlag" placeholder="请选择">
+            <el-option
+              v-for="item in hedgeFlagDictList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>  </el-form-item>
        
          <el-form-item label="数量:">
             <el-input-number v-model="formData.amount" clearable placeholder="请输入" ></el-input-number></el-form-item>
@@ -110,6 +142,7 @@ import {
     findAccountPositionDaily,
     getAccountPositionDailyList
 } from "@/api/internalSystem/positionReward/accountPositionDaily";  //  此处请自行替换地址
+import { getDict } from "@/utils/dictionary";
 import { formatTimeToStr } from "@/utils/date";
 import infoList from "@/mixins/infoList";
 export default {
@@ -121,6 +154,9 @@ export default {
       dialogFormVisible: false,
       type: "",
       deleteVisible: false,
+      brokerDictList:[],
+      hedgeFlagDictList:[],
+      directionDictList:[],
       multipleSelection: [],formData: {
             tradingDate:"",
             brokerId:"",
@@ -155,6 +191,39 @@ export default {
         this.page = 1
         this.pageSize = 10           
         this.getTableData()
+      },
+      brokerfilterDict(brokerId){
+        const re = this.brokerDictList.filter(item=>{
+          return item.value == brokerId
+        })[0]
+        if(re){
+          return re.label
+          }
+        else{
+          return""
+          }
+      },
+      directionfilterDict(direction){
+        const re = this.directionDictList.filter(item=>{
+          return item.value == direction
+        })[0]
+        if(re){
+          return re.label
+          }
+        else{
+          return""
+          }
+      },
+      hedgeFlagfilterDict(hedgeFlag){
+        const re = this.hedgeFlagDictList.filter(item=>{
+          return item.value == hedgeFlag
+        })[0]
+        if(re){
+          return re.label
+          }
+        else{
+          return""
+          }
       },
       handleSelectionChange(val) {
         this.multipleSelection = val
@@ -257,6 +326,18 @@ export default {
   },
   async created() {
     await this.getTableData();
+    //获取期货公司字典
+    const broker = await getDict("broker");
+    broker.map(item=>item.value)
+    this.brokerDictList = broker
+    //获取方向字典
+    const direct = await getDict("direct");
+    direct.map(item=>item.value)
+    this.directionDictList = direct
+    //获取投机\套保字典
+    const hedgeFlag = await getDict("hedgeFlag");
+    hedgeFlag.map(item=>item.value)
+    this.hedgeFlagDictList = hedgeFlag
   
 }
 };
