@@ -1,5 +1,5 @@
 // 自动生成模板SpotDetail
-package futureData
+package future_data
 
 // 如果含有time.Time 请自行import time包
 type SpotDetail struct {

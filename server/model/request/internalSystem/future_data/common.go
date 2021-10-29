@@ -1,4 +1,4 @@
-package futureData
+package future_data
 
 // Paging common input parameter structure
 type PageInfo struct {

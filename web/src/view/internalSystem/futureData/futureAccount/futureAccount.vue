@@ -1,15 +1,12 @@
 <template>
   <div>
     <div class="search-term">
-      <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
-        <el-form-item label="交易日期">
-          <el-input placeholder="搜索条件" v-model="searchInfo.tradingDate"></el-input>
-        </el-form-item>                  
+      <el-form :inline="true" :model="searchInfo" class="demo-form-inline">      
         <el-form-item>
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button @click="openDialog" type="primary">新增</el-button>
+          <el-button @click="openDialog" type="primary">添加期货账号</el-button>
         </el-form-item>
         <el-form-item>
           <el-popover placement="top" v-model="deleteVisible" width="160">
@@ -34,28 +31,14 @@
     >
     <el-table-column type="selection" width="55"></el-table-column>
     
-    <el-table-column label="交易日期" prop="tradingDate" width="120"></el-table-column> 
+    <el-table-column label="期货账号" prop="username" width="220"></el-table-column> 
     
-    <el-table-column label="期货公司" prop="brokerId" width="120">
-      <template slot-scope="scope">
-          <span>{{brokerfilterDict(scope.row.brokerId)}}</span>
-      </template></el-table-column> 
     
-    <el-table-column label="品种" prop="productCode" width="120"></el-table-column> 
-    
-    <el-table-column label="总上缴手续费" prop="totalTradingFee" width="120"></el-table-column> 
-    
-    <el-table-column label="量化客户手续费" prop="specialTradingFee" width="120"></el-table-column> 
-    
-    <el-table-column label="日均持仓" prop="averageDailyPosition" width="120"></el-table-column> 
-    
-    <el-table-column label="最大可操作量" prop="maximumToOpen" width="120"></el-table-column> 
-    
-    <el-table-column label="最新持仓" prop="currentPosition" width="120"></el-table-column> 
+    <el-table-column label="状态" prop="status" width="120"></el-table-column> 
     
       <el-table-column label="按钮组">
         <template slot-scope="scope">
-          <el-button class="table-button" @click="updateBrokerPositionDaily(scope.row)" size="small" type="primary" icon="el-icon-edit">变更</el-button>
+          <el-button class="table-button" @click="updateFutureAccount(scope.row)" size="small" type="primary" icon="el-icon-edit">变更</el-button>
           <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteRow(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -74,39 +57,12 @@
 
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
       <el-form :model="formData" label-position="right" label-width="80px">
-         <el-form-item label="交易日期:">
-          <div class="block">
-              <el-date-picker type="datetime" placeholder="选择日期" v-model="formData.tradingDate" clearable default-time="12:00:00"></el-date-picker>
-          </div>
+         <el-form-item label="期货账号:"><el-input v-model="formData.username" clearable placeholder="请输入"></el-input></el-form-item>
+       
+         <el-form-item label="密码:"><el-input v-model="formData.password" clearable placeholder="请输入"></el-input></el-form-item>
+       
+         <el-form-item label="状态:"><el-input v-model.number="formData.status" clearable placeholder="请输入"></el-input>
       </el-form-item>
-       
-         <el-form-item label="期货公司:">
-            <el-input v-model="formData.brokerId" clearable placeholder="请输入" ></el-input>
-      </el-form-item>
-       
-         <el-form-item label="品种:">
-            <el-input v-model="formData.productCode" clearable placeholder="请输入" ></el-input>
-      </el-form-item>
-       
-         <el-form-item label="交易手续费:">
-              <el-input-number v-model="formData.totalTradingFee" :precision="2" clearable></el-input-number>
-       </el-form-item>
-       
-         <el-form-item label="特殊交易费用:">
-              <el-input-number v-model="formData.specialTradingFee" :precision="2" clearable></el-input-number>
-       </el-form-item>
-       
-         <el-form-item label="日均持仓:">
-              <el-input-number v-model="formData.averageDailyPosition" :precision="2" clearable></el-input-number>
-       </el-form-item>
-       
-         <el-form-item label="最大可操作量:">
-              <el-input-number v-model="formData.maximumToOpen" :precision="2" clearable></el-input-number>
-       </el-form-item>
-       
-         <el-form-item label="最新持仓:">
-              <el-input-number v-model="formData.currentPosition" :precision="2" clearable></el-input-number>
-       </el-form-item>
        </el-form>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
@@ -118,35 +74,26 @@
 
 <script>
 import {
-    createBrokerPositionDaily,
-    deleteBrokerPositionDaily,
-    deleteBrokerPositionDailyByIds,
-    updateBrokerPositionDaily,
-    findBrokerPositionDaily,
-    getBrokerPositionDailyList
-} from "@/api/internalSystem/positionReward/brokerPositionDaily";  //  此处请自行替换地址
+    createFutureAccount,
+    deleteFutureAccount,
+    deleteFutureAccountByIds,
+    updateFutureAccount,
+    findFutureAccount,
+    getFutureAccountList
+} from "@/api/internalSystem/futureData/futureAccount";  //  此处请自行替换地址
 import { formatTimeToStr } from "@/utils/date";
-import { getDict } from "@/utils/dictionary";
 import infoList from "@/mixins/infoList";
 export default {
-  name: "BrokerPositionDaily",
+  name: "FutureAccount",
   mixins: [infoList],
   data() {
     return {
-      listApi: getBrokerPositionDailyList,
+      listApi: getFutureAccountList,
       dialogFormVisible: false,
       type: "",
       deleteVisible: false,
-      brokerDictList:[],
       multipleSelection: [],formData: {
-            tradingDate:"",
-            brokerId:"",
-            productCode:"",
-            totalTradingFee:0,
-            specialTradingFee:0,
-            averageDailyPosition:0,
-            maximumToOpen:0,
-            currentPosition:0,
+            status:0,
             
       }
     };
@@ -172,19 +119,8 @@ export default {
       //条件搜索前端看此方法
       onSubmit() {
         this.page = 1
-        this.pageSize = 10            
+        this.pageSize = 10       
         this.getTableData()
-      },
-      brokerfilterDict(brokerId){
-        const re = this.brokerDictList.filter(item=>{
-          return item.value == brokerId
-        })[0]
-        if(re){
-          return re.label
-          }
-        else{
-          return""
-          }
       },
       handleSelectionChange(val) {
         this.multipleSelection = val
@@ -195,7 +131,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-           this.deleteBrokerPositionDaily(row);
+           this.deleteFutureAccount(row);
         });
       },
       async onDelete() {
@@ -211,7 +147,7 @@ export default {
           this.multipleSelection.map(item => {
             ids.push(item.id)
           })
-        const res = await deleteBrokerPositionDailyByIds({ ids })
+        const res = await deleteFutureAccountByIds({ ids })
         if (res.code == 0) {
           this.$message({
             type: 'success',
@@ -224,30 +160,23 @@ export default {
           this.getTableData()
         }
       },
-    async updateBrokerPositionDaily(row) {
-      const res = await findBrokerPositionDaily({ ID: row.id });
+    async updateFutureAccount(row) {
+      const res = await findFutureAccount({ ID: row.id });
       this.type = "update";
       if (res.code == 0) {
-        this.formData = res.data.reBrokerPositionDaily;
+        this.formData = res.data.refutureAccount;
         this.dialogFormVisible = true;
       }
     },
     closeDialog() {
       this.dialogFormVisible = false;
       this.formData = {
-          tradingDate:"",
-          brokerId:"",
-          productCode:"",
-          totalTradingFee:0,
-          specialTradingFee:0,
-          averageDailyPosition:0,
-          maximumToOpen:0,
-          currentPosition:0,
+          status:0,
           
       };
     },
-    async deleteBrokerPositionDaily(row) {
-      const res = await deleteBrokerPositionDaily({ ID: row.id });
+    async deleteFutureAccount(row) {
+      const res = await deleteFutureAccount({ ID: row.id });
       if (res.code == 0) {
         this.$message({
           type: "success",
@@ -263,13 +192,13 @@ export default {
       let res;
       switch (this.type) {
         case "create":
-          res = await createBrokerPositionDaily(this.formData);
+          res = await createFutureAccount(this.formData);
           break;
         case "update":
-          res = await updateBrokerPositionDaily(this.formData);
+          res = await updateFutureAccount(this.formData);
           break;
         default:
-          res = await createBrokerPositionDaily(this.formData);
+          res = await createFutureAccount(this.formData);
           break;
       }
       if (res.code == 0) {
@@ -288,10 +217,6 @@ export default {
   },
   async created() {
     await this.getTableData();
-    //获取期货公司字典
-    const broker = await getDict("broker");
-    broker.map(item=>item.value)
-    this.brokerDictList = broker
   
 }
 };
