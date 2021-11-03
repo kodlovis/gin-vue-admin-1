@@ -286,7 +286,7 @@ export default {
       };
     },
     async deleteAccountPositionDaily(row) {
-      const res = await deleteAccountPositionDaily({ ID: row.ID });
+      const res = await deleteAccountPositionDaily({ ID: row.id });
       if (res.code == 0) {
         this.$message({
           type: "success",
