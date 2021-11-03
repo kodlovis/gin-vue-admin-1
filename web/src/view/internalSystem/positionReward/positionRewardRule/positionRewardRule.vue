@@ -81,7 +81,7 @@
     ></el-pagination>
 
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
-      <el-form :model="formData" label-position="right" label-width="120px">
+      <el-form :model="formData" label-position="right" label-width="120px" :rules="rules" ref="prForm">
          <el-form-item label="交易所:">
             <el-input v-model="formData.exchangeId" clearable placeholder="请输入" ></el-input>
       </el-form-item>
@@ -134,7 +134,7 @@
        </el-form>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
-        <el-button @click="enterDialog" type="primary">确 定</el-button>
+        <el-button @click="enterDialog" type="primary" :disabled="isDisable">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -160,6 +160,7 @@ export default {
       listApi: getPositionRewardRuleList,
       dialogFormVisible: false,
       type: "",
+      isDisable:false,
       deleteVisible: false,
       rewardTypeDictList:[],
       brokerDictList:[],
@@ -296,6 +297,7 @@ export default {
       }
     },
     async enterDialog() {
+      this.isDisable=true;
       let res;
       switch (this.type) {
         case "create":
@@ -314,6 +316,7 @@ export default {
           message:"创建/更改成功"
         })
         this.closeDialog();
+        this.isDisable=false
         this.getTableData();
       }
     },

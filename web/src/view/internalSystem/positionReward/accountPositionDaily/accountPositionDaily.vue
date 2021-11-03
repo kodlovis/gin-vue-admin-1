@@ -78,7 +78,7 @@
     ></el-pagination>
 
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
-      <el-form :model="formData" label-position="right" label-width="80px">
+      <el-form :model="formData" label-position="right" label-width="80px" :rules="rules" ref="prForm">
          <el-form-item label="交易日期:">
           <div class="block">
               <el-date-picker type="datetime" placeholder="选择日期" v-model="formData.tradingDate" clearable default-time="12:00:00"></el-date-picker>
@@ -127,7 +127,7 @@
        </el-form>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
-        <el-button @click="enterDialog" type="primary">确 定</el-button>
+        <el-button @click="enterDialog" type="primary" :disabled="isDisable">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -154,6 +154,7 @@ export default {
       dialogFormVisible: false,
       type: "",
       deleteVisible: false,
+      isDisable:false,
       brokerDictList:[],
       hedgeFlagDictList:[],
       directionDictList:[],
@@ -298,6 +299,7 @@ export default {
       }
     },
     async enterDialog() {
+      this.isDisable=true;
       let res;
       switch (this.type) {
         case "create":
@@ -316,6 +318,7 @@ export default {
           message:"创建/更改成功"
         })
         this.closeDialog();
+        this.isDisable=false
         this.getTableData();
       }
     },

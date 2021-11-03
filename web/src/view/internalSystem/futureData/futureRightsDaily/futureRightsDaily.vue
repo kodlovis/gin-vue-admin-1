@@ -75,8 +75,8 @@
     ></el-pagination>
 
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
-      <el-form :model="formData" label-position="right" label-width="80px">
-         <el-form-item label="时间:">
+      <el-form :model="formData" label-position="right" label-width="80px" :rules="rules" ref="prForm">
+         <el-form-item label="时间:" prop="time">
           <div class="block">
               <el-date-picker type="datetime" placeholder="选择日期" v-model="formData.time" clearable default-time="12:00:00"></el-date-picker>
           </div>
@@ -86,7 +86,7 @@
               <el-input-number v-model="formData.cumulativeRights" :precision="2" clearable></el-input-number>
        </el-form-item>
        
-         <el-form-item label="部门:">
+         <el-form-item label="部门:" prop="department">
             <el-input v-model="formData.department" clearable placeholder="请输入" ></el-input>
       </el-form-item>
        
@@ -96,7 +96,7 @@
        </el-form>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
-        <el-button @click="enterDialog" type="primary">确 定</el-button>
+        <el-button @click="enterDialog" type="primary" :disabled="isDisable">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -121,6 +121,7 @@ export default {
       listApi: getFutureRightsDailyList,
       dialogFormVisible: false,
       type: "",
+      isDisable:false,
       deleteVisible: false,
       multipleSelection: [],formData: {
             time:"",
@@ -128,6 +129,11 @@ export default {
             department:"",
             product:"",
             
+      },
+      rules: {
+        time:[ { required: true, message: '请输入', trigger: 'blur' }],
+        accountId:[ { required: true, message: '请输入', trigger: 'blur' }],
+        departmentName:[ { required: true, message: '请输入', trigger: 'blur' }],
       }
     };
   },
@@ -225,26 +231,33 @@ export default {
       }
     },
     async enterDialog() {
-      let res;
-      switch (this.type) {
-        case "create":
-          res = await createFutureRightsDaily(this.formData);
-          break;
-        case "update":
-          res = await updateFutureRightsDaily(this.formData);
-          break;
-        default:
-          res = await createFutureRightsDaily(this.formData);
-          break;
-      }
-      if (res.code == 0) {
-        this.$message({
-          type:"success",
-          message:"创建/更改成功"
-        })
-        this.closeDialog();
-        this.getTableData();
-      }
+      this.$refs.prForm.validate(async valid => {
+        if (valid) {
+          this.isDisable=true;
+          let res;
+          switch (this.type) {
+            case "create":
+              res = await createFutureRightsDaily(this.formData);
+              break;
+            case "update":
+              res = await updateFutureRightsDaily(this.formData);
+              break;
+            default:
+              res = await createFutureRightsDaily(this.formData);
+              break;
+          }
+          this.isDisable=false
+          if (res.code == 0) {
+            this.$message({
+              type:"success",
+              message:"创建/更改成功"
+            })
+            this.closeDialog();
+            this.isDisable=false
+            this.getTableData();
+          }
+        }
+      });
     },
     openDialog() {
       this.type = "create";

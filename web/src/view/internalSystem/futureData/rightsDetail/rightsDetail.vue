@@ -6,9 +6,10 @@
           <div class="block">
             <el-date-picker
               v-model="searchInfo.time"
-              type="datetime"
-              placeholder="选择日期时间"
-              default-time="12:00:00">
+              type="datetimerange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期">
             </el-date-picker>
           </div>
         </el-form-item> 
@@ -29,7 +30,7 @@
             <p>确定要删除吗？</p>
               <div style="text-align: right; margin: 0">
                 <el-button @click="deleteVisible = false" size="mini" type="text">取消</el-button>
-                <el-button @click="onDelete" size="mini" type="primary">确定</el-button>
+                <el-button @click="onDelete" size="mini" type="primary" :disabled="isDisable">确定</el-button>
               </div>
             <el-button icon="el-icon-delete" size="mini" slot="reference" type="danger">批量删除</el-button>
           </el-popover>
@@ -83,8 +84,8 @@
     ></el-pagination>
 
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作"  v-dialogDrag>
-      <el-form :model="formData" label-position="right" label-width="100px">
-         <el-form-item label="时间:">
+      <el-form :model="formData" label-position="right" label-width="100px" :rules="rules" ref="prForm">
+         <el-form-item label="时间:" prop="time">
               <el-date-picker type="datetime" placeholder="选择日期" v-model="formData.time" clearable default-time="12:00:00"></el-date-picker>
        </el-form-item>
        
@@ -92,7 +93,7 @@
             <el-input v-model="formData.productName" clearable placeholder="请输入" ></el-input>
       </el-form-item>
        
-         <el-form-item label="部门:">
+         <el-form-item label="部门:" prop="departmentName">
             <el-input v-model="formData.departmentName" clearable placeholder="请输入" ></el-input>
       </el-form-item>
        
@@ -120,7 +121,7 @@
       </el-form>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
-        <el-button @click="enterDialog" type="primary">确 定</el-button>
+        <el-button @click="enterDialog" type="primary" :disabled="isDisable">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -145,6 +146,7 @@ export default {
       listApi: getRightsDetailList,
       dialogFormVisible: false,
       type: "",
+      isDisable:false,
       deleteVisible: false,
       multipleSelection: [],formData: {
             time:"",
@@ -157,6 +159,11 @@ export default {
             customerProfit:"",
             adjustExpense:0,
             
+      },
+      rules: {
+        time:[ { required: true, message: '请输入', trigger: 'blur' }],
+        accountId:[ { required: true, message: '请输入', trigger: 'blur' }],
+        departmentName:[ { required: true, message: '请输入', trigger: 'blur' }],
       }
     };
   },
@@ -259,26 +266,32 @@ export default {
       }
     },
     async enterDialog() {
-      let res;
-      switch (this.type) {
-        case "create":
-          res = await createRightsDetail(this.formData);
-          break;
-        case "update":
-          res = await updateRightsDetail(this.formData);
-          break;
-        default:
-          res = await createRightsDetail(this.formData);
-          break;
-      }
-      if (res.code == 0) {
-        this.$message({
-          type:"success",
-          message:"创建/更改成功"
-        })
-        this.closeDialog();
-        this.getTableData();
-      }
+      this.$refs.prForm.validate(async valid => {
+        if (valid) {
+          this.isDisable=true;
+          let res;
+          switch (this.type) {
+            case "create":
+              res = await createRightsDetail(this.formData);
+              break;
+            case "update":
+              res = await updateRightsDetail(this.formData);
+              break;
+            default:
+              res = await createRightsDetail(this.formData);
+              break;
+          }
+          this.isDisable=false
+          if (res.code == 0) {
+            this.$message({
+              type:"success",
+              message:"创建/更改成功"
+            })
+            this.closeDialog();
+            this.getTableData();
+          }
+        }
+      });
     },
     openDialog() {
       this.type = "create";

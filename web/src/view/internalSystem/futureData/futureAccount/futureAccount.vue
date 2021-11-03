@@ -66,7 +66,7 @@
        </el-form>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
-        <el-button @click="enterDialog" type="primary">确 定</el-button>
+        <el-button @click="enterDialog" type="primary" :disabled="isDisable">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -91,6 +91,7 @@ export default {
       listApi: getFutureAccountList,
       dialogFormVisible: false,
       type: "",
+      isDisable:false,
       deleteVisible: false,
       multipleSelection: [],formData: {
             status:0,
@@ -189,6 +190,7 @@ export default {
       }
     },
     async enterDialog() {
+      this.isDisable=true;
       let res;
       switch (this.type) {
         case "create":
@@ -201,6 +203,7 @@ export default {
           res = await createFutureAccount(this.formData);
           break;
       }
+      this.isDisable=false
       if (res.code == 0) {
         this.$message({
           type:"success",
