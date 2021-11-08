@@ -15,8 +15,16 @@
         <el-form-item label="品种">
           <el-input placeholder="搜索条件" v-model="searchInfo.productName"></el-input>
         </el-form-item>    
-        <el-form-item label="账户">
-          <el-input placeholder="搜索条件" v-model="searchInfo.accountId"></el-input>
+        <el-form-item label="抬头" prop="accountId">
+          <!-- <el-input placeholder="搜索条件" v-model="searchInfo.accountId"></el-input> -->
+          <el-select v-model="searchInfo.accountId" placeholder="请选择" clearable>
+            <el-option
+              :key="item.value"
+              :label="`${item.label}(${item.value})`"
+              :value="item.value"
+              v-for="item in methodOptions">
+            </el-option>
+          </el-select>
         </el-form-item>          
         <el-form-item label="部门">
           <el-input placeholder="搜索条件" v-model="searchInfo.departmentName"></el-input>
@@ -57,7 +65,12 @@
     
     <el-table-column label="品种" prop="productName" width="120"></el-table-column> 
     
-    <el-table-column label="抬头" prop="accountId" width="120"></el-table-column> 
+    <el-table-column label="抬头" prop="accountId" width="120">
+      
+      <template>
+        <div>{{accountType[tableData[0].accountId]}}</div>
+      </template>
+      </el-table-column> 
     
     <el-table-column label="浮动盈亏" prop="profitByFloat" width="120"></el-table-column> 
     
@@ -96,7 +109,16 @@
             <el-input v-model="formData.productName" clearable placeholder="请输入" ></el-input>
       </el-form-item>
        
-         <el-form-item label="抬头:" prop="accountId"><el-input v-model.number="formData.accountId" clearable placeholder="请输入"></el-input>
+         <el-form-item label="抬头:" prop="accountId">
+           <!-- <el-input v-model.number="formData.accountId" clearable placeholder="请输入"></el-input> -->
+          <el-select v-model="formData.accountId" placeholder="请选择" clearable>
+            <el-option
+              :key="item.value"
+              :label="`${item.label}(${item.value})`"
+              :value="item.value"
+              v-for="item in methodOptions">
+            </el-option>
+          </el-select>
       </el-form-item>
        
          <el-form-item label="浮动盈亏:">
@@ -134,6 +156,20 @@ import {
 import { formatTimeToStr } from "@/utils/date";
 import infoList from "@/mixins/infoList";
 import { mapGetters } from "vuex";
+const methodOptions = [
+  {
+    value: "smxh",
+    label: "杉贸现货",
+  },
+  {
+    value: "zwxh",
+    label: "智维现货",
+  },
+  {
+    value: "zexh",
+    label: "总二现货",
+  }
+];
 export default {
   name: "SpotDetail",
   mixins: [infoList],
@@ -144,6 +180,12 @@ export default {
       type: "",
       isDisable:false,
       deleteVisible: false,
+      methodOptions: methodOptions,
+      accountType:{
+          "smxh":"杉贸现货",
+          "zwxh":"智维现货",
+          "zexh":"总二现货",
+   },
       multipleSelection: [],formData: {
             time:"",
             productName:"",
