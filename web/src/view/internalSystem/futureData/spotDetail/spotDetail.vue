@@ -67,9 +67,9 @@
     
     <el-table-column label="抬头" prop="accountId" width="120">
       
-      <template>
+      <!-- <template>
         <div>{{accountType[tableData[0].accountId]}}</div>
-      </template>
+      </template> -->
       </el-table-column> 
     
     <el-table-column label="浮动盈亏" prop="profitByFloat" width="120"></el-table-column> 
