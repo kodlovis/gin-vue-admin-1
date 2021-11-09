@@ -5,8 +5,8 @@ import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/middleware"
 	"gin-vue-admin/router"
-	"gin-vue-admin/router/internalSystem/future_data"
-	"gin-vue-admin/router/internalSystem/position_reward"
+	"gin-vue-admin/router/internal_system/future_data"
+	"gin-vue-admin/router/internal_system/position_reward"
 	"gin-vue-admin/router/rms"
 	"net/http"
 
