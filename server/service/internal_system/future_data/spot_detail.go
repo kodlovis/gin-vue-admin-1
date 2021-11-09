@@ -73,7 +73,7 @@ func GetSpotDetailInfoList(info rif.SpotDetailSearch) (err error, list interface
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.GVA_DB.Model(&mif.SpotDetail{}).Order("time desc, department_name, product_name, account_id, profit_by_float, profit_by_trade, trade_fee")
+	db := global.GVA_DB.Model(&mif.SpotDetail{}).Preload("AccountInfo").Order("time desc, department_name, product_name, account_id, profit_by_float, profit_by_trade, trade_fee")
 	var spotDetails []mif.SpotDetail
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.Time != "" {

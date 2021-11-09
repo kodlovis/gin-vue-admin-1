@@ -17,12 +17,12 @@
         </el-form-item>    
         <el-form-item label="抬头" prop="accountId">
           <!-- <el-input placeholder="搜索条件" v-model="searchInfo.accountId"></el-input> -->
-          <el-select v-model="searchInfo.accountId" placeholder="请选择" clearable>
+           <el-select v-model="searchInfo.accountId" placeholder="请选择" clearable filterable >
             <el-option
-              :key="item.value"
-              :label="`${item.label}(${item.value})`"
-              :value="item.value"
-              v-for="item in methodOptions">
+              :key="item.accountId"
+              :label="`${item.comment}(${item.accountId})`"
+              :value="item.accountId"
+              v-for="item in accountInfoOptions">
             </el-option>
           </el-select>
         </el-form-item>          
@@ -65,11 +65,7 @@
     
     <el-table-column label="品种" prop="productName" width="120"></el-table-column> 
     
-    <el-table-column label="抬头" prop="accountId" width="120">
-      
-      <!-- <template>
-        <div>{{accountType[tableData[0].accountId]}}</div>
-      </template> -->
+    <el-table-column label="抬头" prop="accountInfo.comment" width="120">
       </el-table-column> 
     
     <el-table-column label="浮动盈亏" prop="profitByFloat" width="120"></el-table-column> 
@@ -111,12 +107,12 @@
        
          <el-form-item label="抬头:" prop="accountId">
            <!-- <el-input v-model.number="formData.accountId" clearable placeholder="请输入"></el-input> -->
-          <el-select v-model="formData.accountId" placeholder="请选择" clearable>
+           <el-select v-model="formData.accountId" placeholder="请选择" clearable filterable >
             <el-option
-              :key="item.value"
-              :label="`${item.label}(${item.value})`"
-              :value="item.value"
-              v-for="item in methodOptions">
+              :key="item.accountId"
+              :label="`${item.comment}(${item.accountId})`"
+              :value="item.accountId"
+              v-for="item in accountInfoOptions">
             </el-option>
           </el-select>
       </el-form-item>
@@ -153,6 +149,7 @@ import {
     findSpotDetail,
     getSpotDetailList
 } from "@/api/internalSystem/futureData/spotDetail";  //  此处请自行替换地址
+import{getAccountInfoList}from "@/api/internalSystem/accountInfo"; 
 import { formatTimeToStr } from "@/utils/date";
 import infoList from "@/mixins/infoList";
 import { mapGetters } from "vuex";
@@ -180,6 +177,7 @@ export default {
       type: "",
       isDisable:false,
       deleteVisible: false,
+      accountInfoOptions:[],
       methodOptions: methodOptions,
       accountType:{
           "smxh":"杉贸现货",
@@ -194,7 +192,13 @@ export default {
             profitByTrade:0,
             tradeFee:0,
             departmentName:"",
+            accountInfo:{accountId:"",comment:""},
       },
+      accountInfoData:{
+           accountId:"",
+           comment:"",
+           type:"",
+      }, 
       rules: {
         time:[ { required: true, message: '请输入', trigger: 'blur' }],
         accountId:[ { required: true, message: '请输入', trigger: 'blur' }],
@@ -332,10 +336,34 @@ export default {
     openDialog() {
       this.type = "create";
       this.dialogFormVisible = true;
-    }
+    },
+    setAccountInfoOptions(accountInfoData) {
+        this.accountInfoOptions = [];
+        this.ids = [];
+        this.setAccountInfoOptionsData(accountInfoData, this.accountInfoOptions ,this.ids);
+      },
+      setAccountInfoOptionsData(AccountInfoData, optionsData ,ids) {
+        AccountInfoData &&
+          AccountInfoData.map(item => {
+            if(item.type=='1'){
+                const option = {
+                  accountId: item.accountId,
+                  comment: item.comment
+                };
+                optionsData.push(option);
+                const idOption = {
+                  accountId: item.accountId,
+                };
+                ids.push(idOption)
+              }
+          });
+      },
   },
   async created() {
     await this.getTableData();
+    //加载期货账户信息
+    const accountInfo = await getAccountInfoList({ page: 1, pageSize: 999 });
+    this.setAccountInfoOptions(accountInfo.data.list);
   
 }
 };

@@ -6,10 +6,9 @@
           <div class="block">
             <el-date-picker
               v-model="searchInfo.time"
-              type="datetimerange"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期">
+              type="datetime"
+              placeholder="选择日期时间"
+              default-time="12:00:00">
             </el-date-picker>
           </div>
         </el-form-item> 

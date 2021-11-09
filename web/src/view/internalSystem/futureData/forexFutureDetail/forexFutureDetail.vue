@@ -16,7 +16,14 @@
           <el-input placeholder="搜索条件" v-model="searchInfo.productName"></el-input>
         </el-form-item>    
         <el-form-item label="账户">
-          <el-input placeholder="搜索条件" v-model="searchInfo.accountId"></el-input>
+           <el-select v-model="searchInfo.accountId" placeholder="请选择" clearable filterable >
+            <el-option
+              :key="item.accountId"
+              :label="`${item.comment}(${item.accountId})`"
+              :value="item.accountId"
+              v-for="item in accountInfoOptions">
+            </el-option>
+          </el-select>
         </el-form-item>    
         <el-form-item label="部门">
           <el-input placeholder="搜索条件" v-model="searchInfo.departmentName"></el-input>
@@ -54,7 +61,7 @@
     
     <el-table-column label="品种" prop="productName" width="120"></el-table-column> 
     
-    <el-table-column label="账户" prop="accountId" width="120"></el-table-column> 
+    <el-table-column label="账户" prop="accountInfo.comment" width="150"></el-table-column> 
     
     <el-table-column label="浮动盈亏" prop="profitByFloat" width="120"></el-table-column> 
     
@@ -95,8 +102,15 @@
             <el-input v-model="formData.productName" clearable placeholder="请输入" ></el-input>
       </el-form-item>
        
-         <el-form-item label="账号:" prop="accountId">
-            <el-input v-model="formData.accountId" clearable placeholder="请输入" ></el-input>
+         <el-form-item label="账号:">
+           <el-select v-model="formData.accountId" placeholder="请选择" clearable filterable >
+            <el-option
+              :key="item.accountId"
+              :label="`${item.comment}(${item.accountId})`"
+              :value="item.accountId"
+              v-for="item in accountInfoOptions">
+            </el-option>
+          </el-select>
       </el-form-item>
        
          <el-form-item label="浮动盈亏:">
@@ -132,6 +146,7 @@ import {
     findForexFutureDetail,
     getForexFutureDetailList
 } from "@/api/internalSystem/futureData/forexFutureDetail";  //  此处请自行替换地址
+import{getAccountInfoList}from "@/api/internalSystem/accountInfo"; 
 import { formatTimeToStr } from "@/utils/date";
 import infoList from "@/mixins/infoList";
 export default {
@@ -144,6 +159,7 @@ export default {
       type: "",
       isDisable:false,
       deleteVisible: false,
+      accountInfoOptions:[],
       multipleSelection: [],formData: {
             time:"",
             productName:"",
@@ -152,8 +168,13 @@ export default {
             profitByTrade:"",
             tradeFee:"",
             departmentName:"",
+            accountInfo:{accountId:"",comment:""},
             
       },
+      accountInfoData:{
+           accountId:"",
+           comment:"",
+      }, 
       rules: {
         time:[ { required: true, message: '请输入', trigger: 'blur' }],
         accountId:[ { required: true, message: '请输入', trigger: 'blur' }],
@@ -288,10 +309,34 @@ export default {
     openDialog() {
       this.type = "create";
       this.dialogFormVisible = true;
-    }
+    },
+    setAccountInfoOptions(accountInfoData) {
+        this.accountInfoOptions = [];
+        this.ids = [];
+        this.setAccountInfoOptionsData(accountInfoData, this.accountInfoOptions ,this.ids);
+      },
+      setAccountInfoOptionsData(AccountInfoData, optionsData ,ids) {
+        AccountInfoData &&
+          AccountInfoData.map(item => {
+            if(item.type=='3'){
+              const option = {
+                accountId: item.accountId,
+                comment: item.comment
+              };
+              optionsData.push(option);
+              const idOption = {
+                accountId: item.accountId,
+              };
+              ids.push(idOption)}
+          });
+      },
   },
+      
   async created() {
     await this.getTableData();
+    //加载期货账户信息
+    const accountInfo = await getAccountInfoList({ page: 1, pageSize: 999 });
+    this.setAccountInfoOptions(accountInfo.data.list);
   
 }
 };
