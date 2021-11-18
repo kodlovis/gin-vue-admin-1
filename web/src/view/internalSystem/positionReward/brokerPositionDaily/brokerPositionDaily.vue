@@ -3,8 +3,15 @@
     <div class="search-term">
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
         <el-form-item label="交易日期">
-          <el-input placeholder="搜索条件" v-model="searchInfo.tradingDate"></el-input>
-        </el-form-item>                  
+          <div class="block">
+            <el-date-picker
+              v-model="searchInfo.tradingDate"
+              type="datetime"
+              placeholder="选择日期时间"
+              default-time="12:00:00">
+            </el-date-picker>
+          </div>
+        </el-form-item>                
         <el-form-item>
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>
@@ -20,6 +27,16 @@
               </div>
             <el-button icon="el-icon-delete" size="mini" slot="reference" type="danger">批量删除</el-button>
           </el-popover>
+        </el-form-item>
+        <el-form-item>
+              <el-upload
+                :action="`${path}/excel/importExcel`"
+                :headers="{'x-token':token}"
+                :on-success="loadBrokerPositionExcel"
+                :show-file-list="false"
+              >
+                <el-button size="small" type="primary" icon="el-icon-upload2">导入</el-button>
+              </el-upload>
         </el-form-item>
       </el-form>
     </div>
@@ -117,13 +134,16 @@
 </template>
 
 <script>
+const path = process.env.VUE_APP_BASE_API;
+import { mapGetters } from 'vuex';
 import {
     createBrokerPositionDaily,
     deleteBrokerPositionDaily,
     deleteBrokerPositionDailyByIds,
     updateBrokerPositionDaily,
     findBrokerPositionDaily,
-    getBrokerPositionDailyList
+    getBrokerPositionDailyList,
+    loadBrokerPositionExcelData
 } from "@/api/internalSystem/positionReward/brokerPositionDaily";  //  此处请自行替换地址
 import { formatTimeToStr } from "@/utils/date";
 import { getDict } from "@/utils/dictionary";
@@ -133,6 +153,7 @@ export default {
   mixins: [infoList],
   data() {
     return {
+      path: path,
       listApi: getBrokerPositionDailyList,
       dialogFormVisible: false,
       type: "",
@@ -169,7 +190,16 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters('user', ['userInfo', 'token'])
+  },
   methods: {
+      async loadBrokerPositionExcel() {
+        const res = await  loadBrokerPositionExcelData();
+        if (res.code == 0) {
+          this.getTableData();
+        }
+      },
       //条件搜索前端看此方法
       onSubmit() {
         this.page = 1

@@ -129,3 +129,20 @@ func GetBrokerPositionDailyList(c *gin.Context) {
 		}, "获取成功", c)
 	}
 }
+
+func LoadBrokerPositionExcelData(c *gin.Context) {
+	err := sp.ParseBrokerPositionExcel2InfoList()
+	if err != nil {
+		global.GVA_LOG.Error("加载数据失败", zap.Any("err", err))
+		response.FailWithMessage("加载数据失败", c)
+		return
+	} else {
+		response.OkWithMessage("创建成功", c)
+	}
+	// response.OkWithDetailed(response.PageResult{
+	// 	List:     menus,
+	// 	Total:    int64(len(menus)),
+	// 	Page:     1,
+	// 	PageSize: 999,
+	// }, "加载数据成功", c)
+}

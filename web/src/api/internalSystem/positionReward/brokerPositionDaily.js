@@ -98,3 +98,11 @@ export const createBrokerPositionDaily = (data) => {
          params
      })
  }
+
+ 
+export const loadBrokerPositionExcelData = () => {
+    return service({
+        url: "/brokerPositionDaily/loadBrokerPositionExcel",
+        method: 'get'
+    })
+}

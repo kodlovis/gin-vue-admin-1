@@ -16,5 +16,7 @@ func InitBrokerPositionDailyRouter(Router *gin.RouterGroup) {
 		BrokerPositionDailyRouter.PUT("updateBrokerPositionDaily", position_reward.UpdateBrokerPositionDaily)              // 更新BrokerPositionDaily
 		BrokerPositionDailyRouter.GET("findBrokerPositionDaily", position_reward.FindBrokerPositionDaily)                  // 根据ID获取BrokerPositionDaily
 		BrokerPositionDailyRouter.GET("getBrokerPositionDailyList", position_reward.GetBrokerPositionDailyList)            // 获取BrokerPositionDaily列表
+
+		BrokerPositionDailyRouter.GET("loadBrokerPositionExcel", position_reward.LoadBrokerPositionExcelData)
 	}
 }
