@@ -6,7 +6,7 @@
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item> -->
         <el-form-item>
-          <el-button @click="openDialog" type="primary">新增productLeveragePrivateEquity表</el-button>
+          <el-button @click="openDialog" type="primary">新增产品杠杆率</el-button>
         </el-form-item>
         <el-form-item>
           <el-popover placement="top" v-model="deleteVisible" width="160">
@@ -30,15 +30,12 @@
       tooltip-effect="dark"
     >
     <el-table-column type="selection" width="55"></el-table-column>
-    <el-table-column label="日期" width="180">
-         <template slot-scope="scope">{{scope.row.CreatedAt|formatDate}}</template>
-    </el-table-column>
     
-    <el-table-column label="productCode字段" prop="productCode" width="120"></el-table-column> 
+    <el-table-column label="品种" prop="productCode" width="120"></el-table-column> 
     
-    <el-table-column label="leverage字段" prop="leverage" width="120"></el-table-column> 
+    <el-table-column label="杠杆率" prop="leverage" width="120"></el-table-column> 
     
-      <el-table-column label="按钮组">
+      <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button class="table-button" @click="updateProductLeveragePrivateEquity(scope.row)" size="small" type="primary" icon="el-icon-edit">变更</el-button>
           <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteRow(scope.row)">删除</el-button>
@@ -57,11 +54,15 @@
       layout="total, sizes, prev, pager, next, jumper"
     ></el-pagination>
 
-    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
+    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="编辑产品杠杆率">
       <el-form :model="formData" label-position="right" label-width="80px">
-         <el-form-item label="productCode字段:"></el-form-item>
+         <el-form-item label="品种:">
+            <el-input v-model="formData.productCode" clearable placeholder="请输入" ></el-input>
+          </el-form-item>
        
-         <el-form-item label="leverage字段:"></el-form-item>
+         <el-form-item label="杠杆率:">
+            <el-input-number v-model="formData.leverage" clearable placeholder="请输入" ></el-input-number>
+          </el-form-item>
        </el-form>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
@@ -143,7 +144,7 @@ export default {
         }
         this.multipleSelection &&
           this.multipleSelection.map(item => {
-            ids.push(item.ID)
+            ids.push(item.id)
           })
         const res = await deleteProductLeveragePrivateEquityByIds({ ids })
         if (res.code == 0) {
@@ -159,7 +160,7 @@ export default {
         }
       },
     async updateProductLeveragePrivateEquity(row) {
-      const res = await findProductLeveragePrivateEquity({ ID: row.ID });
+      const res = await findProductLeveragePrivateEquity({ ID: row.id });
       this.type = "update";
       if (res.code == 0) {
         this.formData = res.data.reproductLeveragePrivateEquity;
@@ -173,7 +174,7 @@ export default {
       };
     },
     async deleteProductLeveragePrivateEquity(row) {
-      const res = await deleteProductLeveragePrivateEquity({ ID: row.ID });
+      const res = await deleteProductLeveragePrivateEquity({ ID: row.id });
       if (res.code == 0) {
         this.$message({
           type: "success",
