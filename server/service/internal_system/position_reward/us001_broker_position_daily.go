@@ -126,7 +126,7 @@ func ParseBrokerPositionExcel2InfoList() error {
 		averageDailyPosition, _ := strconv.ParseFloat(row[5], 64)
 		maximumToOpen, _ := strconv.ParseFloat(row[6], 64)
 		currentPosition, _ := strconv.ParseFloat(row[7], 64)
-		tradingDate, _ := time.Parse("2006/01/02", row[0])
+		tradingDate, _ := time.Parse("2006-01-02", row[0])
 		if row[1] == "鲁证" {
 			row[1] = "0275"
 		}
