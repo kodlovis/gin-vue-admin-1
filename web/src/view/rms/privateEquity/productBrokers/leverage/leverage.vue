@@ -6,7 +6,7 @@
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item> -->
         <el-form-item>
-          <el-button @click="openDialog" type="primary">新增产品杠杆率</el-button>
+          <el-button @click="openDialog('add')" type="primary">新增产品杠杆率</el-button>
         </el-form-item>
         <el-form-item>
           <el-popover placement="top" v-model="deleteVisible" width="160">
@@ -31,7 +31,7 @@
     >
     <el-table-column type="selection" width="55"></el-table-column>
     
-    <el-table-column label="品种" prop="productCode" width="120"></el-table-column> 
+    <el-table-column label="品种" prop="productInfo.productName" width="120"></el-table-column> 
     
     <el-table-column label="杠杆率" prop="leverage" width="120"></el-table-column> 
     
@@ -54,10 +54,17 @@
       layout="total, sizes, prev, pager, next, jumper"
     ></el-pagination>
 
-    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="编辑产品杠杆率">
+    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" :title="dialogTitle">
       <el-form :model="formData" label-position="right" label-width="80px">
          <el-form-item label="品种:">
-            <el-input v-model="formData.productCode" clearable placeholder="请输入" ></el-input>
+           <el-select v-model="formData.productCode" placeholder="请选择" clearable filterable >
+            <el-option
+              :key="item.productCode"
+              :label="`${item.productName}(${item.productCode})`"
+              :value="item.productCode"
+              v-for="item in productInfoOptions">
+            </el-option>
+          </el-select>
           </el-form-item>
        
          <el-form-item label="杠杆率:">
@@ -81,10 +88,12 @@ import {
     findProductLeveragePrivateEquity,
     getProductLeveragePrivateEquityList
 } from "@/api/rms/productLeveragePrivateEquity";  //  此处请自行替换地址
+import {getExchangeProductInfoList} from "@/api/internalSystem/exchangeProductInfo"; 
 import { formatTimeToStr } from "@/utils/date";
 import infoList from "@/mixins/infoList";
 export default {
   name: "ProductLeveragePrivateEquity",
+  productInfoOptions:[],
   mixins: [infoList],
   data() {
     return {
@@ -94,7 +103,11 @@ export default {
       deleteVisible: false,
       multipleSelection: [],formData: {
             
-      }
+      },
+      productInfo:{
+           productInfoCode:"",
+           productInfoName:"",
+      }, 
     };
   },
   filters: {
@@ -164,7 +177,7 @@ export default {
       this.type = "update";
       if (res.code == 0) {
         this.formData = res.data.reproductLeveragePrivateEquity;
-        this.dialogFormVisible = true;
+        this.openDialog("edit");
       }
     },
     closeDialog() {
@@ -208,13 +221,45 @@ export default {
         this.getTableData();
       }
     },
-    openDialog() {
-      this.type = "create";
+    openDialog(type) {
+      switch (type) {
+        case "add":
+          this.dialogTitle = "新增杠杆率";
+          break;
+        case "edit":
+          this.dialogTitle = "编辑杠杆率";
+          break;
+        default:
+          break;
+      }
+      this.type = type;
       this.dialogFormVisible = true;
-    }
+    },
+    setProductInfoOptions(productInfoData) {
+        this.productInfoOptions = [];
+        this.ids = [];
+        this.setProductInfoOptionsData(productInfoData, this.productInfoOptions ,this.ids);
+      },
+      setProductInfoOptionsData(ProductInfoData, optionsData ,ids) {
+        ProductInfoData &&
+          ProductInfoData.map(item => {
+              const option = {
+                productCode: item.productCode,
+                productName: item.productName
+              };
+              optionsData.push(option);
+              const idOption = {
+                productId: item.productId,
+              };
+              ids.push(idOption)
+          });
+      },
   },
   async created() {
     await this.getTableData();
+    //加载品种信息
+    const productInfo = await getExchangeProductInfoList({ page: 1, pageSize: 999 });
+    this.setProductInfoOptions(productInfo.data.list);
   
 }
 };

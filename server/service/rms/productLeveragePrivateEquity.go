@@ -71,7 +71,7 @@ func GetProductLeveragePrivateEquityInfoList(info rp.ProductLeveragePrivateEquit
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.GVA_DB.Model(&mp.ProductLeveragePrivateEquity{})
+	db := global.GVA_DB.Model(&mp.ProductLeveragePrivateEquity{}).Preload("ProductInfo").Order("product_code, leverage")
 	var productLeveragePrivateEquitys []mp.ProductLeveragePrivateEquity
 	// 如果有条件搜索 下方会自动创建搜索语句
 	err = db.Count(&total).Error
