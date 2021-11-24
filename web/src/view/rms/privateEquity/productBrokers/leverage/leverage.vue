@@ -2,11 +2,21 @@
   <div>
     <div class="search-term">
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">    
-        <!-- <el-form-item>
-          <el-button @click="onSubmit" type="primary">查询</el-button>
-        </el-form-item> -->
+        <el-form-item label="品种">
+           <el-select v-model="searchInfo.productCode" placeholder="请选择" clearable filterable >
+            <el-option
+              :key="item.productCode"
+              :label="`${item.productName}(${item.productCode})`"
+              :value="item.productCode"
+              v-for="item in productInfoOptions">
+            </el-option>
+          </el-select>
+        </el-form-item>    
         <el-form-item>
-          <el-button @click="openDialog('add')" type="primary">新增产品杠杆率</el-button>
+          <el-button @click="onSubmit" type="primary">查询</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="openDialog('create')" type="primary">新增产品杠杆率</el-button>
         </el-form-item>
         <el-form-item>
           <el-popover placement="top" v-model="deleteVisible" width="160">
@@ -177,7 +187,7 @@ export default {
       this.type = "update";
       if (res.code == 0) {
         this.formData = res.data.reproductLeveragePrivateEquity;
-        this.openDialog("edit");
+        this.openDialog("update");
       }
     },
     closeDialog() {
@@ -223,10 +233,10 @@ export default {
     },
     openDialog(type) {
       switch (type) {
-        case "add":
+        case "create":
           this.dialogTitle = "新增杠杆率";
           break;
-        case "edit":
+        case "update":
           this.dialogTitle = "编辑杠杆率";
           break;
         default:
@@ -256,10 +266,10 @@ export default {
       },
   },
   async created() {
-    await this.getTableData();
     //加载品种信息
     const productInfo = await getExchangeProductInfoList({ page: 1, pageSize: 999 });
     this.setProductInfoOptions(productInfo.data.list);
+    await this.getTableData();
   
 }
 };

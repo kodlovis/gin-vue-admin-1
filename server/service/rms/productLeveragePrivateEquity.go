@@ -74,6 +74,9 @@ func GetProductLeveragePrivateEquityInfoList(info rp.ProductLeveragePrivateEquit
 	db := global.GVA_DB.Model(&mp.ProductLeveragePrivateEquity{}).Preload("ProductInfo").Order("product_code, leverage")
 	var productLeveragePrivateEquitys []mp.ProductLeveragePrivateEquity
 	// 如果有条件搜索 下方会自动创建搜索语句
+	if info.ProductCode != "" {
+		db = db.Where("product_code LIKE ?", "%"+info.ProductCode+"%")
+	}
 	err = db.Count(&total).Error
 	err = db.Limit(limit).Offset(offset).Find(&productLeveragePrivateEquitys).Error
 	return err, productLeveragePrivateEquitys, total
