@@ -6,7 +6,7 @@
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item> -->
         <el-form-item>
-          <el-button @click="openDialog('add')" type="primary">新增产品杠杆率</el-button>
+          <el-button @click="openDialog('create')" type="primary">新增产品杠杆率</el-button>
         </el-form-item>
         <el-form-item>
           <el-popover placement="top" v-model="deleteVisible" width="160">
@@ -177,7 +177,7 @@ export default {
       this.type = "update";
       if (res.code == 0) {
         this.formData = res.data.reproductLeveragePrivateEquity;
-        this.openDialog("edit");
+        this.openDialog("update");
       }
     },
     closeDialog() {
@@ -223,10 +223,10 @@ export default {
     },
     openDialog(type) {
       switch (type) {
-        case "add":
+        case "create":
           this.dialogTitle = "新增杠杆率";
           break;
-        case "edit":
+        case "update":
           this.dialogTitle = "编辑杠杆率";
           break;
         default:
