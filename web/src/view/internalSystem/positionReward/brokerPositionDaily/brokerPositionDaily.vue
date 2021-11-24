@@ -16,7 +16,7 @@
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button @click="openDialog" type="primary">新增</el-button>
+          <el-button @click="openDialog('create')" type="primary">新增持仓</el-button>
         </el-form-item>
         <el-form-item>
           <el-popover placement="top" v-model="deleteVisible" width="160">
@@ -35,7 +35,7 @@
                 :on-success="loadBrokerPositionExcel"
                 :show-file-list="false"
               >
-                <el-button size="small" type="primary" icon="el-icon-upload2">导入</el-button>
+                <el-button size="small" type="primary" icon="el-icon-upload2">Excel导入</el-button>
               </el-upload>
         </el-form-item>
       </el-form>
@@ -89,7 +89,7 @@
       layout="total, sizes, prev, pager, next, jumper"
     ></el-pagination>
 
-    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
+    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" :title="dialogTitle">
       <el-form :model="formData" label-position="right" label-width="80px" :rules="rules" ref="prForm">
          <el-form-item label="交易日期:">
           <div class="block">
@@ -260,7 +260,7 @@ export default {
       this.type = "update";
       if (res.code == 0) {
         this.formData = res.data.reBrokerPositionDaily;
-        this.dialogFormVisible = true;
+        this.openDialog("update");
       }
     },
     closeDialog() {
@@ -314,10 +314,20 @@ export default {
         this.getTableData();
       }
     },
-    openDialog() {
-      this.type = "create";
+    openDialog(type) {
+      switch (type) {
+        case "create":
+          this.dialogTitle = "新增持仓";
+          break;
+        case "update":
+          this.dialogTitle = "编辑持仓";
+          break;
+        default:
+          break;
+      }
+      this.type = type;
       this.dialogFormVisible = true;
-    }
+    },
   },
   async created() {
     await this.getTableData();
