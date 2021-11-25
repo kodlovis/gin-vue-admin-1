@@ -215,6 +215,10 @@ export default {
       async loadAccountPositionExcel() {
         const res = await  loadAccountPositionExcelData();
         if (res.code == 0) {
+          this.$message({
+            type: 'success',
+            message: '上传成功'
+          })
           this.getTableData();
         }
       },

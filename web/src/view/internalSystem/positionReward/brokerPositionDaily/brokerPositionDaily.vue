@@ -87,7 +87,7 @@
     ></el-pagination>
 
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" :title="dialogTitle">
-      <el-form :model="formData" label-position="right" label-width="100px" :rules="rules" ref="prForm">
+      <el-form :model="formData" label-position="right" label-width="100px"  ref="prForm">
          <el-form-item label="交易日期:">
           <div class="block">
               <el-date-picker type="datetime" placeholder="选择日期" v-model="formData.tradingDate" clearable default-time="12:00:00"></el-date-picker>
@@ -174,6 +174,8 @@ export default {
       deleteVisible: false,
       accountInfoOptions:[],
       brokerDictList:[],
+      productInfoOptions:"",
+      dialogTitle:"",
       multipleSelection: [],formData: {
             tradingDate:"",
             brokerId:"",
@@ -219,6 +221,10 @@ export default {
       async loadBrokerPositionExcel() {
         const res = await  loadBrokerPositionExcelData();
         if (res.code == 0) {
+          this.$message({
+            type: 'success',
+            message: '上传成功'
+          })
           this.getTableData();
         }
       },
