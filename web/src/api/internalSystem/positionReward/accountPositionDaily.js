@@ -98,3 +98,9 @@ export const createAccountPositionDaily = (data) => {
          params
      })
  }
+ export const loadAccountPositionExcelData = () => {
+     return service({
+         url: "/accountPositionDaily/loadAccountPositionExcel",
+         method: 'get'
+     })
+ }

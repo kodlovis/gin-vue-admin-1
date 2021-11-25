@@ -16,5 +16,7 @@ func InitAccountPositionDailyRouter(Router *gin.RouterGroup) {
 		AccountPositionDailyRouter.PUT("updateAccountPositionDaily", position_reward.UpdateAccountPositionDaily)              // 更新AccountPositionDaily
 		AccountPositionDailyRouter.GET("findAccountPositionDaily", position_reward.FindAccountPositionDaily)                  // 根据ID获取AccountPositionDaily
 		AccountPositionDailyRouter.GET("getAccountPositionDailyList", position_reward.GetAccountPositionDailyList)            // 获取AccountPositionDaily列表
+
+		AccountPositionDailyRouter.GET("loadAccountPositionExcel", position_reward.LoadAccountPositionExcelData)
 	}
 }

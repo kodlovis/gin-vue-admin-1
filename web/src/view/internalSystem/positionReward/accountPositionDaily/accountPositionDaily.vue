@@ -3,13 +3,20 @@
     <div class="search-term">
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
         <el-form-item label="交易日期">
-          <el-input placeholder="搜索条件" v-model="searchInfo.tradingDate"></el-input>
+          <div class="block">
+            <el-date-picker
+              v-model="searchInfo.tradingDate"
+              type="datetime"
+              placeholder="选择日期时间"
+              default-time="12:00:00">
+            </el-date-picker>
+          </div>
         </el-form-item>                
         <el-form-item>
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button @click="openDialog" type="primary">新增</el-button>
+          <el-button @click="openDialog('create')" type="primary">新增</el-button>
         </el-form-item>
         <el-form-item>
           <el-popover placement="top" v-model="deleteVisible" width="160">
@@ -20,6 +27,16 @@
               </div>
             <el-button icon="el-icon-delete" size="mini" slot="reference" type="danger">批量删除</el-button>
           </el-popover>
+        </el-form-item>
+        <el-form-item>
+              <el-upload
+                :action="`${path}/excel/importExcel`"
+                :headers="{'x-token':token}"
+                :on-success="loadAccountPositionExcel"
+                :show-file-list="false"
+              >
+                <el-button size="small" type="primary" icon="el-icon-upload2">Excel导入</el-button>
+              </el-upload>
         </el-form-item>
       </el-form>
     </div>
@@ -36,11 +53,7 @@
     
     <el-table-column label="交易日期" prop="tradingDate" width="120"></el-table-column> 
     
-    <el-table-column label="期货公司" prop="brokerId" width="120">
-      <template slot-scope="scope">
-          <span>{{brokerfilterDict(scope.row.brokerId)}}</span>
-      </template>
-    </el-table-column> 
+    <el-table-column label="期货公司" prop="accountInfo.comment" width="120"></el-table-column> 
     
     <el-table-column label="账户" prop="accountId" width="120"></el-table-column> 
     
@@ -77,7 +90,7 @@
       layout="total, sizes, prev, pager, next, jumper"
     ></el-pagination>
 
-    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
+    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" :title="dialogTitle">
       <el-form :model="formData" label-position="right" label-width="80px" :rules="rules" ref="prForm">
          <el-form-item label="交易日期:">
           <div class="block">
@@ -86,14 +99,14 @@
       </el-form-item>
        
          <el-form-item label="期货公司:">
-          <el-select v-model="formData.brokerId" placeholder="请选择">
+           <el-select v-model="formData.brokerId" placeholder="请选择或输入期货公司代码" clearable filterable >
             <el-option
-              v-for="item in brokerDictList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
+              :key="item.brokerId"
+              :label="`${item.comment}(${item.brokerId})`"
+              :value="item.brokerId"
+              v-for="item in accountInfoOptions">
             </el-option>
-          </el-select>  
+          </el-select>
           </el-form-item>
        
          <el-form-item label="账户:">
@@ -134,15 +147,19 @@
 </template>
 
 <script>
+const path = process.env.VUE_APP_BASE_API;
+import { mapGetters } from 'vuex';
 import {
     createAccountPositionDaily,
     deleteAccountPositionDaily,
     deleteAccountPositionDailyByIds,
     updateAccountPositionDaily,
     findAccountPositionDaily,
-    getAccountPositionDailyList
+    getAccountPositionDailyList,
+    loadAccountPositionExcelData
 } from "@/api/internalSystem/positionReward/accountPositionDaily";  //  此处请自行替换地址
 import { getDict } from "@/utils/dictionary";
+import {getAccountInfoList} from "@/api/internalSystem/accountInfo"; 
 import { formatTimeToStr } from "@/utils/date";
 import infoList from "@/mixins/infoList";
 export default {
@@ -150,6 +167,7 @@ export default {
   mixins: [infoList],
   data() {
     return {
+      path: path,
       listApi: getAccountPositionDailyList,
       dialogFormVisible: false,
       type: "",
@@ -166,7 +184,11 @@ export default {
             direction:"",
             hedgeFlag:"",
             amount:"",
-      }
+      },
+      accountInfoData:{
+           accountId:"",
+           comment:"",
+      }, 
     };
   },
   filters: {
@@ -186,13 +208,37 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters('user', ['userInfo', 'token'])
+  },
   methods: {
+      async loadAccountPositionExcel() {
+        const res = await  loadAccountPositionExcelData();
+        if (res.code == 0) {
+          this.getTableData();
+        }
+      },
+    openDialog(type) {
+      switch (type) {
+        case "create":
+          this.dialogTitle = "新增持仓信息";
+          break;
+        case "update":
+          this.dialogTitle = "编辑持仓信息";
+          break;
+        default:
+          break;
+      }
+      this.type = type;
+      this.dialogFormVisible = true;
+    },
       //条件搜索前端看此方法
       onSubmit() {
         this.page = 1
         this.pageSize = 10           
         this.getTableData()
       },
+      //字典
       brokerfilterDict(brokerId){
         const re = this.brokerDictList.filter(item=>{
           return item.value == brokerId
@@ -204,6 +250,7 @@ export default {
           return""
           }
       },
+      //字典
       directionfilterDict(direction){
         const re = this.directionDictList.filter(item=>{
           return item.value == direction
@@ -215,6 +262,7 @@ export default {
           return""
           }
       },
+      //字典
       hedgeFlagfilterDict(hedgeFlag){
         const re = this.hedgeFlagDictList.filter(item=>{
           return item.value == hedgeFlag
@@ -269,7 +317,7 @@ export default {
       this.type = "update";
       if (res.code == 0) {
         this.formData = res.data.reAccountPositionDaily;
-        this.dialogFormVisible = true;
+        this.openDialog("update");
       }
     },
     closeDialog() {
@@ -322,17 +370,34 @@ export default {
         this.getTableData();
       }
     },
-    openDialog() {
-      this.type = "create";
-      this.dialogFormVisible = true;
-    }
+    //账户选项
+    setAccountInfoOptions(accountInfoData) {
+        this.accountInfoOptions = [];
+        this.ids = [];
+        this.setAccountInfoOptionsData(accountInfoData, this.accountInfoOptions ,this.ids);
+      },
+      setAccountInfoOptionsData(AccountInfoData, optionsData ,ids) {
+        AccountInfoData &&
+          AccountInfoData.map(item => {
+            if(item.type=='4'){
+              const option = {
+                brokerId: item.accountId,
+                comment: item.comment
+              };
+              optionsData.push(option);
+              const idOption = {
+                brokerId: item.accountId,
+              };
+              ids.push(idOption)}
+          });
+      },
   },
   async created() {
-    await this.getTableData();
     //获取期货公司字典
     const broker = await getDict("broker");
     broker.map(item=>item.value)
     this.brokerDictList = broker
+    await this.getTableData();
     //获取方向字典
     const direct = await getDict("direct");
     direct.map(item=>item.value)
@@ -341,6 +406,9 @@ export default {
     const hedgeFlag = await getDict("hedgeFlag");
     hedgeFlag.map(item=>item.value)
     this.hedgeFlagDictList = hedgeFlag
+    //加载期货账户信息
+    const accountInfo = await getAccountInfoList({ page: 1, pageSize: 999 });
+    this.setAccountInfoOptions(accountInfo.data.list);
   
 }
 };
