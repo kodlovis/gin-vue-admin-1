@@ -2,10 +2,12 @@ package position_reward
 
 import (
 	"errors"
+	"fmt"
 	"gin-vue-admin/global"
 	mp "gin-vue-admin/model/internal_system/position_reward"
 	rp "gin-vue-admin/model/request/internal_system/position_reward"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/360EntSecGroup-Skylar/excelize/v2"
@@ -76,7 +78,7 @@ func GetBrokerPositionDailyInfoList(info rp.BrokerPositionDailySearch) (err erro
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.GVA_DB.Model(&mp.BrokerPositionDaily{}).Order("trading_date desc")
+	db := global.GVA_DB.Model(&mp.BrokerPositionDaily{}).Preload("ProductInfo").Order("trading_date desc")
 	var BrokerPositionDailys []mp.BrokerPositionDaily
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if !info.TradingDate.IsZero() {
@@ -101,6 +103,25 @@ func ParseBrokerPositionExcel2InfoList() error {
 		return err
 	}
 	menus := make([]mp.BrokerPositionDaily, 0)
+	err = file.RemoveRow("Sheet1", 1)
+	if err != nil {
+		return err
+	}
+	err = file.RemoveCol("Sheet1", "I")
+	if err != nil {
+		return err
+	}
+	err = file.RemoveCol("Sheet1", "I")
+	if err != nil {
+		return err
+	}
+	if err := file.SaveAs(global.GVA_CONFIG.Excel.Dir + "BrokerPositionDaily.xlsx"); err != nil {
+		fmt.Println(err)
+	}
+	file, err = excelize.OpenFile(global.GVA_CONFIG.Excel.Dir + "BrokerPositionDaily.xlsx")
+	if err != nil {
+		return err
+	}
 	rows, err := file.Rows("Sheet1")
 	if err != nil {
 		return err
@@ -133,7 +154,7 @@ func ParseBrokerPositionExcel2InfoList() error {
 		menu := mp.BrokerPositionDaily{
 			TradingDate:          tradingDate,
 			BrokerId:             row[1],
-			ProductCode:          row[2],
+			ProductCode:          strings.ToUpper(row[2]),
 			TotalTradingFee:      float64(totalTradingFee),
 			SpecialTradingFee:    float64(specialTradingFee),
 			AverageDailyPosition: float64(averageDailyPosition),
