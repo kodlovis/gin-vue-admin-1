@@ -99,7 +99,7 @@
       </el-form-item>
        
          <el-form-item label="期货公司:">
-           <el-select v-model="formData.brokerId" placeholder="请选择或输入期货公司代码" clearable filterable >
+           <el-select v-model="formData.brokerId" placeholder="请选择" clearable filterable >
             <el-option
               :key="item.brokerId"
               :label="`${item.comment}(${item.brokerId})`"
