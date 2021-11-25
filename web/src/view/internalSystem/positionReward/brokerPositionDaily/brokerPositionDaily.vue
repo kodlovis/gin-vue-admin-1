@@ -98,7 +98,14 @@
       </el-form-item>
        
          <el-form-item label="期货公司:">
-            <el-input v-model="formData.brokerId" clearable placeholder="请输入" ></el-input>
+          <el-select v-model="formData.brokerId" placeholder="请选择" clearable filterable >
+            <el-option
+              v-for="item in brokerDictList"
+              :key="item.value"
+              :label="item.label"
+              :value="`${item.value}`">
+          </el-option>
+        </el-select>
       </el-form-item>
        
          <el-form-item label="品种:">
