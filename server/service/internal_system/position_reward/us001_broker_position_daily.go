@@ -78,7 +78,7 @@ func GetBrokerPositionDailyInfoList(info rp.BrokerPositionDailySearch) (err erro
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.GVA_DB.Model(&mp.BrokerPositionDaily{}).Preload("ProductInfo").Order("trading_date desc")
+	db := global.GVA_DB.Model(&mp.BrokerPositionDaily{}).Preload("AccountInfo").Preload("ProductInfo").Order("trading_date desc")
 	var BrokerPositionDailys []mp.BrokerPositionDaily
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if !info.TradingDate.IsZero() {

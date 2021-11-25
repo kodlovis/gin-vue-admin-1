@@ -18,6 +18,7 @@ type BrokerPositionDaily struct {
 	MaximumToOpen        float64                             `json:"maximumToOpen" form:"maximumToOpen" gorm:"column:maximum_to_open;comment:"`
 	CurrentPosition      float64                             `json:"currentPosition" form:"currentPosition" gorm:"column:current_position;comment:"`
 	ProductInfo          internal_system.ExchangeProductInfo `json:"productInfo" gorm:"foreignKey:ProductCode;references:ProductCode;comment:"`
+	AccountInfo          internal_system.AccountInfo         `json:"accountInfo" gorm:"foreignKey:AccountId;references:BrokerId;comment:"`
 }
 
 func (BrokerPositionDaily) TableName() string {

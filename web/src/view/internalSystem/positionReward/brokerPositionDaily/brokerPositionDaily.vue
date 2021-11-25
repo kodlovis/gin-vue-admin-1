@@ -53,10 +53,7 @@
     
     <el-table-column label="交易日期" prop="tradingDate" width="120"></el-table-column> 
     
-    <el-table-column label="期货公司" prop="brokerId" width="120">
-      <template slot-scope="scope">
-          <span>{{brokerfilterDict(scope.row.brokerId)}}</span>
-      </template></el-table-column> 
+    <el-table-column label="期货公司" prop="accountInfo.comment" width="120"></el-table-column> 
     
     <el-table-column label="品种" prop="productInfo.productName" width="120"></el-table-column> 
     
@@ -90,7 +87,7 @@
     ></el-pagination>
 
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" :title="dialogTitle">
-      <el-form :model="formData" label-position="right" label-width="80px" :rules="rules" ref="prForm">
+      <el-form :model="formData" label-position="right" label-width="100px" :rules="rules" ref="prForm">
          <el-form-item label="交易日期:">
           <div class="block">
               <el-date-picker type="datetime" placeholder="选择日期" v-model="formData.tradingDate" clearable default-time="12:00:00"></el-date-picker>
@@ -98,14 +95,14 @@
       </el-form-item>
        
          <el-form-item label="期货公司:">
-          <el-select v-model="formData.brokerId" placeholder="请选择" clearable filterable >
+           <el-select v-model="formData.brokerId" placeholder="请选择" clearable filterable >
             <el-option
-              v-for="item in brokerDictList"
-              :key="item.value"
-              :label="item.label"
-              :value="`${item.value}`">
-          </el-option>
-        </el-select>
+              :key="item.brokerId"
+              :label="`${item.comment}(${item.brokerId})`"
+              :value="item.brokerId"
+              v-for="item in accountInfoOptions">
+            </el-option>
+          </el-select>
       </el-form-item>
        
          <el-form-item label="品种:">
@@ -160,6 +157,7 @@ import {
     loadBrokerPositionExcelData
 } from "@/api/internalSystem/positionReward/brokerPositionDaily";  //  此处请自行替换地址
 import {getExchangeProductInfoList} from "@/api/internalSystem/exchangeProductInfo"; 
+import {getAccountInfoList} from "@/api/internalSystem/accountInfo"; 
 import { formatTimeToStr } from "@/utils/date";
 import { getDict } from "@/utils/dictionary";
 import infoList from "@/mixins/infoList";
@@ -174,6 +172,7 @@ export default {
       type: "",
       isDisable:false,
       deleteVisible: false,
+      accountInfoOptions:[],
       brokerDictList:[],
       multipleSelection: [],formData: {
             tradingDate:"",
@@ -186,6 +185,10 @@ export default {
             currentPosition:0,
             
       },
+      accountInfoData:{
+           accountId:"",
+           comment:"",
+      }, 
       productInfo:{
            productInfoCode:"",
            productInfoName:"",
@@ -366,6 +369,26 @@ export default {
               ids.push(idOption)
           });
       },
+    setAccountInfoOptions(accountInfoData) {
+        this.accountInfoOptions = [];
+        this.ids = [];
+        this.setAccountInfoOptionsData(accountInfoData, this.accountInfoOptions ,this.ids);
+      },
+      setAccountInfoOptionsData(AccountInfoData, optionsData ,ids) {
+        AccountInfoData &&
+          AccountInfoData.map(item => {
+            if(item.type=='4'){
+              const option = {
+                brokerId: item.accountId,
+                comment: item.comment
+              };
+              optionsData.push(option);
+              const idOption = {
+                brokerId: item.accountId,
+              };
+              ids.push(idOption)}
+          });
+      },
   },
   async created() {
     //加载品种信息
@@ -376,6 +399,10 @@ export default {
     const broker = await getDict("broker");
     broker.map(item=>item.value)
     this.brokerDictList = broker
+    //加载期货账户信息
+    const accountInfo = await getAccountInfoList({ page: 1, pageSize: 999 });
+    this.setAccountInfoOptions(accountInfo.data.list);
+  
   
 }
 };
