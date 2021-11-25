@@ -37,7 +37,7 @@
     <el-table-column label="风控阈值" prop="adminValue" width="120"></el-table-column> 
     <el-table-column label="描述" prop="description" width="220"></el-table-column> 
     
-      <el-table-column label="按钮组">
+      <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button class="table-button" @click="updateRiskSetting(scope.row)" size="small" type="primary" icon="el-icon-edit">变更</el-button>
           <el-popover placement="top" width="160" v-model="scope.row.visible">

@@ -45,7 +45,7 @@
 
       <el-table-column label="排序标记" prop="sort" width="120"></el-table-column>
 
-      <el-table-column label="按钮组">
+      <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button @click="updateSysDictionaryDetail(scope.row)" size="small" type="primary">变更</el-button>
           <el-popover placement="top" width="160" v-model="scope.row.visible">

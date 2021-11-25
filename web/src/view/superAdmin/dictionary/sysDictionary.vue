@@ -48,7 +48,7 @@
 
       <el-table-column label="描述" prop="desc" width="280"></el-table-column>
 
-      <el-table-column label="按钮组">
+      <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button @click="toDetile(scope.row)" size="small" type="success">详情</el-button>
           <el-button @click="updateSysDictionary(scope.row)" size="small" type="primary">变更</el-button>

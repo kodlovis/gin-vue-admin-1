@@ -81,7 +81,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="按钮组">
+      <el-table-column label="操作">
         <template slot-scope="scope">
           <el-popover placement="top" v-model="scope.row.visible" width="160">
             <p>确定要删除吗？</p>

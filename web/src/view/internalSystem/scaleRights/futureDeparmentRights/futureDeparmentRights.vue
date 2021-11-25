@@ -55,7 +55,7 @@
     
     <el-table-column label="盈亏" prop="profit" width="120"></el-table-column> 
     
-      <el-table-column label="按钮组">
+      <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button class="table-button" @click="updateFutureDeparmentRights(scope.row)" size="small" type="primary" icon="el-icon-edit">变更</el-button>
           <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteRow(scope.row)">删除</el-button>
