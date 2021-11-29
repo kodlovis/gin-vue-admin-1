@@ -84,6 +84,9 @@ func GetBrokerPositionDailyInfoList(info rp.BrokerPositionDailySearch) (err erro
 	if !info.TradingDate.IsZero() {
 		db = db.Where("trading_date = ?", info.TradingDate)
 	}
+	if info.BrokerId != "" {
+		db = db.Where("broker_id LIKE ?", "%"+info.BrokerId+"%")
+	}
 	err = db.Count(&total).Error
 	err = db.Limit(limit).Offset(offset).Find(&BrokerPositionDailys).Error
 	return err, BrokerPositionDailys, total

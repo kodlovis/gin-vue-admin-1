@@ -11,7 +11,17 @@
               default-time="12:00:00">
             </el-date-picker>
           </div>
-        </el-form-item>                
+        </el-form-item>
+        <el-form-item label="期货公司">
+           <el-select v-model="searchInfo.brokerId" placeholder="请选择" clearable filterable >
+            <el-option
+              :key="item.brokerId"
+              :label="`${item.comment}(${item.brokerId})`"
+              :value="item.brokerId"
+              v-for="item in accountInfoOptions">
+            </el-option>
+          </el-select>
+        </el-form-item>                 
         <el-form-item>
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>

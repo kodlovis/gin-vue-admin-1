@@ -71,7 +71,7 @@ func GetPositionRewardRuleInfoList(info rp.PositionRewardRuleSearch) (err error,
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.GVA_DB.Model(&mp.PositionRewardRule{})
+	db := global.GVA_DB.Model(&mp.PositionRewardRule{}).Preload("AccountInfo").Preload("ProductInfo").Order("effective_date desc")
 	var positionRewardRules []mp.PositionRewardRule
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.EffectiveDate != "" {
@@ -80,7 +80,19 @@ func GetPositionRewardRuleInfoList(info rp.PositionRewardRuleSearch) (err error,
 	if info.ExpirationDate != "" {
 		db = db.Where("expiration_date = ?", info.ExpirationDate)
 	}
+	if info.BrokerId != "" {
+		db = db.Where("broker_id LIKE ?", "%"+info.BrokerId+"%")
+	}
 	err = db.Count(&total).Error
 	err = db.Limit(limit).Offset(offset).Find(&positionRewardRules).Error
+	for i := 0; i < len(positionRewardRules); i++ {
+		if positionRewardRules[i].ExchangeId == "SHF" {
+			positionRewardRules[i].ExchangeId = "上海期货交易所"
+		} else if positionRewardRules[i].ExchangeId == "DCE" {
+			positionRewardRules[i].ExchangeId = "大连商品交易所"
+		} else if positionRewardRules[i].ExchangeId == "ZCE" {
+			positionRewardRules[i].ExchangeId = "郑州商品交易所"
+		}
+	}
 	return err, positionRewardRules, total
 }

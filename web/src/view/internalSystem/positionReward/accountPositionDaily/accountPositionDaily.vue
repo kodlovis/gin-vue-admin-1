@@ -11,7 +11,17 @@
               default-time="12:00:00">
             </el-date-picker>
           </div>
-        </el-form-item>                
+        </el-form-item>
+        <el-form-item label="期货公司">
+           <el-select v-model="searchInfo.accountId" placeholder="请选择" clearable filterable >
+            <el-option
+              :key="item.brokerId"
+              :label="`${item.comment}(${item.brokerId})`"
+              :value="item.brokerId"
+              v-for="item in accountInfoOptions">
+            </el-option>
+          </el-select>
+        </el-form-item>                 
         <el-form-item>
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>
@@ -91,7 +101,7 @@
     ></el-pagination>
 
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" :title="dialogTitle">
-      <el-form :model="formData" label-position="right" label-width="80px" :rules="rules" ref="prForm">
+      <el-form :model="formData" label-position="right" label-width="80px" ref="prForm">
          <el-form-item label="交易日期:">
           <div class="block">
               <el-date-picker type="datetime" placeholder="选择日期" v-model="formData.tradingDate" clearable default-time="12:00:00"></el-date-picker>
@@ -173,6 +183,8 @@ export default {
       type: "",
       deleteVisible: false,
       isDisable:false,
+      accountInfoOptions:[],
+      dialogTitle:"",
       brokerDictList:[],
       hedgeFlagDictList:[],
       directionDictList:[],
