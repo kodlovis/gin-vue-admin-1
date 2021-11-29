@@ -6,7 +6,7 @@
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button @click="openDialog" type="primary">添加期货账号</el-button>
+          <el-button @click="openDialog('create')" type="primary">添加期货账号</el-button>
         </el-form-item>
         <el-form-item>
           <el-popover placement="top" v-model="deleteVisible" width="160">
@@ -36,6 +36,19 @@
     
     <el-table-column label="状态" prop="status" width="120"></el-table-column> 
     
+    <el-table-column label="代理地址" prop="proxy" width="320"></el-table-column> 
+    
+    <el-table-column label="描述" prop="description" width="120"></el-table-column> 
+    
+    <!-- <el-table-column label="updateAt字段" prop="updateAt" width="120"></el-table-column>  -->
+    
+    <el-table-column label="是否使用代理" prop="isUseProxy" width="120">
+      <template slot-scope="scope">
+          <span>{{isUseProxyFilterDict(scope.row.isUseProxy)}}</span>
+      </template></el-table-column> 
+    
+    <el-table-column label="账号归属" prop="group" width="120"></el-table-column> 
+
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button class="table-button" @click="updateFutureAccount(scope.row)" size="small" type="primary" icon="el-icon-edit">变更</el-button>
@@ -55,14 +68,31 @@
       layout="total, sizes, prev, pager, next, jumper"
     ></el-pagination>
 
-    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
-      <el-form :model="formData" label-position="right" label-width="80px">
+    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" :title="dialogTitle">
+      <el-form :model="formData" label-position="right" label-width="100px">
          <el-form-item label="期货账号:"><el-input v-model="formData.username" clearable placeholder="请输入"></el-input></el-form-item>
        
          <el-form-item label="密码:"><el-input v-model="formData.password" clearable placeholder="请输入"></el-input></el-form-item>
        
          <el-form-item label="状态:"><el-input v-model.number="formData.status" clearable placeholder="请输入"></el-input>
       </el-form-item>
+         <el-form-item label="代理地址:"><el-input v-model.number="formData.proxy" clearable placeholder="请输入"></el-input></el-form-item>
+       
+         <el-form-item label="描述:"><el-input v-model.number="formData.description" clearable placeholder="请输入"></el-input></el-form-item>
+       
+       
+         <el-form-item label="是否使用代理:">
+          <el-select v-model="formData.isUseProxy" placeholder="请选择">
+            <el-option
+              v-for="item in isUseProxyDictList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+      </el-form-item>
+      
+         <el-form-item label="账号归属:"><el-input v-model.number="formData.group" clearable placeholder="请输入"></el-input></el-form-item>
        </el-form>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
@@ -82,6 +112,7 @@ import {
     getFutureAccountList
 } from "@/api/internalSystem/futureData/futureAccount";  //  此处请自行替换地址
 import { formatTimeToStr } from "@/utils/date";
+import { getDict } from "@/utils/dictionary";
 import infoList from "@/mixins/infoList";
 export default {
   name: "FutureAccount",
@@ -93,9 +124,13 @@ export default {
       type: "",
       isDisable:false,
       deleteVisible: false,
+      isUseProxyDictList:[],
       multipleSelection: [],formData: {
             status:0,
-            
+            isUseProxy:0,
+            proxy:"",
+            description:"",
+            group:"",
       }
     };
   },
@@ -166,13 +201,17 @@ export default {
       this.type = "update";
       if (res.code == 0) {
         this.formData = res.data.refutureAccount;
-        this.dialogFormVisible = true;
+        this.openDialog("update");
       }
     },
     closeDialog() {
       this.dialogFormVisible = false;
       this.formData = {
           status:0,
+          isUseProxy:0,
+          proxy:"",
+          description:"",
+          group:"",
           
       };
     },
@@ -213,13 +252,38 @@ export default {
         this.getTableData();
       }
     },
-    openDialog() {
-      this.type = "create";
+    openDialog(type) {
+      switch (type) {
+        case "create":
+          this.dialogTitle = "新增账号";
+          break;
+        case "update":
+          this.dialogTitle = "编辑账号";
+          break;
+        default:
+          break;
+      }
+      this.type = type;
       this.dialogFormVisible = true;
-    }
+    },
+      isUseProxyFilterDict(isUseProxy){
+        const re = this.isUseProxyDictList.filter(item=>{
+          return item.value == isUseProxy
+        })[0]
+        if(re){
+          return re.label
+          }
+        else{
+          return""
+          }
+      },
   },
   async created() {
     await this.getTableData();
+    //获取是否使用代理字典
+    const isUseProxy = await getDict("isUseProxy");
+    isUseProxy.map(item=>item.value)
+    this.isUseProxyDictList = isUseProxy
   
 }
 };
