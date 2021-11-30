@@ -13,7 +13,14 @@
           </div>
         </el-form-item>  
         <el-form-item label="品种">
-          <el-input placeholder="搜索条件" v-model="searchInfo.productName"></el-input>
+           <el-select v-model="searchInfo.productName" placeholder="请选择" clearable filterable >
+            <el-option
+              :key="item.productName"
+              :label="`${item.productName}(${item.productCode})`"
+              :value="item.productName"
+              v-for="item in productInfoOptions">
+            </el-option>
+          </el-select>
         </el-form-item>    
         <el-form-item label="账户">
            <el-select v-model="searchInfo.accountId" placeholder="请选择" clearable filterable >
@@ -32,7 +39,7 @@
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button @click="openDialog" type="primary">新增数据</el-button>
+          <el-button @click="openDialog('create')" type="primary">新增数据</el-button>
         </el-form-item>
         <el-form-item>
           <el-popover placement="top" v-model="deleteVisible" width="160">
@@ -90,7 +97,7 @@
       layout="total, sizes, prev, pager, next, jumper"
     ></el-pagination>
 
-    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作" v-dialogDrag>
+    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" :title="dialogTitle" v-dialogDrag>
       <el-form :model="formData" label-position="right" label-width="100px" :rules="rules" ref="prForm">
          <el-form-item label="时间:" prop="time">
           <div class="block">
@@ -99,7 +106,14 @@
        </el-form-item>
        
          <el-form-item label="品种:">
-            <el-input v-model="formData.productName" clearable placeholder="请输入" ></el-input>
+           <el-select v-model="formData.productName" placeholder="请选择" clearable filterable >
+            <el-option
+              :key="item.productName"
+              :label="`${item.productName}(${item.productCode})`"
+              :value="item.productName"
+              v-for="item in productInfoOptions">
+            </el-option>
+          </el-select>
       </el-form-item>
        
          <el-form-item label="账号:">
@@ -147,6 +161,7 @@ import {
     getForexFutureDetailList
 } from "@/api/internalSystem/futureData/forexFutureDetail";  //  此处请自行替换地址
 import{getAccountInfoList}from "@/api/internalSystem/accountInfo"; 
+import {getExchangeProductInfoList} from "@/api/internalSystem/exchangeProductInfo"; 
 import { formatTimeToStr } from "@/utils/date";
 import infoList from "@/mixins/infoList";
 export default {
@@ -159,7 +174,9 @@ export default {
       type: "",
       isDisable:false,
       deleteVisible: false,
+      productInfoOptions:"",
       accountInfoOptions:[],
+      dialogTitle:"",
       multipleSelection: [],formData: {
             time:"",
             productName:"",
@@ -174,6 +191,10 @@ export default {
       accountInfoData:{
            accountId:"",
            comment:"",
+      }, 
+      productInfo:{
+           productInfoCode:"",
+           productInfoName:"",
       }, 
       rules: {
         time:[ { required: true, message: '请输入', trigger: 'blur' }],
@@ -249,7 +270,7 @@ export default {
       this.type = "update";
       if (res.code == 0) {
         this.formData = res.data.reforexFutureDetail;
-        this.dialogFormVisible = true;
+        this.openDialog("update");
       }
     },
     closeDialog() {
@@ -306,8 +327,18 @@ export default {
         }
       });
     },
-    openDialog() {
-      this.type = "create";
+    openDialog(type) {
+      switch (type) {
+        case "create":
+          this.dialogTitle = "新增数据";
+          break;
+        case "update":
+          this.dialogTitle = "编辑数据";
+          break;
+        default:
+          break;
+      }
+      this.type = type;
       this.dialogFormVisible = true;
     },
     setAccountInfoOptions(accountInfoData) {
@@ -330,13 +361,35 @@ export default {
               ids.push(idOption)}
           });
       },
+    setProductInfoOptions(productInfoData) {
+        this.productInfoOptions = [];
+        this.ids = [];
+        this.setProductInfoOptionsData(productInfoData, this.productInfoOptions ,this.ids);
+      },
+      setProductInfoOptionsData(ProductInfoData, optionsData ,ids) {
+        ProductInfoData &&
+          ProductInfoData.map(item => {
+              const option = {
+                productCode: item.productCode,
+                productName: item.productName
+              };
+              optionsData.push(option);
+              const idOption = {
+                productId: item.productId,
+              };
+              ids.push(idOption)
+          });
+      },
   },
       
   async created() {
-    await this.getTableData();
     //加载期货账户信息
     const accountInfo = await getAccountInfoList({ page: 1, pageSize: 999 });
     this.setAccountInfoOptions(accountInfo.data.list);
+    //加载品种信息
+    const productInfo = await getExchangeProductInfoList({ page: 1, pageSize: 999 });
+    this.setProductInfoOptions(productInfo.data.list);
+    await this.getTableData();
   
 }
 };

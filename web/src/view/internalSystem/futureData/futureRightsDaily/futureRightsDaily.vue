@@ -16,13 +16,20 @@
           <el-input placeholder="搜索条件" v-model="searchInfo.department"></el-input>
         </el-form-item>    
         <el-form-item label="品种">
-          <el-input placeholder="搜索条件" v-model="searchInfo.product"></el-input>
+           <el-select v-model="searchInfo.productName" placeholder="请选择" clearable filterable >
+            <el-option
+              :key="item.productName"
+              :label="`${item.productName}(${item.productCode})`"
+              :value="item.productName"
+              v-for="item in productInfoOptions">
+            </el-option>
+          </el-select>
         </el-form-item>    
         <el-form-item>
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button @click="openDialog" type="primary">新增数据</el-button>
+          <el-button @click="openDialog('create')" type="primary">新增数据</el-button>
         </el-form-item>
         <el-form-item>
           <el-popover placement="top" v-model="deleteVisible" width="160">
@@ -74,7 +81,7 @@
       layout="total, sizes, prev, pager, next, jumper"
     ></el-pagination>
 
-    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
+    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" :title="dialogTitle">
       <el-form :model="formData" label-position="right" label-width="80px" :rules="rules" ref="prForm">
          <el-form-item label="时间:" prop="time">
           <div class="block">
@@ -91,7 +98,14 @@
       </el-form-item>
        
          <el-form-item label="品种:">
-            <el-input v-model="formData.product" clearable placeholder="请输入" ></el-input>
+           <el-select v-model="formData.productName" placeholder="请选择" clearable filterable >
+            <el-option
+              :key="item.productName"
+              :label="`${item.productName}(${item.productCode})`"
+              :value="item.productName"
+              v-for="item in productInfoOptions">
+            </el-option>
+          </el-select>
       </el-form-item>
        </el-form>
       <div class="dialog-footer" slot="footer">
@@ -111,6 +125,7 @@ import {
     findFutureRightsDaily,
     getFutureRightsDailyList
 } from "@/api/internalSystem/futureData/futureRightsDaily";  //  此处请自行替换地址
+import {getExchangeProductInfoList} from "@/api/internalSystem/exchangeProductInfo"; 
 import { formatTimeToStr } from "@/utils/date";
 import infoList from "@/mixins/infoList";
 export default {
@@ -123,6 +138,8 @@ export default {
       type: "",
       isDisable:false,
       deleteVisible: false,
+      productInfoOptions:"",
+      dialogTitle:"",
       multipleSelection: [],formData: {
             time:"",
             cumulativeRights:"",
@@ -204,7 +221,7 @@ export default {
       this.type = "update";
       if (res.code == 0) {
         this.formData = res.data.refutureRightsDaily;
-        this.dialogFormVisible = true;
+        this.openDialog("update");
       }
     },
     closeDialog() {
@@ -259,12 +276,44 @@ export default {
         }
       });
     },
-    openDialog() {
-      this.type = "create";
+    openDialog(type) {
+      switch (type) {
+        case "create":
+          this.dialogTitle = "新增数据";
+          break;
+        case "update":
+          this.dialogTitle = "编辑数据";
+          break;
+        default:
+          break;
+      }
+      this.type = type;
       this.dialogFormVisible = true;
-    }
+    },
+    setProductInfoOptions(productInfoData) {
+        this.productInfoOptions = [];
+        this.ids = [];
+        this.setProductInfoOptionsData(productInfoData, this.productInfoOptions ,this.ids);
+      },
+      setProductInfoOptionsData(ProductInfoData, optionsData ,ids) {
+        ProductInfoData &&
+          ProductInfoData.map(item => {
+              const option = {
+                productCode: item.productCode,
+                productName: item.productName
+              };
+              optionsData.push(option);
+              const idOption = {
+                productId: item.productId,
+              };
+              ids.push(idOption)
+          });
+      },
   },
   async created() {
+    //加载品种信息
+    const productInfo = await getExchangeProductInfoList({ page: 1, pageSize: 999 });
+    this.setProductInfoOptions(productInfo.data.list);
     await this.getTableData();
   
 }
