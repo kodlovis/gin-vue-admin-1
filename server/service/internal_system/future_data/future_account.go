@@ -49,6 +49,11 @@ func DeleteFutureAccountByIds(ids rif.IdsReq) (err error) {
 //@return: err error
 
 func UpdateFutureAccount(futureAccount mif.FutureAccount) (err error) {
+	var accountInfo mif.FutureAccount
+	err = global.GVA_DB.Where("id = ?", futureAccount.ID).First(&accountInfo).Error
+	if futureAccount.Password != accountInfo.Password {
+		futureAccount.Password = string(utils.Base64Encode([]byte(futureAccount.Password)))
+	}
 	err = global.GVA_DB.Save(&futureAccount).Error
 	return err
 }
