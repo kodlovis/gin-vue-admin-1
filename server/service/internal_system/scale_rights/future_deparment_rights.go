@@ -57,7 +57,7 @@ func UpdateFutureDeparmentRights(futureDeparmentRights mp.FutureDeparmentRights)
 //@return: err error, futureDeparmentRights model.FutureDeparmentRights
 
 func GetFutureDeparmentRights(id uint) (err error, futureDeparmentRights mp.FutureDeparmentRights) {
-	err = global.GVA_DB.Where("id = ?", id).First(&futureDeparmentRights).Error
+	err = global.GVA_DB.Where("id = ?", id).Order("time desc").First(&futureDeparmentRights).Error
 	return
 }
 
@@ -71,7 +71,7 @@ func GetFutureDeparmentRightsInfoList(info rp.FutureDeparmentRightsSearch) (err 
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.GVA_DB.Model(&mp.FutureDeparmentRights{})
+	db := global.GVA_DB.Model(&mp.FutureDeparmentRights{}).Order("time desc")
 	var futureDeparmentRightss []mp.FutureDeparmentRights
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.Time != "" {

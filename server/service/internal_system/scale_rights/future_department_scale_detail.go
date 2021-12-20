@@ -57,7 +57,7 @@ func UpdateFutureDepartmentScaleDetail(futureDepartmentScaleDetail mp.FutureDepa
 //@return: err error, futureDepartmentScaleDetail model.FutureDepartmentScaleDetail
 
 func GetFutureDepartmentScaleDetail(id uint) (err error, futureDepartmentScaleDetail mp.FutureDepartmentScaleDetail) {
-	err = global.GVA_DB.Where("id = ?", id).First(&futureDepartmentScaleDetail).Error
+	err = global.GVA_DB.Where("id = ?", id).Order("time desc").First(&futureDepartmentScaleDetail).Error
 	return
 }
 
@@ -71,7 +71,7 @@ func GetFutureDepartmentScaleDetailInfoList(info rp.FutureDepartmentScaleDetailS
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.GVA_DB.Model(&mp.FutureDepartmentScaleDetail{})
+	db := global.GVA_DB.Model(&mp.FutureDepartmentScaleDetail{}).Order("time desc")
 	var futureDepartmentScaleDetails []mp.FutureDepartmentScaleDetail
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.Time != "" {

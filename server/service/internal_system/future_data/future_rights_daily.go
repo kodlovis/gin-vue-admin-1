@@ -57,7 +57,7 @@ func UpdateFutureRightsDaily(futureRightsDaily mif.FutureRightsDaily) (err error
 //@return: err error, futureRightsDaily model.FutureRightsDaily
 
 func GetFutureRightsDaily(id uint) (err error, futureRightsDaily mif.FutureRightsDaily) {
-	err = global.GVA_DB.Where("id = ?", id).First(&futureRightsDaily).Error
+	err = global.GVA_DB.Where("id = ?", id).Order("time desc").First(&futureRightsDaily).Error
 	return
 }
 
@@ -71,7 +71,7 @@ func GetFutureRightsDailyInfoList(info rif.FutureRightsDailySearch) (err error, 
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.GVA_DB.Model(&mif.FutureRightsDaily{})
+	db := global.GVA_DB.Model(&mif.FutureRightsDaily{}).Order("time desc")
 	var futureRightsDailys []mif.FutureRightsDaily
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.Time != "" {
