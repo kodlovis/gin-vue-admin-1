@@ -313,8 +313,23 @@ export default {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
-              })
+              }).then(async () =>{
               res = await updateForexFutureDetail(this.formData);
+              if (res.code == 0) {
+                this.closeDialog();
+                this.$message({
+                  type: "success",
+                  message: "修改成功!"
+                });
+                this.getTableData();
+              }
+              }).catch(() => {
+              this.$message({
+                type: "info",
+                message: "已取消修改"
+              });
+            });
+              
               break;
             default:
               res = await createForexFutureDetail(this.formData);

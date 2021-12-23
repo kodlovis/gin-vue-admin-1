@@ -257,7 +257,27 @@ export default {
               res = await createFutureRightsDaily(this.formData);
               break;
             case "update":
+              this.$confirm('确定要修改当前数据吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(async () =>{
               res = await updateFutureRightsDaily(this.formData);
+              if (res.code == 0) {
+                this.closeDialog();
+                this.$message({
+                  type: "success",
+                  message: "修改成功!"
+                });
+                this.getTableData();
+              }
+              }).catch(() => {
+              this.$message({
+                type: "info",
+                message: "已取消修改"
+              });
+            });
+              
               break;
             default:
               res = await createFutureRightsDaily(this.formData);

@@ -296,8 +296,22 @@ export default {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
-              })
-                res = await updateRightsDetail(this.formData);
+              }).then(async () =>{
+              res = await updateRightsDetail(this.formData)
+              if (res.code == 0) {
+                this.closeDialog();
+                this.$message({
+                  type: "success",
+                  message: "修改成功!"
+                });
+                this.getTableData();
+              }
+              }).catch(() => {
+              this.$message({
+                type: "info",
+                message: "已取消修改"
+              });
+            });
               break;
             default:
               res = await createRightsDetail(this.formData);
