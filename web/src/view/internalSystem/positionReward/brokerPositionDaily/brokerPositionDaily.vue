@@ -358,6 +358,11 @@ export default {
           this.dialogTitle = "新增持仓";
           break;
         case "update":
+          this.$confirm('确定要修改当前数据吗?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          })
           this.dialogTitle = "编辑持仓";
           break;
         default:

@@ -132,6 +132,8 @@
            <el-input-number v-model="formData.cumulativeRights" clearable placeholder="请输入" ></el-input-number>
       </el-form-item>
       </el-form>
+
+
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
         <el-button @click="enterDialog" type="primary" :disabled="isDisable">确 定</el-button>
@@ -290,7 +292,12 @@ export default {
               res = await createRightsDetail(this.formData);
               break;
             case "update":
-              res = await updateRightsDetail(this.formData);
+              this.$confirm('确定要修改当前数据吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              })
+                res = await updateRightsDetail(this.formData);
               break;
             default:
               res = await createRightsDetail(this.formData);

@@ -231,7 +231,7 @@ export default {
         }
         this.multipleSelection &&
           this.multipleSelection.map(item => {
-            ids.push(item.ID)
+            ids.push(item.id)
           })
         const res = await deleteTradeDetailByIds({ ids })
         if (res.code == 0) {
@@ -247,7 +247,7 @@ export default {
         }
       },
     async updateTradeDetail(row) {
-      const res = await findTradeDetail({ ID: row.ID });
+      const res = await findTradeDetail({ ID: row.id });
       this.type = "update";
       if (res.code == 0) {
         this.formData = res.data.retradeDetail;
@@ -274,7 +274,7 @@ export default {
       };
     },
     async deleteTradeDetail(row) {
-      const res = await deleteTradeDetail({ ID: row.ID });
+      const res = await deleteTradeDetail({ ID: row.id });
       if (res.code == 0) {
         this.$message({
           type: "success",
@@ -293,6 +293,11 @@ export default {
           res = await createTradeDetail(this.formData);
           break;
         case "update":
+          this.$confirm('确定要修改当前数据吗?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          })
           res = await updateTradeDetail(this.formData);
           break;
         default:

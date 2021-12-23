@@ -309,6 +309,11 @@ export default {
               res = await createForexFutureDetail(this.formData);
               break;
             case "update":
+              this.$confirm('确定要修改当前数据吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              })
               res = await updateForexFutureDetail(this.formData);
               break;
             default:

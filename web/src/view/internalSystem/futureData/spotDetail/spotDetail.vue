@@ -335,6 +335,11 @@ export default {
               res = await createSpotDetail(this.formData);
               break;
             case "update":
+              this.$confirm('确定要修改当前数据吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              })
               res = await updateSpotDetail(this.formData);
               break;
             default:
