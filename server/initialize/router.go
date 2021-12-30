@@ -59,7 +59,7 @@ func Routers() *gin.Engine {
 		router.InitExcelRouter(PrivateGroup)                 // 表格导入导出
 		rms.InitRiskSettingRouter(PrivateGroup)
 		rms.InitProductLeveragePrivateEquityRouter(PrivateGroup)
-		rms.InitExchangeTradingfeeRewardRouter(PrivateGroup)
+		//rms.InitExchangeTradingfeeRewardRouter(PrivateGroup)
 		rms.InitRoleRouter(PrivateGroup)
 		rms.InitUsersRouter(PrivateGroup)
 		rms.InitMacRouter(PrivateGroup)

@@ -16,8 +16,8 @@ type FuturePositionSizeDetail struct {
 	LongInstrument  string    `json:"longInstrument" form:"longInstrument" gorm:"column:long_instrument;comment:;type:character varying;"`
 	LongBasis       float64   `json:"longBasis" form:"longBasis" gorm:"column:long_basis;comment:;type:double precision;size:53;"`
 	LongMarket      float64   `json:"longMarket" form:"longMarket" gorm:"column:long_market;comment:;type:double precision;size:53;"`
-	Price           float64   `json:"price" form:"price" gorm:"column:price;comment:;type:double precision;size:53;"`
-	PriceMarket     float64   `json:"priceMarket" form:"priceMarket" gorm:"column:price_market;comment:;type:double precision;size:53;"`
+	LongPrice       float64   `json:"longPrice" form:"longPrice" gorm:"column:long_price;comment:;type:double precision;size:53;"`
+	ShortPrice      float64   `json:"shortPrice" form:"shortPrice" gorm:"column:short_price;comment:;type:double precision;size:53;"`
 	LongAccount     string    `json:"longAccount" form:"longAccount" gorm:"column:long_account;comment:;type:character varying;"`
 	LongPosition    float64   `json:"longPosition" form:"longPosition" gorm:"column:long_position;comment:;type:double precision;size:53;"`
 	LongComment     string    `json:"longComment" form:"longComment" gorm:"column:long_comment;comment:;type:character varying;"`

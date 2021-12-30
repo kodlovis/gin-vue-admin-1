@@ -38,42 +38,42 @@
       style="width: 100%"
       tooltip-effect="dark"
     >
-    <el-table-column type="selection" width="50"></el-table-column>
+    <el-table-column type="selection" width="40"></el-table-column>
     
-    <el-table-column label="日期" prop="time" width="120"></el-table-column> 
+    <el-table-column label="日期" prop="time" width="170"></el-table-column> 
     
     <el-table-column label="部门" prop="department" width="120"></el-table-column> 
     
-    <el-table-column label="交易类别" prop="tradeType" width="120"></el-table-column> 
-    <el-table-column label="风险类别" prop="riskType" width="120"></el-table-column> 
+    <el-table-column label="交易类别" prop="tradeType" width="100"></el-table-column> 
+    <el-table-column label="风险类别" prop="riskType" width="100"></el-table-column> 
     
-    <el-table-column label="多头合约" prop="longInstrument" width="120"></el-table-column> 
+    <el-table-column label="多头合约" prop="longInstrument" width="100"></el-table-column> 
     
-    <el-table-column label="多头开仓均价（基差）" prop="longBasis" width="120"></el-table-column> 
+    <el-table-column label="多头开仓均价（基差）" prop="longBasis" width="110"></el-table-column> 
     
-    <el-table-column label="多头市价" prop="longMarket" width="120"></el-table-column> 
-    <el-table-column label="既定价" prop="price" width="120"></el-table-column> 
-    <el-table-column label="既定价市价" prop="priceMarket" width="120"></el-table-column> 
+    <el-table-column label="多头市价（基差）" prop="longMarket" width="80"></el-table-column> 
+    <el-table-column label="多头既定价" prop="longPrice" width="90"></el-table-column> 
     
     <el-table-column label="多头账户" prop="longAccount" width="120"></el-table-column> 
     
-    <el-table-column label="多头持仓手数" prop="longPosition" width="120"></el-table-column> 
+    <el-table-column label="多头持仓吨数" prop="longPosition" width="110"></el-table-column> 
     
     <el-table-column label="多头持仓备注" prop="longComment" width="120"></el-table-column> 
     
-    <el-table-column label="空头合约" prop="shortInstrument" width="120"></el-table-column> 
+    <el-table-column label="空头合约" prop="shortInstrument" width="100"></el-table-column> 
     
-    <el-table-column label="空头开仓均价（基差）" prop="shortBasis" width="120"></el-table-column> 
+    <el-table-column label="空头开仓均价（基差）" prop="shortBasis" width="110"></el-table-column> 
     
-    <el-table-column label="空头市价" prop="shortMarket" width="120"></el-table-column> 
+    <el-table-column label="空头市价（基差）" prop="shortMarket" width="80"></el-table-column> 
     
+    <el-table-column label="空头既定价" prop="shortPrice" width="90"></el-table-column> 
     <el-table-column label="空头账户" prop="shortAccount" width="120"></el-table-column> 
     
-    <el-table-column label="空头持仓手数" prop="shortPosition" width="120"></el-table-column> 
+    <el-table-column label="空头持仓吨数" prop="shortPosition" width="110"></el-table-column> 
     
     <el-table-column label="空头持仓备注" prop="shortComment" width="120"></el-table-column> 
     
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="180">
         <template slot-scope="scope">
           <el-button class="table-button" @click="updateFuturePositionSizeDetail(scope.row)" size="small" type="primary" icon="el-icon-edit">变更</el-button>
           <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteRow(scope.row)">删除</el-button>
@@ -119,13 +119,10 @@
             <el-input-number v-model="formData.longMarket" clearable placeholder="请输入" ></el-input-number>
       </el-form-item>
        
-         <el-form-item label="既定价:">
-            <el-input-number v-model="formData.price" clearable placeholder="请输入" ></el-input-number>
+         <el-form-item label="多头既定价:">
+            <el-input-number v-model="formData.longPrice" clearable placeholder="请输入" ></el-input-number>
       </el-form-item>
        
-         <el-form-item label="市价:">
-            <el-input-number v-model="formData.priceMarket" clearable placeholder="请输入" ></el-input-number>
-      </el-form-item>
          <el-form-item label="多头账户:">
             <el-input v-model="formData.longAccount" clearable placeholder="请输入" ></el-input>
       </el-form-item>
@@ -145,8 +142,11 @@
             <el-input-number v-model="formData.shortBasis" clearable placeholder="请输入" ></el-input-number>
       </el-form-item>
        
-         <el-form-item label="空头市价:">
+         <el-form-item label="空头市价（基差）:">
             <el-input-number v-model="formData.shortMarket" clearable placeholder="请输入" ></el-input-number>
+      </el-form-item>
+         <el-form-item label="空头既定价:">
+            <el-input-number v-model="formData.shortPrice" clearable placeholder="请输入" ></el-input-number>
       </el-form-item>
        
          <el-form-item label="空头账户:">
@@ -197,8 +197,8 @@ export default {
             longInstrument:"",
             longBasis:"",
             longMarket:"",
-            price:"",
-            priceMarket:"",
+            shortPrice:"",
+            longPrice:"",
             longAccount:"",
             longPosition:"",
             longComment:"",
@@ -292,8 +292,8 @@ export default {
             longInstrument:"",
             longBasis:"",
             longMarket:"",
-            price:"",
-            priceMarket:"",
+            shortPrice:"",
+            longPrice:"",
             longAccount:"",
             longPosition:"",
             longComment:"",
