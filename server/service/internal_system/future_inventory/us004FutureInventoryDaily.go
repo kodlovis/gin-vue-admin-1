@@ -71,7 +71,7 @@ func GetUs004FutureInventoryDailyInfoList(info rif.Us004FutureInventoryDailySear
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.GVA_DB.Model(&mif.Us004FutureInventoryDaily{})
+	db := global.GVA_DB.Model(&mif.Us004FutureInventoryDaily{}).Order("time desc")
 	var us004FutureInventoryDailys []mif.Us004FutureInventoryDaily
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if !info.Time.IsZero() {
