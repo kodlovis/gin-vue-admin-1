@@ -2,17 +2,45 @@
   <div>
     <div class="search-term">
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
-        <el-form-item label="时间">
-          <el-input placeholder="搜索条件" v-model="searchInfo.time"></el-input>
-        </el-form-item>    
+        <el-form-item label="日期">
+          <div class="block">
+            <el-date-picker
+              v-model="searchInfo.time"
+              type="datetime"
+              placeholder="选择日期时间"
+              default-time="12:00:00">
+            </el-date-picker>
+          </div>
+        </el-form-item> 
         <el-form-item label="品种">
-          <el-input placeholder="搜索条件" v-model="searchInfo.productCode"></el-input>
+          <el-select v-model="searchInfo.productCode" placeholder="请选择" clearable filterable >
+            <el-option
+              :key="item.productCode"
+              :label="`${item.productName}(${item.productCode})`"
+              :value="item.productCode"
+              v-for="item in productInfoOptions">
+            </el-option>
+          </el-select>
         </el-form-item>      
         <el-form-item label="交易所">
-          <el-input placeholder="搜索条件" v-model="searchInfo.exchangeId"></el-input>
+            <el-select v-model="searchInfo.exchangeId" placeholder="请选择" clearable filterable >
+            <el-option
+              :key="item.exchangeId"
+              :label="`${item.comment}(${item.exchangeId})`"
+              :value="item.exchangeId"
+              v-for="item in exchangeInfoData">
+            </el-option>
+          </el-select>
         </el-form-item>    
         <el-form-item label="简称">
-          <el-input placeholder="搜索条件" v-model="searchInfo.comment"></el-input>
+              <el-select v-model="searchInfo.comment" placeholder="请选择" clearable filterable >
+            <el-option
+              :key="item.name"
+              :label="item.name"
+              :value="item.name"
+              v-for="item in commentChoice">
+            </el-option>
+          </el-select>
         </el-form-item>    
         <el-form-item>
           <el-button @click="onSubmit" type="primary">查询</el-button>
@@ -77,23 +105,44 @@
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
       <el-form :model="formData" label-position="right" label-width="80px">
         <el-form-item label="时间:">
-          <el-date-picker type="date" placeholder="选择日期" v-model="formData.time" clearable></el-date-picker>
+          <el-date-picker type="datetime" placeholder="选择日期" v-model="formData.time" clearable default-time="12:00:00"></el-date-picker>
         </el-form-item>
        
         <el-form-item label="品种:">
-          <el-input v-model="formData.productCode" clearable placeholder="请输入" ></el-input>
+            <el-select v-model="formData.productCode" placeholder="请选择" clearable filterable >
+            <el-option
+              :key="item.productCode"
+              :label="`${item.productName}(${item.productCode})`"
+              :value="item.productCode"
+              v-for="item in productInfoOptions">
+            </el-option>
+          </el-select>
         </el-form-item>
     
         <el-form-item label="简称:">
-          <el-input v-model="formData.comment" clearable placeholder="请输入" ></el-input>
+           <el-select v-model="formData.comment" placeholder="请选择" clearable filterable >
+            <el-option
+              :key="item.name"
+              :label="item.name"
+              :value="item.name"
+              v-for="item in commentChoice">
+            </el-option>
+          </el-select>
         </el-form-item>
        
         <el-form-item label="交易所:">
-          <el-input v-model="formData.exchangeId" clearable placeholder="请输入" ></el-input>
+           <el-select v-model="formData.exchangeId" placeholder="请选择" clearable filterable >
+            <el-option
+              :key="item.exchangeId"
+              :label="`${item.comment}(${item.exchangeId})`"
+              :value="item.exchangeId"
+              v-for="item in exchangeInfoData">
+            </el-option>
+          </el-select>
         </el-form-item>
        
         <el-form-item label="数量:">
-          <el-input v-model="formData.volume" clearable placeholder="请输入" ></el-input>
+          <el-input style="width:220px" v-model="formData.volume" clearable placeholder="请输入" ></el-input>
         </el-form-item>
        </el-form>
       <div class="dialog-footer" slot="footer">
@@ -114,6 +163,7 @@ import {
     getUs004FutureInventoryDailyList
 } from "@/api/internalSystem/stockControl/us004FutureInventoryDaily";  //  此处请自行替换地址
 import { formatTimeToStr } from "@/utils/date";
+import {getExchangeProductInfoList} from "@/api/internalSystem/exchangeProductInfo"; 
 import infoList from "@/mixins/infoList";
 export default {
   name: "Us004FutureInventoryDaily",
@@ -126,11 +176,29 @@ export default {
       deleteVisible: false,
       multipleSelection: [],formData: {
             time:new Date(),
-            productCode:"",
+            productCode:"CU",
             exchangeId:"",
             comment:"",
             
-      }
+            
+      },
+      productInfo:{
+        productInfoCode:"",
+        productInfoName:"",
+      }, 
+      exchangeInfoData:[
+        {exchangeId:"SHF",comment:"上海期货交易所"},
+        // {exchangeId:"ZCE",comment:"郑州商品交易所"},
+        // {exchangeId:"DCE",comment:"大连商品交易所"},
+        {exchangeId:"INE",comment:"上海能源交易所"},
+        {exchangeId:"LME",comment:"LME"},
+      ], 
+      commentChoice:[
+        {name:"现货"},
+        {name:"保税"},
+        {name:"LME"},
+
+      ], 
     };
   },
   filters: {
@@ -207,7 +275,7 @@ export default {
       this.dialogFormVisible = false;
       this.formData = {
           time:new Date(),
-          productCode:"",
+          productCode:"CU",
           exchangeId:"",
           comment:"",
           
@@ -228,6 +296,7 @@ export default {
     },
     async enterDialog() {
       let res;
+      console.log(this.formData)
       switch (this.type) {
         case "create":
           res = await createUs004FutureInventoryDaily(this.formData);
@@ -251,9 +320,31 @@ export default {
     openDialog() {
       this.type = "create";
       this.dialogFormVisible = true;
-    }
+    },
+    setProductInfoOptions(productInfoData) {
+    this.productInfoOptions = [];
+    this.ids = [];
+    this.setProductInfoOptionsData(productInfoData, this.productInfoOptions ,this.ids);
+    },
+    setProductInfoOptionsData(ProductInfoData, optionsData ,ids) {
+      ProductInfoData &&
+        ProductInfoData.map(item => {
+            const option = {
+              productCode: item.productCode,
+              productName: item.productName
+            };
+            optionsData.push(option);
+            const idOption = {
+              productId: item.productId,
+            };
+            ids.push(idOption)
+        });
+    },
   },
   async created() {
+    //加载品种信息
+    const productInfo = await getExchangeProductInfoList({ page: 1, pageSize: 999 });
+    this.setProductInfoOptions(productInfo.data.list);
     await this.getTableData();
   
 }
