@@ -38,7 +38,7 @@
             <el-button icon="el-icon-delete" size="mini" slot="reference" type="danger">批量删除</el-button>
           </el-popover>
         </el-form-item>
-        <el-form-item>
+        <!-- <el-form-item>
               <el-upload
                 :action="`${path}/excel/importExcel`"
                 :headers="{'x-token':token}"
@@ -47,7 +47,7 @@
               >
                 <el-button size="small" type="primary" icon="el-icon-upload2">Excel导入</el-button>
               </el-upload>
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
     </div>
     <el-table
@@ -69,7 +69,7 @@
     
     <el-table-column label="手续费返还率" prop="rewardRate" width="120"></el-table-column> 
     
-    <el-table-column label="描述" prop="description" width="120"></el-table-column> 
+    <el-table-column label="描述" prop="description" width="420"></el-table-column> 
     
       <el-table-column label="操作">
         <template slot-scope="scope">
@@ -346,6 +346,9 @@ export default {
     const exchangeInfo = await getExchangeProductInfoList({ page: 1, pageSize: 999 });
     this.setExchangeInfoOptions(exchangeInfo.data.list);
     await this.getTableData();
+    //加载品种信息
+    const productInfo = await getExchangeProductInfoList({ page: 1, pageSize: 999 });
+    this.setProductInfoOptions(productInfo.data.list);
   
 }
 };
