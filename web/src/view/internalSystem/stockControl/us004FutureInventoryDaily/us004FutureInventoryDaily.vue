@@ -78,6 +78,7 @@
     <el-table-column label="品种" prop="productCode" width="120"></el-table-column> 
     
     <el-table-column label="数量" prop="volume" width="120"></el-table-column> 
+    <el-table-column label="单位" prop="unit" width="120"></el-table-column> 
     
     <el-table-column label="交易所" prop="exchangeId" width="120"></el-table-column> 
     
@@ -144,6 +145,16 @@
         <el-form-item label="数量:">
           <el-input style="width:220px" v-model="formData.volume" clearable placeholder="请输入" ></el-input>
         </el-form-item>
+        <el-form-item label="单位:">
+           <el-select v-model="formData.unit" placeholder="请选择" clearable filterable >
+            <el-option
+              :key="item.name"
+              :label="item.name"
+              :value="item.name"
+              v-for="item in unitData">
+            </el-option>
+          </el-select>
+        </el-form-item>
        </el-form>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
@@ -179,6 +190,7 @@ export default {
             productCode:"CU",
             exchangeId:"",
             comment:"",
+            unit:"",
             
             
       },
@@ -197,8 +209,12 @@ export default {
         {name:"现货"},
         {name:"保税"},
         {name:"LME"},
-
       ], 
+      unitData:[
+        {name:"吨"},
+        {name:"万吨"},
+        {name:"磅"},
+      ]
     };
   },
   filters: {
