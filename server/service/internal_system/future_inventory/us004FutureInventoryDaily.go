@@ -90,3 +90,13 @@ func GetUs004FutureInventoryDailyInfoList(info rif.Us004FutureInventoryDailySear
 	err = db.Limit(limit).Offset(offset).Find(&us004FutureInventoryDailys).Error
 	return err, us004FutureInventoryDailys, total
 }
+func GetUs004FutureInventoryDailyType(info rif.Us004FutureInventoryDailySearch) (err error, list interface{}, total int64) {
+	limit := info.PageSize
+	offset := info.PageSize * (info.Page - 1)
+	// 创建db
+	db := global.GVA_DB.Model(&mif.Us004FutureInventoryDaily{})
+	var us004FutureInventoryDailys []mif.Us004FutureInventoryDaily
+	err = db.Count(&total).Error
+	err = db.Limit(limit).Offset(offset).Select("comment").Distinct("comment").Find(&us004FutureInventoryDailys).Error
+	return err, us004FutureInventoryDailys, total
+}

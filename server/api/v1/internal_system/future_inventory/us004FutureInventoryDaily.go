@@ -129,3 +129,19 @@ func GetUs004FutureInventoryDailyList(c *gin.Context) {
 		}, "获取成功", c)
 	}
 }
+
+func GetUs004FutureInventoryDailyType(c *gin.Context) {
+	var pageInfo rif.Us004FutureInventoryDailySearch
+	_ = c.ShouldBindQuery(&pageInfo)
+	if err, list, total := sif.GetUs004FutureInventoryDailyType(pageInfo); err != nil {
+		global.GVA_LOG.Error("获取失败", zap.Any("err", err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
+}

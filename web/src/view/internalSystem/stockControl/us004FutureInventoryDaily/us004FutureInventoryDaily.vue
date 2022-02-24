@@ -32,7 +32,7 @@
             </el-option>
           </el-select>
         </el-form-item>    
-        <el-form-item label="简称">
+        <el-form-item label="细分品种">
               <el-select v-model="searchInfo.comment" placeholder="请选择" clearable filterable >
             <el-option
               :key="item.name"
@@ -41,7 +41,7 @@
               v-for="item in commentChoice">
             </el-option>
           </el-select>
-        </el-form-item>    
+        </el-form-item>
         <el-form-item>
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>
@@ -82,7 +82,8 @@
     
     <el-table-column label="交易所" prop="exchangeId" width="120"></el-table-column> 
     
-    <el-table-column label="简称" prop="comment" width="120"></el-table-column> 
+    <el-table-column label="细分品种" prop="comment" width="120"></el-table-column> 
+    <el-table-column label="库存类型" prop="type" width="120"></el-table-column> 
     
       <el-table-column label="操作">
         <template slot-scope="scope">
@@ -120,13 +121,13 @@
           </el-select>
         </el-form-item>
     
-        <el-form-item label="简称:">
+        <el-form-item label="细分品种:">
            <el-select v-model="formData.comment" placeholder="请选择" clearable filterable >
             <el-option
-              :key="item.name"
-              :label="item.name"
-              :value="item.name"
-              v-for="item in commentChoice">
+              :key="item.comment"
+              :label="`${item.comment}`"
+              :value="item.comment"
+              v-for="item in commentOptions">
             </el-option>
           </el-select>
         </el-form-item>
@@ -155,6 +156,16 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="库存类型">
+          <el-select v-model="formData.type" placeholder="请选择" clearable filterable >
+            <el-option
+              :key="item.name"
+              :label="item.name"
+              :value="item.name"
+              v-for="item in typeChoice">
+            </el-option>
+          </el-select>
+        </el-form-item>  
        </el-form>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
@@ -171,7 +182,8 @@ import {
     deleteUs004FutureInventoryDailyByIds,
     updateUs004FutureInventoryDaily,
     findUs004FutureInventoryDaily,
-    getUs004FutureInventoryDailyList
+    getUs004FutureInventoryDailyList,
+    getUs004FutureInventoryDailyType,
 } from "@/api/internalSystem/stockControl/us004FutureInventoryDaily";  //  此处请自行替换地址
 import { formatTimeToStr } from "@/utils/date";
 import {getExchangeProductInfoList} from "@/api/internalSystem/exchangeProductInfo"; 
@@ -191,8 +203,7 @@ export default {
             exchangeId:"",
             comment:"",
             unit:"",
-            
-            
+            type:"",
       },
       productInfo:{
         productInfoCode:"",
@@ -214,6 +225,10 @@ export default {
         {name:"吨"},
         {name:"万吨"},
         {name:"磅"},
+      ], 
+      typeChoice:[
+        {name:"现货"},
+        {name:"库存"},
       ]
     };
   },
@@ -294,7 +309,8 @@ export default {
           productCode:"CU",
           exchangeId:"",
           comment:"",
-          
+          type:"",
+          unit:"",
       };
     },
     async deleteUs004FutureInventoryDaily(row) {
@@ -356,11 +372,31 @@ export default {
             ids.push(idOption)
         });
     },
+    setTypeOptions(typeData) {
+    this.commentOptions = [];
+    this.ids = [];
+    this.setTypeOptionsData(typeData, this.commentOptions ,this.ids);
+    },
+    setTypeOptionsData(TypeData, optionsData ,ids) {
+      TypeData &&
+        TypeData.map(item => {
+            const option = {
+              comment: item.comment,
+            };
+            optionsData.push(option);
+            const idOption = {
+              id: item.id,
+            };
+            ids.push(idOption)
+        });
+    },
   },
   async created() {
     //加载品种信息
     const productInfo = await getExchangeProductInfoList({ page: 1, pageSize: 999 });
     this.setProductInfoOptions(productInfo.data.list);
+    const commentInfo = await getUs004FutureInventoryDailyType({ page: 1, pageSize: 999 });
+    this.setTypeOptions(commentInfo.data.list);
     await this.getTableData();
   
 }

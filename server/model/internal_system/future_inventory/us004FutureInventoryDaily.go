@@ -14,6 +14,7 @@ type Us004FutureInventoryDaily struct {
 	ExchangeId  string    `json:"exchangeId" form:"exchangeId" gorm:"column:exchange_id;comment:;type:varchar;"`
 	Comment     string    `json:"comment" form:"comment" gorm:"column:comment;comment:;type:varchar;"`
 	Unit        string    `json:"unit" form:"unit" gorm:"column:unit;comment:;type:varchar;"`
+	Type        string    `json:"type" form:"type" gorm:"column:type;comment:;type:varchar;"`
 }
 
 func (Us004FutureInventoryDaily) TableName() string {

@@ -97,4 +97,13 @@ export const createUs004FutureInventoryDaily = (data) => {
          method: 'get',
          params
      })
+
+ }
+
+ export const getUs004FutureInventoryDailyType = (params) => {
+    return service({
+        url: "/us004FutureInventoryDaily/getUs004FutureInventoryDailyType",
+        method: 'get',
+        params
+    })
  }
