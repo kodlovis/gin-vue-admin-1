@@ -346,6 +346,11 @@ export default {
     setProductInfoOptions(productInfoData) {
         this.productInfoOptions = [];
         this.ids = [];
+        const option = {
+          productCode: "qita",
+          productName: "其他"
+        };
+        this.productInfoOptions.push(option)
         this.setProductInfoOptionsData(productInfoData, this.productInfoOptions ,this.ids);
       },
       setProductInfoOptionsData(ProductInfoData, optionsData ,ids) {
