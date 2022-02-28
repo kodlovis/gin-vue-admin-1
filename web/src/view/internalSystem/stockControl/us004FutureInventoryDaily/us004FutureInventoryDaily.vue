@@ -227,8 +227,9 @@ export default {
         {name:"磅"},
       ], 
       typeChoice:[
-        {name:"现货"},
-        {name:"库存"},
+        {name:"社会库存"},
+        {name:"保税库存"},
+        {name:""},
       ]
     };
   },
