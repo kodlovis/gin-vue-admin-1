@@ -143,7 +143,7 @@ func ParseInventoryExcel2InfoList() error {
 		// amount, _ := strconv.ParseInt(row[6], 0, 0)
 		// direction, _ := strconv.ParseInt(row[5], 0, 0)
 		// hedgeFlag, _ := strconv.ParseInt(row[4], 0, 0)
-		volume, _ := strconv.ParseInt(row[1], 0, 0)
+		volume, _ := strconv.ParseFloat(row[1], 0)
 		time, _ := time.Parse("2006-01-02", row[0])
 
 		// if row[1] == "鲁证期货" {
@@ -152,7 +152,7 @@ func ParseInventoryExcel2InfoList() error {
 		for i := 0; i < len(us004ProductAssociationDetails); i++ {
 			if row[2] == us004ProductAssociationDetails[i].SubProductName {
 				productCode = us004ProductAssociationDetails[i].ProductName
-				unit = us004ProductAssociationDetails[i].ProductName
+				unit = us004ProductAssociationDetails[i].Unit
 			}
 		}
 		menu := mif.Us004FutureInventoryDaily{
