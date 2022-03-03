@@ -13,7 +13,7 @@
           </div>
         </el-form-item> 
         <el-form-item label="品种">
-          <el-select v-model="searchInfo.productCode" placeholder="请选择" clearable filterable >
+          <el-select v-model="searchInfo.productCode" placeholder="请选择" clearable filterable>
             <el-option
               :key="item.productCode"
               :label="`${item.productName}(${item.productCode})`"
@@ -21,19 +21,9 @@
               v-for="item in productInfoOptions">
             </el-option>
           </el-select>
-        </el-form-item>      
-        <el-form-item label="交易所">
-            <el-select v-model="searchInfo.exchangeId" placeholder="请选择" clearable filterable >
-            <el-option
-              :key="item.exchangeId"
-              :label="`${item.comment}(${item.exchangeId})`"
-              :value="item.exchangeId"
-              v-for="item in exchangeInfoData">
-            </el-option>
-          </el-select>
-        </el-form-item>    
+        </el-form-item>
         <el-form-item label="细分品种">
-              <el-select v-model="searchInfo.comment" placeholder="请选择" clearable filterable >
+              <el-select v-model="searchInfo.comment" placeholder="请选择" clearable filterable>
             <el-option
               :key="item.name"
               :label="item.name"
@@ -58,6 +48,16 @@
             <el-button icon="el-icon-delete" size="mini" slot="reference" type="danger">批量删除</el-button>
           </el-popover>
         </el-form-item>
+        <el-form-item>
+              <el-upload
+                :action="`${path}/us004FutureInventoryDaily/importInventoryExcel`"
+                :headers="{'x-token':token}"
+                :on-success="loadInventoryExcelData"
+                :show-file-list="false"
+              >
+                <el-button size="small" type="primary" icon="el-icon-upload2">Excel导入</el-button>
+              </el-upload>
+        </el-form-item>
       </el-form>
     </div>
     <el-table
@@ -80,7 +80,6 @@
     <el-table-column label="数量" prop="volume" width="120"></el-table-column> 
     <el-table-column label="单位" prop="unit" width="120"></el-table-column> 
     
-    <el-table-column label="交易所" prop="exchangeId" width="120"></el-table-column> 
     
     <el-table-column label="细分品种" prop="comment" width="120"></el-table-column> 
     <el-table-column label="库存类型" prop="type" width="120"></el-table-column> 
@@ -132,16 +131,6 @@
           </el-select>
         </el-form-item>
        
-        <el-form-item label="交易所:">
-           <el-select v-model="formData.exchangeId" placeholder="请选择" clearable filterable >
-            <el-option
-              :key="item.exchangeId"
-              :label="`${item.comment}(${item.exchangeId})`"
-              :value="item.exchangeId"
-              v-for="item in exchangeInfoData">
-            </el-option>
-          </el-select>
-        </el-form-item>
        
         <el-form-item label="数量:">
           <el-input style="width:220px" v-model="formData.volume" clearable placeholder="请输入" ></el-input>
@@ -176,6 +165,7 @@
 </template>
 
 <script>
+const path = process.env.VUE_APP_BASE_API;
 import {
     createUs004FutureInventoryDaily,
     deleteUs004FutureInventoryDaily,
@@ -184,6 +174,7 @@ import {
     findUs004FutureInventoryDaily,
     getUs004FutureInventoryDailyList,
     getUs004FutureInventoryDailyType,
+    loadInventoryExcelData
 } from "@/api/internalSystem/stockControl/us004FutureInventoryDaily";  //  此处请自行替换地址
 import { formatTimeToStr } from "@/utils/date";
 import {getExchangeProductInfoList} from "@/api/internalSystem/exchangeProductInfo"; 
@@ -193,6 +184,7 @@ export default {
   mixins: [infoList],
   data() {
     return {
+      path: path,
       listApi: getUs004FutureInventoryDailyList,
       dialogFormVisible: false,
       type: "",
@@ -209,13 +201,6 @@ export default {
         productInfoCode:"",
         productInfoName:"",
       }, 
-      exchangeInfoData:[
-        {exchangeId:"SHF",comment:"上海期货交易所"},
-        // {exchangeId:"ZCE",comment:"郑州商品交易所"},
-        // {exchangeId:"DCE",comment:"大连商品交易所"},
-        {exchangeId:"INE",comment:"上海能源交易所"},
-        {exchangeId:"LME",comment:"LME"},
-      ], 
       commentChoice:[
         {name:"现货"},
         {name:"保税"},
@@ -251,6 +236,16 @@ export default {
     }
   },
   methods: {
+      async loadInventoryExcelData() {
+        const res = await  loadInventoryExcelData();
+        if (res.code == 0) {
+          this.$message({
+            type: 'success',
+            message: '上传成功'
+          })
+          this.getTableData();
+        }
+      },
       //条件搜索前端看此方法
       onSubmit() {
         this.page = 1

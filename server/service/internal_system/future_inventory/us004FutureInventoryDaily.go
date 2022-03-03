@@ -1,9 +1,15 @@
 package future_inventory
 
 import (
+	"errors"
 	"gin-vue-admin/global"
 	mif "gin-vue-admin/model/internal_system/future_inventory"
 	rif "gin-vue-admin/model/request/internal_system/future_inventory"
+	"os"
+	"strconv"
+	"time"
+
+	"github.com/360EntSecGroup-Skylar/excelize/v2"
 )
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -99,4 +105,91 @@ func GetUs004FutureInventoryDailyType(info rif.Us004FutureInventoryDailySearch) 
 	err = db.Count(&total).Error
 	err = db.Limit(limit).Offset(offset).Select("comment").Distinct("comment").Find(&us004FutureInventoryDailys).Error
 	return err, us004FutureInventoryDailys, total
+}
+
+func ParseInventoryExcel2InfoList() error {
+	skipHeader := true
+	fixedHeader := []string{"日期", "数量", "品种", "库存类型"}
+	file, err := excelize.OpenFile(global.GVA_CONFIG.Excel.Dir + "InventoryExcel.xlsx")
+	if err != nil {
+		return err
+	}
+	menus := make([]mif.Us004FutureInventoryDaily, 0)
+	rows, err := file.Rows("Sheet1")
+	if err != nil {
+		return err
+	}
+	db := global.GVA_DB.Model(&mif.Us004ProductAssociationDetail{})
+	var us004ProductAssociationDetails []mif.Us004ProductAssociationDetail
+	err = db.Find(&us004ProductAssociationDetails).Error
+	var productCode string
+	var unit string
+	for rows.Next() {
+		row, err := rows.Columns()
+		if err != nil {
+			return err
+		}
+		if skipHeader {
+			if compareStrSlice(row, fixedHeader) {
+				skipHeader = false
+				continue
+			} else {
+				return errors.New("Excel格式错误")
+			}
+		}
+		if len(row) != len(fixedHeader) {
+			continue
+		}
+		// amount, _ := strconv.ParseInt(row[6], 0, 0)
+		// direction, _ := strconv.ParseInt(row[5], 0, 0)
+		// hedgeFlag, _ := strconv.ParseInt(row[4], 0, 0)
+		volume, _ := strconv.ParseInt(row[1], 0, 0)
+		time, _ := time.Parse("2006-01-02", row[0])
+
+		// if row[1] == "鲁证期货" {
+		// 	row[1] = "0275"
+		// }
+		for i := 0; i < len(us004ProductAssociationDetails); i++ {
+			if row[2] == us004ProductAssociationDetails[i].SubProductName {
+				productCode = us004ProductAssociationDetails[i].ProductName
+				unit = us004ProductAssociationDetails[i].ProductName
+			}
+		}
+		menu := mif.Us004FutureInventoryDaily{
+			Time:        time,
+			Volume:      float32(volume),
+			Comment:     row[2],
+			ProductCode: productCode,
+			Unit:        unit,
+			Type:        row[3],
+		}
+		menus = append(menus, menu)
+	}
+	err = CreateInventoryList(menus)
+	err = os.Remove(global.GVA_CONFIG.Excel.Dir + "InventoryExcel.xlsx")
+	if err != nil {
+		return err
+	}
+	return err
+}
+
+//批量创建
+func CreateInventoryList(list []mif.Us004FutureInventoryDaily) (err error) {
+	err = global.GVA_DB.Model(&mif.Us004FutureInventoryDaily{}).CreateInBatches(list, len(list)).Error
+	return
+}
+
+func compareStrSlice(a, b []string) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	if (b == nil) != (a == nil) {
+		return false
+	}
+	for key, value := range a {
+		if value != b[key] {
+			return false
+		}
+	}
+	return true
 }

@@ -145,3 +145,30 @@ func GetUs004FutureInventoryDailyType(c *gin.Context) {
 		}, "获取成功", c)
 	}
 }
+func LoadInventoryExcelData(c *gin.Context) {
+	err := sif.ParseInventoryExcel2InfoList()
+	if err != nil {
+		global.GVA_LOG.Error("加载数据失败", zap.Any("err", err))
+		response.FailWithMessage("加载数据失败", c)
+		return
+	} else {
+		response.OkWithMessage("创建成功", c)
+	}
+	// response.OkWithDetailed(response.PageResult{
+	// 	List:     menus,
+	// 	Total:    int64(len(menus)),
+	// 	Page:     1,
+	// 	PageSize: 999,
+	// }, "加载数据成功", c)
+}
+
+func ImportInventoryExcel(c *gin.Context) {
+	_, header, err := c.Request.FormFile("file")
+	if err != nil {
+		global.GVA_LOG.Error("接收文件失败!", zap.Any("err", err))
+		response.FailWithMessage("接收文件失败", c)
+		return
+	}
+	_ = c.SaveUploadedFile(header, global.GVA_CONFIG.Excel.Dir+"InventoryExcel.xlsx")
+	response.OkWithMessage("导入成功", c)
+}

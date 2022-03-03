@@ -107,3 +107,10 @@ export const createUs004FutureInventoryDaily = (data) => {
         params
     })
  }
+ 
+ export const loadInventoryExcelData = () => {
+    return service({
+        url: "/us004FutureInventoryDaily/loadInventoryExcelData",
+        method: 'get'
+    })
+}
