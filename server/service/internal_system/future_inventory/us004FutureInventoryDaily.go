@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/360EntSecGroup-Skylar/excelize/v2"
+	"gorm.io/gorm/clause"
 )
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -178,7 +179,7 @@ func ParseInventoryExcel2InfoList() error {
 
 //批量创建
 func CreateInventoryList(list []mif.Us004FutureInventoryDaily) (err error) {
-	err = global.GVA_DB.Model(&mif.Us004FutureInventoryDaily{}).CreateInBatches(list, len(list)).Error
+	err = global.GVA_DB.Model(&mif.Us004FutureInventoryDaily{}).Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(list, len(list)).Error
 	return
 }
 
