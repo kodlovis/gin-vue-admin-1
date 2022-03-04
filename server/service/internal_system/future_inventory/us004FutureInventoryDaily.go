@@ -1,7 +1,6 @@
 package future_inventory
 
 import (
-	"errors"
 	"gin-vue-admin/global"
 	mif "gin-vue-admin/model/internal_system/future_inventory"
 	rif "gin-vue-admin/model/request/internal_system/future_inventory"
@@ -134,7 +133,11 @@ func ParseInventoryExcel2InfoList() error {
 				skipHeader = false
 				continue
 			} else {
-				return errors.New("Excel格式错误")
+				err = ParseLMEInventoryExcel2InfoList()
+				if err != nil {
+					return err
+				}
+				return nil
 			}
 		}
 		if len(row) != len(fixedHeader) {
