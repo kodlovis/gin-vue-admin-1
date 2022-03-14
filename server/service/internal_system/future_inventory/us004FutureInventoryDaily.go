@@ -115,6 +115,7 @@ func ParseInventoryExcel2InfoList() error {
 		return err
 	}
 	menus := make([]mif.Us004FutureInventoryDaily, 0)
+	err = file.RemoveCol("Sheet1", "E")
 	rows, err := file.Rows("Sheet1")
 	if err != nil {
 		return err
