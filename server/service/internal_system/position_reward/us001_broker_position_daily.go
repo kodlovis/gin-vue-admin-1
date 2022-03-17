@@ -153,6 +153,8 @@ func ParseBrokerPositionExcel2InfoList() error {
 		tradingDate, _ := time.Parse("2006-01-02", row[0])
 		if row[1] == "鲁证" {
 			row[1] = "0275"
+		} else if row[1] == "华联" {
+			row[1] = "0276"
 		}
 		menu := mp.BrokerPositionDaily{
 			TradingDate:          tradingDate,
