@@ -65,7 +65,7 @@
     <el-table-column label="杂项费用" prop="sundryExpense" width="120"></el-table-column> 
     
     <el-table-column label="期货费用" prop="futureCharges" width="120"></el-table-column> 
-    <el-table-column label="费用调整" prop="adjustExpense" width="120"></el-table-column> 
+    <el-table-column label="营业外收入" prop="adjustExpense" width="120"></el-table-column> 
     <el-table-column label="客户利润" prop="customerProfit" width="120"></el-table-column> 
     
     <el-table-column label="品种累计权益" prop="cumulativeRights" width="120"></el-table-column> 
@@ -121,7 +121,7 @@
          <el-form-item label="期货费用:">
            <el-input-number v-model="formData.futureCharges" clearable placeholder="请输入" ></el-input-number>
       </el-form-item>
-         <el-form-item label="费用调整:">
+         <el-form-item label="营业外收入:">
            <el-input-number v-model="formData.adjustExpense" clearable placeholder="请输入" ></el-input-number>
       </el-form-item>
          <el-form-item label="客户利润:">
