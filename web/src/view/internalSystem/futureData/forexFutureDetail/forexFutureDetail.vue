@@ -140,7 +140,14 @@
       </el-form-item>
        
          <el-form-item label="部门:" prop="departmentName">
-            <el-input v-model="formData.departmentName" clearable placeholder="请输入" ></el-input>
+           <el-select v-model="formData.departmentName" placeholder="请选择" clearable filterable >
+            <el-option
+              :key="item.name"
+              :label="item.name"
+              :value="item.name"
+              v-for="item in departmentInfoOptions">
+            </el-option>
+          </el-select>
       </el-form-item>
        </el-form>
       <div class="dialog-footer" slot="footer">
@@ -187,7 +194,16 @@ export default {
             departmentName:"",
             accountInfo:{accountId:"",comment:""},
             
-      },
+      },departmentInfoOptions:[
+          {name:"有色金属部"},
+          {name:"农产品部"},
+          {name:"黑色建材部"},
+          {name:"总经理二室"},
+          {name:"钢材事业部_杉贸"},
+          {name:"原料事业部"},
+          {name:"钢材事业部"},
+          {name:"能化橡胶部"},
+   ],
       accountInfoData:{
            accountId:"",
            comment:"",

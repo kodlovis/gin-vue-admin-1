@@ -143,8 +143,18 @@
               <el-input-number v-model="formData.tradeFee" :precision="2" clearable></el-input-number>
        </el-form-item>
        
-         <el-form-item label="部门:" prop="departmentName"><el-input v-model.number="formData.departmentName" clearable placeholder="请输入"></el-input>
-      </el-form-item>
+         <el-form-item label="部门:" prop="departmentName">
+           <!-- <el-input v-model.number="formData.departmentName" clearable placeholder="请输入"></el-input> -->
+      
+           
+          <el-select v-model="formData.departmentName" placeholder="请选择" clearable filterable >
+            <el-option
+              :key="item.name"
+              :label="item.name"
+              :value="item.name"
+              v-for="item in departmentInfoOptions">
+            </el-option>
+          </el-select></el-form-item>
        </el-form>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
@@ -199,7 +209,16 @@ export default {
           "smxh":"杉贸现货",
           "zwxh":"智维现货",
           "zexh":"总二现货",
-   },
+   },departmentInfoOptions:[
+          {name:"有色金属部"},
+          {name:"农产品部"},
+          {name:"黑色建材部"},
+          {name:"总经理二室"},
+          {name:"钢材事业部_杉贸"},
+          {name:"原料事业部"},
+          {name:"钢材事业部"},
+          {name:"能化橡胶部"},
+   ],
       multipleSelection: [],formData: {
             time:"",
             productName:"",

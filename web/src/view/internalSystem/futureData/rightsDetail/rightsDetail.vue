@@ -65,7 +65,7 @@
     <el-table-column label="杂项费用" prop="sundryExpense" width="120"></el-table-column> 
     
     <el-table-column label="期货费用" prop="futureCharges" width="120"></el-table-column> 
-    <el-table-column label="费用调整" prop="adjustExpense" width="120"></el-table-column> 
+    <el-table-column label="营业外收入" prop="adjustExpense" width="120"></el-table-column> 
     <el-table-column label="客户利润" prop="customerProfit" width="120"></el-table-column> 
     
     <el-table-column label="品种累计权益" prop="cumulativeRights" width="120"></el-table-column> 
@@ -107,7 +107,14 @@
       </el-form-item>
        
          <el-form-item label="部门:" prop="departmentName">
-            <el-input v-model="formData.departmentName" clearable placeholder="请输入" ></el-input>
+           <el-select v-model="formData.departmentName" placeholder="请选择" clearable filterable >
+            <el-option
+              :key="item.name"
+              :label="item.name"
+              :value="item.name"
+              v-for="item in departmentInfoOptions">
+            </el-option>
+          </el-select>
       </el-form-item>
        
          <el-form-item label="三大费用:">
@@ -121,7 +128,7 @@
          <el-form-item label="期货费用:">
            <el-input-number v-model="formData.futureCharges" clearable placeholder="请输入" ></el-input-number>
       </el-form-item>
-         <el-form-item label="费用调整:">
+         <el-form-item label="营业外收入:">
            <el-input-number v-model="formData.adjustExpense" clearable placeholder="请输入" ></el-input-number>
       </el-form-item>
          <el-form-item label="客户利润:">
@@ -176,7 +183,16 @@ export default {
             customerProfit:"",
             adjustExpense:0,
             
-      },
+      },departmentInfoOptions:[
+          {name:"有色金属部"},
+          {name:"农产品部"},
+          {name:"黑色建材部"},
+          {name:"总经理二室"},
+          {name:"钢材事业部_杉贸"},
+          {name:"原料事业部"},
+          {name:"钢材事业部"},
+          {name:"能化橡胶部"},
+   ],
       rules: {
         time:[ { required: true, message: '请输入', trigger: 'blur' }],
         accountId:[ { required: true, message: '请输入', trigger: 'blur' }],

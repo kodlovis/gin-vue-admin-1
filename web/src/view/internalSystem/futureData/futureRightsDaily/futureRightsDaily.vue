@@ -94,7 +94,14 @@
        </el-form-item>
        
          <el-form-item label="部门:" prop="department">
-            <el-input v-model="formData.department" clearable placeholder="请输入" ></el-input>
+           <el-select v-model="formData.department" placeholder="请选择" clearable filterable >
+            <el-option
+              :key="item.name"
+              :label="item.name"
+              :value="item.name"
+              v-for="item in departmentInfoOptions">
+            </el-option>
+          </el-select>
       </el-form-item>
        
          <el-form-item label="品种:">
@@ -146,7 +153,11 @@ export default {
             department:"",
             product:"",
             
-      },
+      },departmentInfoOptions:[
+          {name:"杉贸本部"},
+          {name:"智维本部"},
+          {name:"总经理一室"},
+   ],
       rules: {
         time:[ { required: true, message: '请输入', trigger: 'blur' }],
         accountId:[ { required: true, message: '请输入', trigger: 'blur' }],
