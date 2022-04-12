@@ -109,7 +109,7 @@
               <el-date-picker type="datetime" placeholder="选择日期" v-model="formData.time" clearable default-time="12:00:00"></el-date-picker>
        </el-form-item>
        
-         <el-form-item label="品种:" :rules="rules">
+         <el-form-item label="品种:"  prop="productName">
            <el-select v-model="formData.productName" placeholder="请选择" clearable filterable >
             <el-option
               :key="item.productName"
@@ -243,6 +243,7 @@ export default {
         time:[ { required: true, message: '请输入', trigger: 'blur' }],
         accountId:[ { required: true, message: '请输入', trigger: 'blur' }],
         departmentName:[ { required: true, message: '请输入', trigger: 'blur' }],
+        productName:[ { required: true, message: '请输入', trigger: 'blur' }],
       }
     };
   },

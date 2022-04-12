@@ -106,7 +106,7 @@
           </div>
        </el-form-item>
        
-         <el-form-item label="品种:">
+         <el-form-item label="品种:" prop="productName">
            <el-select v-model="formData.productName" placeholder="请选择" clearable filterable >
             <el-option
               :key="item.productName"
@@ -117,7 +117,7 @@
           </el-select>
       </el-form-item>
        
-         <el-form-item label="账号:">
+         <el-form-item label="账号:" prop="accountId">
            <el-select v-model="formData.accountId" placeholder="请选择" clearable filterable >
             <el-option
               :key="item.accountId"
@@ -216,6 +216,7 @@ export default {
       rules: {
         time:[ { required: true, message: '请输入', trigger: 'blur' }],
         accountId:[ { required: true, message: '请输入', trigger: 'blur' }],
+        productName:[ { required: true, message: '请输入', trigger: 'blur' }],
         departmentName:[ { required: true, message: '请输入', trigger: 'blur' }],
       }
     };
