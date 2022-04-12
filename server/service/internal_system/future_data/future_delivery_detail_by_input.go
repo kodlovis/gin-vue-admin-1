@@ -71,7 +71,7 @@ func GetFutureDeliveryDetailByInputInfoList(info request.FutureDeliveryDetailByI
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.GVA_DB.Model(&model.FutureDeliveryDetailByInput{})
+	db := global.GVA_DB.Model(&model.FutureDeliveryDetailByInput{}).Order("time desc, department_name")
 	var futureDeliveryDetailByInputs []model.FutureDeliveryDetailByInput
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.DepartmentName != "" {
