@@ -63,9 +63,11 @@
     
     <el-table-column label="返还数量" prop="rewardAmount" width="120"></el-table-column> 
     
-    <el-table-column label="生效日期" prop="effectiveDate" width="220"></el-table-column> 
+    <el-table-column label="生效日期" prop="effectiveDate" width="220">
+        <template slot-scope="scope">{{scope.row.effectiveDate|formatDate}}</template></el-table-column> 
     
-    <el-table-column label="失效日期" prop="expirationDate" width="220"></el-table-column> 
+    <el-table-column label="失效日期" prop="expirationDate" width="220">
+        <template slot-scope="scope">{{scope.row.expirationDate|formatDate}}</template></el-table-column> 
     
       <el-table-column label="操作">
         <template slot-scope="scope">

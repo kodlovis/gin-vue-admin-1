@@ -68,7 +68,8 @@
          <template slot-scope="scope">{{scope.row.CreatedAt|formatDate}}</template>
     </el-table-column> -->
     
-    <el-table-column label="时间" prop="time" width="220"></el-table-column> 
+    <el-table-column label="时间" prop="time" width="220">
+        <template slot-scope="scope">{{scope.row.time|formatDate}}</template></el-table-column> 
     
     <el-table-column label="品种" prop="productName" width="120"></el-table-column> 
     
@@ -81,7 +82,7 @@
     
     <el-table-column label="手续费" prop="tradeFee" width="120"></el-table-column> 
     
-    <el-table-column label="部门" prop="departmentName" width="120"></el-table-column> 
+    <el-table-column label="部门" prop="departmentName" width="130"></el-table-column> 
     
       <el-table-column label="操作">
         <template slot-scope="scope">
@@ -108,7 +109,7 @@
               <el-date-picker type="datetime" placeholder="选择日期" v-model="formData.time" clearable default-time="12:00:00"></el-date-picker>
        </el-form-item>
        
-         <el-form-item label="品种:">
+         <el-form-item label="品种:" :rules="rules">
            <el-select v-model="formData.productName" placeholder="请选择" clearable filterable >
             <el-option
               :key="item.productName"

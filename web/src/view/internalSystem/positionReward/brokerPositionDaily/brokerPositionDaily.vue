@@ -61,7 +61,8 @@
     >
     <el-table-column type="selection" width="55"></el-table-column>
     
-    <el-table-column label="交易日期" prop="tradingDate" width="220"></el-table-column> 
+    <el-table-column label="交易日期" prop="tradingDate" width="220">
+        <template slot-scope="scope">{{scope.row.tradingDate|formatDate}}</template></el-table-column> 
     
     <el-table-column label="期货公司" prop="accountInfo.comment" width="120"></el-table-column> 
     

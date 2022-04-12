@@ -54,11 +54,12 @@
     >
     <el-table-column type="selection" width="55"></el-table-column>
     
-    <el-table-column label="时间" prop="time" width="220"></el-table-column> 
+    <el-table-column label="时间" prop="time" width="220">
+        <template slot-scope="scope">{{scope.row.time|formatDate}}</template></el-table-column> 
     
     <el-table-column label="品种" prop="productName" width="120"></el-table-column> 
     
-    <el-table-column label="部门" prop="departmentName" width="120"></el-table-column> 
+    <el-table-column label="部门" prop="departmentName" width="130"></el-table-column> 
     
     <el-table-column label="三大费用" prop="threeCharges" width="120"></el-table-column> 
     

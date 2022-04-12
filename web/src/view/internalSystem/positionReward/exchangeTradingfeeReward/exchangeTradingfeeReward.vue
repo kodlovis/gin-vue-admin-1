@@ -61,7 +61,8 @@
     >
     <el-table-column type="selection" width="55"></el-table-column>
     
-    <el-table-column label="生效日期" prop="effectiveDate" width="220"></el-table-column> 
+    <el-table-column label="生效日期" prop="effectiveDate" width="220">
+        <template slot-scope="scope">{{scope.row.effectiveDate|formatDate}}</template></el-table-column> 
     
     <el-table-column label="交易所名称 " prop="exchangeId" width="120"></el-table-column> 
     
