@@ -50,15 +50,13 @@
     <el-table-column label="日期" prop="time" width="160">
         <template slot-scope="scope">{{scope.row.time|formatDate}}</template></el-table-column> 
     
-    <el-table-column label="部门" prop="departmentName" width="130"></el-table-column> 
-    
     <el-table-column label="品种" prop="productName" width="120"></el-table-column> 
-
-    <el-table-column label="持仓浮盈" prop="profitOfClose" width="120"></el-table-column> 
     
     <el-table-column label="平仓盈亏" prop="profitOfTrade" width="120"></el-table-column> 
     
     <el-table-column label="手续费" prop="tradeFee" width="120"></el-table-column> 
+    
+    <el-table-column label="部门" prop="departmentName" width="130"></el-table-column> 
     
       <el-table-column label="操作">
         <template slot-scope="scope">
@@ -108,9 +106,6 @@
           </el-select>
       </el-form-item>
        
-         <el-form-item label="持仓浮盈:">
-           <el-input-number v-model="formData.profitOfClose" clearable placeholder="请输入" ></el-input-number></el-form-item>
-       
          <el-form-item label="平仓盈亏:">
            <el-input-number v-model="formData.profitOfTrade" clearable placeholder="请输入" ></el-input-number></el-form-item>
        
@@ -155,7 +150,6 @@ export default {
             departmentName:"",
             productName:"",
             profitOfTrade:0,
-            profitOfClose:0,
             tradeFee:0,
             time:"",
       },departmentInfoOptions:[
@@ -254,7 +248,6 @@ export default {
             departmentName:"",
             productName:"",
             profitOfTrade:"",
-            profitOfClose:"",
             tradeFee:"",
             time:"",
       };
