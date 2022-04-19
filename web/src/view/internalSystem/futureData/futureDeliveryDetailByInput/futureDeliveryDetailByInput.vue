@@ -50,7 +50,7 @@
     <el-table-column label="日期" prop="time" width="160">
         <template slot-scope="scope">{{scope.row.time|formatDate}}</template></el-table-column> 
     
-    <el-table-column label="账户" prop="accountName" width="120"></el-table-column> 
+    <el-table-column label="账户" prop="accountInfo.comment" width="150"></el-table-column>
 
     <el-table-column label="品种" prop="productName" width="120"></el-table-column> 
 
