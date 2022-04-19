@@ -50,7 +50,11 @@
     <el-table-column label="日期" prop="time" width="160">
         <template slot-scope="scope">{{scope.row.time|formatDate}}</template></el-table-column> 
     
+    <el-table-column label="账户" prop="accountName" width="120"></el-table-column> 
+
     <el-table-column label="品种" prop="productName" width="120"></el-table-column> 
+
+    <el-table-column label="持仓浮盈" prop="profitOfPosition" width="120"></el-table-column> 
     
     <el-table-column label="平仓盈亏" prop="profitOfTrade" width="120"></el-table-column> 
     
@@ -94,6 +98,16 @@
             </el-option>
           </el-select>
       </el-form-item>
+         <el-form-item label="账号:" prop="accountName">
+           <el-select v-model="formData.accountName" placeholder="请选择" clearable filterable >
+            <el-option
+              :key="item.accountName"
+              :label="`${item.comment}(${item.accountName})`"
+              :value="item.accountName"
+              v-for="item in accountInfoOptions">
+            </el-option>
+          </el-select>
+      </el-form-item>
        
          <el-form-item label="部门:" prop="departmentName">
            <el-select v-model="formData.departmentName" placeholder="请选择" clearable filterable >
@@ -106,6 +120,9 @@
           </el-select>
       </el-form-item>
        
+         <el-form-item label="持仓浮盈:">
+           <el-input-number v-model="formData.profitOfPosition" clearable placeholder="请输入" ></el-input-number></el-form-item>
+
          <el-form-item label="平仓盈亏:">
            <el-input-number v-model="formData.profitOfTrade" clearable placeholder="请输入" ></el-input-number></el-form-item>
        
@@ -130,6 +147,7 @@ import {
     findFutureDeliveryDetailByInput,
     getFutureDeliveryDetailByInputList
 } from "@/api/internalSystem/futureData/futureDeliveryDetailByInput";  //  此处请自行替换地址
+import{getAccountInfoList}from "@/api/internalSystem/accountInfo"; 
 import {getExchangeProductInfoList} from "@/api/internalSystem/exchangeProductInfo"; 
 import { formatTimeToStr } from "@/utils/date";
 import infoList from "@/mixins/infoList";
@@ -149,6 +167,8 @@ export default {
       multipleSelection: [],formData: {
             departmentName:"",
             productName:"",
+            accountName:"",
+            profitOfPosition:0,
             profitOfTrade:0,
             tradeFee:0,
             time:"",
@@ -164,6 +184,7 @@ export default {
    ],
       rules: {
         time:[ { required: true, message: '请输入', trigger: 'blur' }],
+        accountName:[ { required: true, message: '请输入', trigger: 'blur' }],
         productName:[ { required: true, message: '请输入', trigger: 'blur' }],
         departmentName:[ { required: true, message: '请输入', trigger: 'blur' }],
       }
@@ -247,8 +268,10 @@ export default {
       this.formData = {
             departmentName:"",
             productName:"",
-            profitOfTrade:"",
-            tradeFee:"",
+            accountName:"",
+            profitOfPosition:0,
+            profitOfTrade:0,
+            tradeFee:0,
             time:"",
       };
     },
@@ -345,13 +368,35 @@ export default {
               ids.push(idOption)
           });
       },
+    setAccountInfoOptions(accountInfoData) {
+        this.accountInfoOptions = [];
+        this.ids = [];
+        this.setAccountInfoOptionsData(accountInfoData, this.accountInfoOptions ,this.ids);
+      },
+      setAccountInfoOptionsData(AccountInfoData, optionsData ,ids) {
+        AccountInfoData &&
+          AccountInfoData.map(item => {
+            if(item.type=='2'){
+              const option = {
+                accountName: item.accountId,
+                comment: item.comment
+              };
+              optionsData.push(option);
+              const idOption = {
+                accountName: item.accountId,
+              };
+              ids.push(idOption)}
+          });
+      },
   },
   async created() {
     await this.getTableData();
     //加载品种信息
     const productInfo = await getExchangeProductInfoList({ page: 1, pageSize: 999 });
     this.setProductInfoOptions(productInfo.data.list);
-  
+    //加载期货账户信息
+    const accountInfo = await getAccountInfoList({ page: 1, pageSize: 999 });
+    this.setAccountInfoOptions(accountInfo.data.list);
 }
 };
 </script>
