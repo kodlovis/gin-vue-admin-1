@@ -98,12 +98,12 @@
             </el-option>
           </el-select>
       </el-form-item>
-         <el-form-item label="账号:" prop="accountName">
-           <el-select v-model="formData.accountName" placeholder="请选择" clearable filterable >
+         <el-form-item label="账号:" prop="accountId">
+           <el-select v-model="formData.accountId" placeholder="请选择" clearable filterable >
             <el-option
-              :key="item.accountName"
-              :label="`${item.comment}(${item.accountName})`"
-              :value="item.accountName"
+              :key="item.accountId"
+              :label="`${item.comment}(${item.accountId})`"
+              :value="item.accountId"
               v-for="item in accountInfoOptions">
             </el-option>
           </el-select>
@@ -164,10 +164,11 @@ export default {
       dialogTitle:"",
       productInfoOptions:"",
       deleteVisible: false,
+      accountInfoOptions:[],
       multipleSelection: [],formData: {
             departmentName:"",
             productName:"",
-            accountName:"",
+            accountId:"",
             profitOfPosition:0,
             profitOfTrade:0,
             tradeFee:0,
@@ -182,9 +183,13 @@ export default {
           {name:"钢材事业部"},
           {name:"能化橡胶部"},
    ],
+      accountInfoData:{
+           accountId:"",
+           comment:"",
+      }, 
       rules: {
         time:[ { required: true, message: '请输入', trigger: 'blur' }],
-        accountName:[ { required: true, message: '请输入', trigger: 'blur' }],
+        accountId:[ { required: true, message: '请输入', trigger: 'blur' }],
         productName:[ { required: true, message: '请输入', trigger: 'blur' }],
         departmentName:[ { required: true, message: '请输入', trigger: 'blur' }],
       }
@@ -268,7 +273,7 @@ export default {
       this.formData = {
             departmentName:"",
             productName:"",
-            accountName:"",
+            accountId:"",
             profitOfPosition:0,
             profitOfTrade:0,
             tradeFee:0,
@@ -378,12 +383,12 @@ export default {
           AccountInfoData.map(item => {
             if(item.type=='2'){
               const option = {
-                accountName: item.accountId,
+                accountId: item.accountId,
                 comment: item.comment
               };
               optionsData.push(option);
               const idOption = {
-                accountName: item.accountId,
+                accountId: item.accountId,
               };
               ids.push(idOption)}
           });
