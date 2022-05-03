@@ -8,6 +8,7 @@ type AccountInfo struct {
 	CompanyCode string `json:"companyCode" form:"companyCode" gorm:"column:company_code;comment:;type:character varying;"`
 	Comment     string `json:"comment" form:"comment" gorm:"column:comment;comment:;type:character varying;"`
 	Type        string `json:"type" form:"comment" gorm:"column:type;comment:;type:character varying;"`
+	TypeName    string `json:"type_name" form:"comment" gorm:"column:type_name;comment:;type:character varying;"`
 }
 
 func (AccountInfo) TableName() string {
