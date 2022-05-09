@@ -7,8 +7,9 @@ type AccountInfo struct {
 	FutureName  string `json:"futureName" form:"futureName" gorm:"column:future_name;comment:;type:character varying;"`
 	CompanyCode string `json:"companyCode" form:"companyCode" gorm:"column:company_code;comment:;type:character varying;"`
 	Comment     string `json:"comment" form:"comment" gorm:"column:comment;comment:;type:character varying;"`
-	Type        string `json:"type" form:"comment" gorm:"column:type;comment:;type:character varying;"`
-	TypeName    string `json:"type_name" form:"comment" gorm:"column:type_name;comment:;type:character varying;"`
+	Type        string `json:"type" form:"type" gorm:"column:type;comment:;type:character varying;"`
+	TypeName    string `json:"type_name" form:"type_name" gorm:"column:type_name;comment:;type:character varying;"`
+	BrokerId    string `json:"brokerId" form:"brokerId" gorm:"column:broker_id;comment:;type:character varying;"`
 }
 
 func (AccountInfo) TableName() string {
