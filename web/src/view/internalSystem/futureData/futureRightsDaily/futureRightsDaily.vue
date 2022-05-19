@@ -158,6 +158,7 @@ export default {
           {name:"杉贸本部"},
           {name:"智维本部"},
           {name:"总经理一室"},
+          {name:"杉阳资管"},
    ],
       rules: {
         time:[ { required: true, message: '请输入', trigger: 'blur' }],
