@@ -78,7 +78,7 @@
     
     <el-table-column label="浮动盈亏" prop="profitByFloat" width="120"></el-table-column> 
     
-    <el-table-column label="平仓盈亏" prop="profitByTrade" width="120"></el-table-column> 
+    <el-table-column label="当月累计平仓盈亏" prop="profitByTrade" width="120"></el-table-column> 
     
     <el-table-column label="手续费" prop="tradeFee" width="120"></el-table-column> 
     
