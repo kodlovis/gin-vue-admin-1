@@ -136,7 +136,7 @@
               <el-input-number v-model="formData.profitByFloat" :precision="2" clearable></el-input-number>
        </el-form-item>
        
-         <el-form-item label="平仓盈亏:">
+         <el-form-item label="当月累计平仓盈亏:">
               <el-input-number v-model="formData.profitByTrade" :precision="2" clearable></el-input-number>
        </el-form-item>
        
