@@ -78,7 +78,7 @@
     
     <el-table-column label="浮动盈亏" prop="profitByFloat" width="120"></el-table-column> 
     
-    <el-table-column label="当月累计平仓盈亏" prop="profitByTrade" width="120"></el-table-column> 
+    <el-table-column label="当月累计平仓盈亏" prop="profitByTrade" width="140"></el-table-column> 
     
     <el-table-column label="手续费" prop="tradeFee" width="120"></el-table-column> 
     
@@ -104,7 +104,7 @@
     ></el-pagination>
 
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" :title="dialogTitle" v-dialogDrag>
-      <el-form :model="formData" label-position="right" label-width="100px" :rules="rules" ref="prForm">
+      <el-form :model="formData" label-position="right" label-width="140px" :rules="rules" ref="prForm">
          <el-form-item label="时间:" prop="time">
               <el-date-picker type="datetime" placeholder="选择日期" v-model="formData.time" clearable default-time="12:00:00"></el-date-picker>
        </el-form-item>
