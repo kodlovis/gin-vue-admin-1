@@ -10,7 +10,32 @@ type SpotDetail struct {
 	ProductName    string                              `json:"productName" form:"productName" gorm:"column:product_name;comment:;type:varchar;"`
 	AccountId      string                              `json:"accountId" form:"accountId" gorm:"column:account_id;comment:type:varchar;"`
 	ProfitByFloat  float64                             `json:"profitByFloat" form:"profitByFloat" gorm:"column:profit_by_float;comment:"`
-	ProfitByTrade  float64                             `json:"profitByTrade" form:"profitByTrade" gorm:"column:profit_by_trade;comment:"`
+	ProfitByTrade  float64                             `json:"profitByTrade" form:"profitByTrade" gorm:"column:profit_by_trade;comment:;type:varchar"`
+	TradeFee       float64                             `json:"tradeFee" form:"tradeFee" gorm:"column:trade_fee;comment:"`
+	DepartmentName string                              `json:"departmentName" form:"departmentName" gorm:"column:department_name;type:varchar;"`
+	AccountInfo    internal_system.AccountInfo         `json:"accountInfo" gorm:"foreignKey:AccountId;references:AccountId;comment:"`
+	ProductInfo    internal_system.ExchangeProductInfo `json:"productInfo" gorm:"foreignKey:ProductName;references:ProductName;comment:"`
+}
+
+type SpotDetailWithoutTrade struct {
+	ID             uint                                `json:"id"  gorm:"column:id;comment:ID;"`
+	Time           string                              `json:"time" form:"time" gorm:"column:time;comment:;"`
+	ProductName    string                              `json:"productName" form:"productName" gorm:"column:product_name;comment:;type:varchar;"`
+	AccountId      string                              `json:"accountId" form:"accountId" gorm:"column:account_id;comment:type:varchar;"`
+	ProfitByFloat  float64                             `json:"profitByFloat" form:"profitByFloat" gorm:"column:profit_by_float;comment:"`
+	TradeFee       float64                             `json:"tradeFee" form:"tradeFee" gorm:"column:trade_fee;comment:"`
+	DepartmentName string                              `json:"departmentName" form:"departmentName" gorm:"column:department_name;type:varchar;"`
+	AccountInfo    internal_system.AccountInfo         `json:"accountInfo" gorm:"foreignKey:AccountId;references:AccountId;comment:"`
+	ProductInfo    internal_system.ExchangeProductInfo `json:"productInfo" gorm:"foreignKey:ProductName;references:ProductName;comment:"`
+}
+
+type SpotDetailWithStringTrade struct {
+	ID             uint                                `json:"id"  gorm:"column:id;comment:ID;"`
+	Time           string                              `json:"time" form:"time" gorm:"column:time;comment:;"`
+	ProductName    string                              `json:"productName" form:"productName" gorm:"column:product_name;comment:;type:varchar;"`
+	AccountId      string                              `json:"accountId" form:"accountId" gorm:"column:account_id;comment:type:varchar;"`
+	ProfitByFloat  float64                             `json:"profitByFloat" form:"profitByFloat" gorm:"column:profit_by_float;comment:"`
+	ProfitByTrade  string                              `json:"profitByTrade" form:"profitByTrade" gorm:"column:profit_by_trade;comment:;type:varchar"`
 	TradeFee       float64                             `json:"tradeFee" form:"tradeFee" gorm:"column:trade_fee;comment:"`
 	DepartmentName string                              `json:"departmentName" form:"departmentName" gorm:"column:department_name;type:varchar;"`
 	AccountInfo    internal_system.AccountInfo         `json:"accountInfo" gorm:"foreignKey:AccountId;references:AccountId;comment:"`
@@ -18,5 +43,13 @@ type SpotDetail struct {
 }
 
 func (SpotDetail) TableName() string {
+	return "future.spot_detail"
+}
+
+func (SpotDetailWithoutTrade) TableName() string {
+	return "future.spot_detail"
+}
+
+func (SpotDetailWithStringTrade) TableName() string {
 	return "future.spot_detail"
 }

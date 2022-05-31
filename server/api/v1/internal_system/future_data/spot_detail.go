@@ -20,7 +20,7 @@ import (
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /spotDetail/createSpotDetail [post]
 func CreateSpotDetail(c *gin.Context) {
-	var spotDetail mif.SpotDetail
+	var spotDetail rif.SpotDetail
 	_ = c.ShouldBindJSON(&spotDetail)
 	if err := sif.CreateSpotDetail(spotDetail); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Any("err", err))
@@ -77,7 +77,7 @@ func DeleteSpotDetailByIds(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /spotDetail/updateSpotDetail [put]
 func UpdateSpotDetail(c *gin.Context) {
-	var spotDetail mif.SpotDetail
+	var spotDetail rif.SpotDetail
 	_ = c.ShouldBindJSON(&spotDetail)
 	if err := sif.UpdateSpotDetail(spotDetail); err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Any("err", err))

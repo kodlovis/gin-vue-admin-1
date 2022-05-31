@@ -78,7 +78,7 @@
     
     <el-table-column label="浮动盈亏" prop="profitByFloat" width="120"></el-table-column> 
     
-    <el-table-column label="当月累计平仓盈亏" prop="profitByTrade" width="140"></el-table-column> 
+    <el-table-column label="当月累计平仓盈亏" prop="profitByTrade" width="160"></el-table-column> 
     
     <el-table-column label="手续费" prop="tradeFee" width="120"></el-table-column> 
     
@@ -136,8 +136,8 @@
               <el-input-number v-model="formData.profitByFloat" :precision="2" clearable></el-input-number>
        </el-form-item>
        
-         <el-form-item label="当月累计平仓盈亏:">
-              <el-input-number v-model="formData.profitByTrade" :precision="2" clearable></el-input-number>
+         <el-form-item label="当月累计平仓盈亏:" >
+              <el-input value="" v-model="formData.profitByTrade" :precision="2" clearable placeholder="该行留空会继承本月累计平仓盈亏"></el-input>
        </el-form-item>
        
          <el-form-item label="手续费:">
@@ -225,7 +225,7 @@ export default {
             productName:"",
             accountId:"",
             profitByFloat:0,
-            profitByTrade:0,
+            profitByTrade:"",
             tradeFee:0,
             departmentName:"",
             accountInfo:{accountId:"",comment:""},
@@ -327,7 +327,7 @@ export default {
           productName:"",
           accountId:"",
           profitByFloat:0,
-          profitByTrade:0,
+          profitByTrade:"",
           tradeFee:0,
           departmentName:"",
           
