@@ -100,7 +100,7 @@ func UpdateSpotDetail(spotDetail rif.SpotDetail) (err error) {
 		//err := global.GVA_DB.Model(mif.SpotDetail{}).Where("id = ?", spotDetail.ID).Updates(mif.SpotDetail{Time: spotDetail.Time, ProductName: spotDetail.ProductName, AccountId: spotDetail.AccountId,
 		//	ProfitByTrade: "", ProfitByFloat: spotDetail.ProfitByFloat, TradeFee: spotDetail.TradeFee, DepartmentName: spotDetail.DepartmentName})
 
-		err := global.GVA_DB.Model(mif.SpotDetail{}).Where("id = ?", spotDetail.ID).Select("profit_by_trade").Updates(map[string]interface{}{"profit_by_trade": nil, "time": spotDetail.Time,
+		err := global.GVA_DB.Model(mif.SpotDetail{}).Where("id = ?", spotDetail.ID).Select("*").Updates(map[string]interface{}{"profit_by_trade": nil, "time": spotDetail.Time,
 			"product_name": spotDetail.ProductName, "account_id": spotDetail.AccountId, "profit_by_float": spotDetail.ProfitByFloat, "trade_fee": spotDetail.TradeFee, "department_name": spotDetail.DepartmentName})
 
 		// err := global.GVA_DB.Raw("update future.spot_detail set time=?, ProductName:=?, AccountId=?,
@@ -155,7 +155,7 @@ func GetSpotDetailInfoList(info rif.SpotDetailSearch) (err error, list interface
 		db = db.Where("account_id LIKE ?", "%"+info.AccountId+"%")
 	}
 	if info.DepartmentName != "" {
-		db = db.Where("department_name = ?", info.DepartmentName)
+		db = db.Where("department_name LIKE ?", "%"+info.DepartmentName+"%")
 	}
 	err = db.Count(&total).Error
 	err = db.Limit(limit).Offset(offset).Find(&spotDetails).Error
