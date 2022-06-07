@@ -65,7 +65,7 @@
     
     <el-table-column label="特法客户日均持仓" prop="specialLawCustomerDailyPosition" width="140"></el-table-column> 
     
-    <el-table-column label="除做市商外法人客户日均持仓" prop="corporateCustomerDailyPosition" width="220"></el-table-column> 
+    <el-table-column label="法人客户日均持仓" prop="corporateCustomerDailyPosition" width="220"></el-table-column> 
     
     <el-table-column label="今日日均持仓" prop="dailyAveragePosition" width="120"></el-table-column> 
     
@@ -96,7 +96,7 @@
     ></el-pagination>
 
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
-      <el-form :model="formData" label-position="right" label-width="80px">
+      <el-form :model="formData" label-position="right" label-width="250px">
          <el-form-item label="日期:">
               <el-date-picker type="date" placeholder="选择日期" v-model="formData.time" clearable></el-date-picker>
        </el-form-item>
@@ -113,19 +113,26 @@
               <el-input-number v-model="formData.customerDailyPosition" :precision="2" clearable></el-input-number>
        </el-form-item>
        
-         <el-form-item label="机构客户日均持仓:"></el-form-item>
+         <el-form-item label="机构客户日均持仓:">
+              <el-input-number v-model="formData.institutionalDailyPosition" :precision="2" clearable></el-input-number></el-form-item>
        
-         <el-form-item label="特法客户日均持仓:"></el-form-item>
+         <el-form-item label="特法客户日均持仓:">
+              <el-input-number v-model="formData.specialLawCustomerDailyPosition" :precision="2" clearable></el-input-number></el-form-item>
        
-         <el-form-item label="除做市商外法人客户日均持仓:"></el-form-item>
+         <el-form-item label="法人客户日均持仓:">
+              <el-input-number v-model="formData.corporateCustomerDailyPosition" :precision="2" clearable></el-input-number></el-form-item>
        
-         <el-form-item label="今日日均持仓:"></el-form-item>
+         <el-form-item label="今日日均持仓:">
+              <el-input-number v-model="formData.dailyAveragePosition" :precision="2" clearable></el-input-number></el-form-item>
        
-         <el-form-item label="重点合约当月日均持仓:"></el-form-item>
+         <el-form-item label="重点合约当月日均持仓:">
+              <el-input-number v-model="formData.keyContractMonthlyAveragePosition" :precision="2" clearable></el-input-number></el-form-item>
        
-         <el-form-item label="本月截至今日上缴手续费:"></el-form-item>
+         <el-form-item label="本月截至今日上缴手续费:">
+              <el-input-number v-model="formData.theHandlingFeeDueTodayThisMonth" :precision="2" clearable></el-input-number></el-form-item>
        
-         <el-form-item label="法人持仓占比乘数:"></el-form-item>
+         <el-form-item label="法人持仓占比乘数:">
+              <el-input-number v-model="formData.corporatePositionMultiplier" :precision="2" clearable></el-input-number></el-form-item>
        </el-form>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>

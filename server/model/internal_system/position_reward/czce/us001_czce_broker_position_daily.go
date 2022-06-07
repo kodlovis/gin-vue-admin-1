@@ -7,7 +7,7 @@ import (
 
 // 如果含有time.Time 请自行import time包
 type Us001CzceBrokerPositionDaily struct {
-	ID                              uint      `json:"id"  gorm:"column:id;comment:ID;"`
+	ID                              uint      `json:"ID"  gorm:"column:id;comment:ID;"`
 	Time                            time.Time `json:"time" form:"time" gorm:"column:time;comment:;type:date;size:0;"`
 	ExchangeId                      string    `json:"exchangeId" form:"exchangeId" gorm:"column:exchange_id;comment:;type:varchar;"`
 	BrokerId                        string    `json:"brokerId" form:"brokerId" gorm:"column:broker_id;comment:"`
