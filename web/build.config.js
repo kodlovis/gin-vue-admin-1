@@ -2,8 +2,8 @@
 
 module.exports = {
     title: '上海杉杉贸易',
-    vueClientPort: 8083,
-    goServerPort: 8888,
+    vueClientPort: 8084,
+    goServerPort: 9999,
     baseCdnUrl: '//cdn.staticfile.org',
     cdns: [
         /**
