@@ -71,7 +71,7 @@
         <el-form-item label="时间">
           <div class="block">
             <el-date-picker
-              v-model="form.time"
+              v-model="searchInfo.time"
               type="datetime"
               placeholder="选择日期时间"
               default-time="12:00:00">
