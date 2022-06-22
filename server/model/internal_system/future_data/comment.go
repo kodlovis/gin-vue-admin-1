@@ -16,3 +16,7 @@ type SysUser struct {
 
 	AuthorityId string `json:"authorityId" gorm:"default:888;comment:用户角色ID"` // 用户角色ID
 }
+
+func (SysUser) TableName() string {
+	return "sys_users"
+}

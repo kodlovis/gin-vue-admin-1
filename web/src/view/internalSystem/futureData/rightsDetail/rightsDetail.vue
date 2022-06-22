@@ -69,7 +69,8 @@
     <el-table-column label="营业外收入" prop="adjustExpense" width="120"></el-table-column> 
     <el-table-column label="客户利润" prop="customerProfit" width="120"></el-table-column> 
     
-    <el-table-column label="品种累计权益" prop="cumulativeRights" width="120"></el-table-column> 
+    <!-- <el-table-column label="品种累计权益" prop="cumulativeRights" width="120"></el-table-column>  -->
+        <el-table-column label="创建者" prop="userInfo.nickName" width="120"></el-table-column> 
     
       <el-table-column label="操作">
         <template slot-scope="scope">
@@ -136,9 +137,9 @@
            <el-input-number v-model="formData.customerProfit" clearable placeholder="请输入" ></el-input-number>
       </el-form-item>
        
-         <el-form-item label="品种累计权益:">
+         <!-- <el-form-item label="品种累计权益:">
            <el-input-number v-model="formData.cumulativeRights" clearable placeholder="请输入" ></el-input-number>
-      </el-form-item>
+      </el-form-item> -->
       </el-form>
 
 
@@ -162,6 +163,7 @@ import {
 import {getExchangeProductInfoList} from "@/api/internalSystem/exchangeProductInfo"; 
 import { formatTimeToStr } from "@/utils/date";
 import infoList from "@/mixins/infoList";
+import { mapGetters } from "vuex";
 export default {
   name: "RightsDetail",
   mixins: [infoList],
@@ -183,6 +185,9 @@ export default {
             threeCharges:"",
             customerProfit:"",
             adjustExpense:0,
+            userInfo:{
+              nickName:""
+            }
             
       },departmentInfoOptions:[
           {name:"有色金属部"},
@@ -200,6 +205,9 @@ export default {
         departmentName:[ { required: true, message: '请输入', trigger: 'blur' }],
       }
     };
+  },
+  computed: {
+    ...mapGetters("user", ["userInfo", "token"])
   },
   filters: {
     formatDate: function(time) {
@@ -306,7 +314,7 @@ export default {
           let res;
           switch (this.type) {
             case "create":
-              res = await createRightsDetail(this.formData);
+              res = await createRightsDetail({...this.formData,userID:this.userInfo.ID});
               break;
             case "update":
               this.$confirm('确定要修改当前数据吗?', '提示', {
