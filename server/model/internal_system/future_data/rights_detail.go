@@ -15,6 +15,9 @@ type RightsDetail struct {
 	CustomerProfit      float64 `json:"customerProfit" form:"customerProfit" gorm:"column:customer_profit;comment:;type:double precision;size:53;"`
 	ExchangeGainsLosses float64 `json:"exchangeGainsLosses" form:"exchangeGainsLosses" gorm:"column:exchange_gains_losses;comment:;type:double precision;size:53;"`
 	FinancingInterest   float64 `json:"financingInterest" form:"financingInterest" gorm:"column:financing_interest;comment:;type:double precision;size:53;"`
+	UserID              uint    `json:"userID" form:"userID" gorm:"column:user_id;comment:;type:double precision;size:53;"`
+
+	UserInfo SysUser `json:"userInfo" gorm:"foreignKey:ID;references:UserID;comment:"`
 }
 
 func (RightsDetail) TableName() string {
