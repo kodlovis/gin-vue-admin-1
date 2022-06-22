@@ -300,7 +300,7 @@ export default {
         if (res.code == 0) {
           this.$message({
             type: 'success',
-            message: '删除成功'
+            message: '删除成功,报表同步会有稍许延迟'
           })
           if (this.tableData.length == ids.length) {
               this.page--;
@@ -333,7 +333,7 @@ export default {
       if (res.code == 0) {
         this.$message({
           type: "success",
-          message: "删除成功"
+          message: "删除成功,报表同步会有稍许延迟"
         });
         if (this.tableData.length == 1) {
             this.page--;
@@ -345,6 +345,7 @@ export default {
     async createBasisOfInstrumentCloseList(){
       var item=[]
       for (let index = 0; index < this.deliveryInstrumentOptions.length; index++) {
+        if (Number(this.deliveryInstrumentOptions[index].adjustBasis)!=0){
                 item.push({
                   adjustBasis:Number(this.deliveryInstrumentOptions[index].adjustBasis),
                   benchmarkInstrument:this.deliveryInstrumentOptions[index].selectedInstrument,
@@ -353,13 +354,14 @@ export default {
                   basisWithoutRisk:this.deliveryInstrumentOptions[index].basisWithoutRisk,
                   time:this.deliveryInstrumentOptions[index].time,
                 })
+            }
       }
       let res;
       res = await createBasisOfInstrumentCloseList({item})
       if (res.code == 0) {
         this.$message({
           type:"success",
-          message:"提交成功"
+          message:"提交成功,报表同步会有稍许延迟"
         })
         this.deliveryInstrumentOptions=[]
           //及时刷新table数据this.deliveryInstrumentOptions.splice
@@ -392,7 +394,7 @@ export default {
       if (res.code == 0) {
         this.$message({
           type:"success",
-          message:"创建/更改成功"
+          message:"创建/更改成功,报表同步会有稍许延迟"
         })
         this.closeDialog();
         this.getTableData();

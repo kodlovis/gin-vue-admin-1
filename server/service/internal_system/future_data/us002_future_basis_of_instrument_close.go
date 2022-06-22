@@ -16,6 +16,8 @@ import (
 
 func CreateUs002FutureBasisOfInstrumentClose(us002FutureBasisOfInstrumentClose model.Us002FutureBasisOfInstrumentClose) (err error) {
 	err = global.GVA_DB.Create(&us002FutureBasisOfInstrumentClose).Error
+	sql := "REFRESH MATERIALIZED VIEW future.mv_future_position_detail WITH DATA;"
+	go global.GVA_DB.Exec(sql)
 	return err
 }
 
@@ -27,6 +29,8 @@ func CreateUs002FutureBasisOfInstrumentClose(us002FutureBasisOfInstrumentClose m
 
 func DeleteUs002FutureBasisOfInstrumentClose(us002FutureBasisOfInstrumentClose model.Us002FutureBasisOfInstrumentClose) (err error) {
 	err = global.GVA_DB.Delete(&us002FutureBasisOfInstrumentClose).Error
+	sql := "REFRESH MATERIALIZED VIEW future.mv_future_position_detail WITH DATA;"
+	go global.GVA_DB.Exec(sql)
 	return err
 }
 
@@ -38,6 +42,8 @@ func DeleteUs002FutureBasisOfInstrumentClose(us002FutureBasisOfInstrumentClose m
 
 func DeleteUs002FutureBasisOfInstrumentCloseByIds(ids request.IdsReq) (err error) {
 	err = global.GVA_DB.Delete(&[]model.Us002FutureBasisOfInstrumentClose{}, "id in ?", ids.Ids).Error
+	sql := "REFRESH MATERIALIZED VIEW future.mv_future_position_detail WITH DATA;"
+	go global.GVA_DB.Exec(sql)
 	return err
 }
 
@@ -49,6 +55,8 @@ func DeleteUs002FutureBasisOfInstrumentCloseByIds(ids request.IdsReq) (err error
 
 func UpdateUs002FutureBasisOfInstrumentClose(us002FutureBasisOfInstrumentClose model.Us002FutureBasisOfInstrumentClose) (err error) {
 	err = global.GVA_DB.Save(&us002FutureBasisOfInstrumentClose).Error
+	sql := "REFRESH MATERIALIZED VIEW future.mv_future_position_detail WITH DATA;"
+	go global.GVA_DB.Exec(sql)
 	return err
 }
 
@@ -169,5 +177,7 @@ func GetNoRiskValue(info request.NoRiskValue) (err error, list interface{}) {
 func CreateBasisOfInstrumentCloseList(BasisOInstrumentList request.BasisOInstrumentList) (err error) {
 
 	err = global.GVA_DB.Model(&model.Us002FutureBasisOfInstrumentClose{}).CreateInBatches(BasisOInstrumentList.Us002FutureBasisOfInstrumentClose, len(BasisOInstrumentList.Us002FutureBasisOfInstrumentClose)).Error
+	sql := "REFRESH MATERIALIZED VIEW future.mv_future_position_detail WITH DATA;"
+	go global.GVA_DB.Exec(sql)
 	return err
 }
