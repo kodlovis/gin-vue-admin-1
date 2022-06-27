@@ -20,3 +20,13 @@ type SysUser struct {
 func (SysUser) TableName() string {
 	return "sys_users"
 }
+
+type UserDepartment struct {
+	global.GVA_MODEL
+	Userid         string `json:"userid" form:"userid" gorm:"column:user_id;comment:;type:character varying;"`
+	DepartmentCode string `json:"departmentCode" form:"departmentCode" gorm:"column:department_code;comment:;type:character varying;"`
+}
+
+func (UserDepartment) TableName() string {
+	return "master_data.us010_user_department"
+}

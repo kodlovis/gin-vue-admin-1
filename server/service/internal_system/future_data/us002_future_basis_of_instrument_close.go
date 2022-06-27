@@ -97,55 +97,54 @@ func GetUs002FutureBasisOfInstrumentCloseInfoList(info request.Us002FutureBasisO
 
 //获取近月交割合约信息
 func PositionDeliveryMonthInstrumentlIST(info request.PositionDeliveryMonthInstrument) (err error, list interface{}, total int64) {
-	// 创建db
-	//db := global.GVA_DB.Model(&model.PositionDeliveryMonthInstrument{})
-	// limit := info.PageSize
-	// offset := info.PageSize * (info.Page - 1)
-	if info.Time != "" {
-		var positionDeliveryMonthInstrument []model.PositionDeliveryMonthInstrument
-		timeStr := info.Time
-		sql := "SELECT * from master_data.fn_get_position_delivery_month_instrument(to_char('" + timeStr + "'::date,'yyyy-mm-dd')::date)"
-		err = global.GVA_DB.Raw(sql).Scan(&positionDeliveryMonthInstrument).Error
-		total = int64(len(positionDeliveryMonthInstrument))
-		//获取近月合约品种的远月合约list
-		var instrument []model.FarMonthInstrument
-		nsql := "SELECT instrument,product from master_data.fn_get_no_risk_far_month_instrument(to_char('" + timeStr + "'::date,'yyyy-mm-dd')::date)"
-		err = global.GVA_DB.Raw(nsql).Scan(&instrument).Error
-		//将近月合约信息和远月合约list组合起来
-		for i := 0; i < len(positionDeliveryMonthInstrument); i++ {
-			for j := 0; j < len(instrument); j++ {
-				if positionDeliveryMonthInstrument[i].Product == instrument[j].Product {
-					positionDeliveryMonthInstrument[i].FarMonthInstrument = append(positionDeliveryMonthInstrument[i].FarMonthInstrument, instrument[j])
-				}
-			}
+
+	//获取当前用户所属的部门list
+	var deparmentList []string
+	sql := "SELECT department_code FROM master_data.us010_user_department where user_id=?"
+	err = global.GVA_DB.Raw(sql, info.UserID).Scan(&deparmentList).Error
+	//拼接sql适用的字符串
+	var dept string
+	dept = "(" + dept
+	for i := 0; i < len(deparmentList); i++ {
+		dept = dept + "'" + deparmentList[i] + "'"
+		if i+1 < len(deparmentList) {
+			dept = dept + ","
 		}
-		return err, positionDeliveryMonthInstrument, total
-	} else {
-		var positionDeliveryMonthInstrument []model.PositionDeliveryMonthInstrument
-		current_time := time.Now().AddDate(0, 0, 0)
-		timeStr := current_time.Format("2006-01-02 15:04:05")
-		sql := "SELECT * from master_data.fn_get_position_delivery_month_instrument(to_char('" + timeStr + "'::date,'yyyy-mm-dd')::date)"
-		err = global.GVA_DB.Raw(sql).Scan(&positionDeliveryMonthInstrument).Error
-		total = int64(len(positionDeliveryMonthInstrument))
-		//获取近月合约品种的远月合约list
-		var instrument []model.FarMonthInstrument
-		nsql := "SELECT instrument,product from master_data.fn_get_no_risk_far_month_instrument(to_char('" + timeStr + "'::date,'yyyy-mm-dd')::date)"
-		err = global.GVA_DB.Raw(nsql).Scan(&instrument).Error
-		//将近月合约信息和远月合约list组合起来
-		for i := 0; i < len(positionDeliveryMonthInstrument); i++ {
-			for j := 0; j < len(instrument); j++ {
-				if positionDeliveryMonthInstrument[i].Product == instrument[j].Product {
-					positionDeliveryMonthInstrument[i].FarMonthInstrument = append(positionDeliveryMonthInstrument[i].FarMonthInstrument, instrument[j])
-				}
-			}
-		}
-		return err, positionDeliveryMonthInstrument, total
 	}
+	dept = dept + ")"
+
+	var timeStr string
+	var positionDeliveryMonthInstrument []model.PositionDeliveryMonthInstrument
+	if info.Time != "" {
+		timeStr = info.Time
+	} else {
+		current_time := time.Now().AddDate(0, 0, 0)
+		timeStr = current_time.Format("2006-01-02 15:04:05")
+	}
+	//查询当前账号归属部门的近月合约list
+	asql := "SELECT * from master_data.fn_get_delivery_month_instrument_detail_by_dept(to_char('" + timeStr + "'::date,'yyyy-mm-dd')::date,to_char('" + timeStr + "'::date,'yyyy-mm-dd')::date) where department_code  in " + dept + ""
+	err = global.GVA_DB.Raw(asql).Scan(&positionDeliveryMonthInstrument).Error
+	total = int64(len(positionDeliveryMonthInstrument))
+	//获取近月合约品种的远月合约list
+	var instrument []model.FarMonthInstrument
+	nsql := "SELECT instrument,product from master_data.fn_get_no_risk_far_month_instrument(to_char('" + timeStr + "'::date,'yyyy-mm-dd')::date)"
+	err = global.GVA_DB.Raw(nsql).Scan(&instrument).Error
+	//将近月合约信息和远月合约list组合起来
+	for i := 0; i < len(positionDeliveryMonthInstrument); i++ {
+		for j := 0; j < len(instrument); j++ {
+			if positionDeliveryMonthInstrument[i].Product == instrument[j].Product {
+				positionDeliveryMonthInstrument[i].FarMonthInstrument = append(positionDeliveryMonthInstrument[i].FarMonthInstrument, instrument[j])
+			}
+		}
+	}
+	return err, positionDeliveryMonthInstrument, total
 	// sql := "with source as (SELECT '2022-06-13',instrument, exchange_id,  product,launch_date, last_trade_date, month, last_ddate FROM future.future_instruments " +
 	// 	"where last_trade_date>='2022-06-13' and to_char(last_trade_date,'yyyy-mm')='2022-06' and exchange_id!='CFX' and product!='SCTAS' order by instrument) " +
 	// 	"select s.*, case when nt.month is null then 1 else 0 end as is_throw from source s left join future.product_not_throw nt on s.month =nt.month and s.product=nt.product " +
 	// 	"WHERE instrument  IN (SELECT instrument from future.fuc_future_position_detail('2022-06-13', '2022-06-13'))"
 }
+
+//该方法暂不使用
 func GetBenchmarkInstrumentList(info request.PositionDeliveryMonthInstrument) (err error, list interface{}, total int64) {
 	var instrument []model.FarMonthInstrument
 	current_time := time.Now().AddDate(0, 0, -2)
@@ -175,7 +174,6 @@ func GetNoRiskValue(info request.NoRiskValue) (err error, list interface{}) {
 }
 
 func CreateBasisOfInstrumentCloseList(BasisOInstrumentList request.BasisOInstrumentList) (err error) {
-
 	err = global.GVA_DB.Model(&model.Us002FutureBasisOfInstrumentClose{}).CreateInBatches(BasisOInstrumentList.Us002FutureBasisOfInstrumentClose, len(BasisOInstrumentList.Us002FutureBasisOfInstrumentClose)).Error
 	sql := "REFRESH MATERIALIZED VIEW future.mv_future_position_detail WITH DATA;"
 	go global.GVA_DB.Exec(sql)

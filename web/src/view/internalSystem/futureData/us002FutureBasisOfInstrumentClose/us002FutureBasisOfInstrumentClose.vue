@@ -192,6 +192,7 @@ import {
 } from "@/api/internalSystem/futureData/us002FutureBasisOfInstrumentClose";  //  此处请自行替换地址
 import { formatTimeToStr } from "@/utils/date";
 import infoList from "@/mixins/infoList";
+import { mapGetters } from "vuex";
 export default {
   name: "Us002FutureBasisOfInstrumentClose",
   mixins: [infoList],
@@ -214,6 +215,9 @@ export default {
             is_throw:"",
       },
     };
+  },
+  computed: {
+    ...mapGetters("user", ["userInfo", "token"])
   },
   filters: {
     formatDate: function(time) {
@@ -353,6 +357,7 @@ export default {
                   productCode:this.deliveryInstrumentOptions[index].product,
                   basisWithoutRisk:this.deliveryInstrumentOptions[index].basisWithoutRisk,
                   time:this.deliveryInstrumentOptions[index].time,
+                  userid:this.userInfo.ID,
                 })
             }
       }
@@ -375,7 +380,7 @@ export default {
         this.page = 1
         this.pageSize = 10
         //加载近月合约信息
-        const deliveryInstrument = await getPositionDeliveryMonthInstrumentList({ page: 1, pageSize: 999, ...this.form  });
+        const deliveryInstrument = await getPositionDeliveryMonthInstrumentList({ page: 1, pageSize: 999, ...this.form,userid:this.userInfo.ID  });
         this.setdeliveryInstrumentOptions(deliveryInstrument.data.list);
     },
     async enterDialog() {
@@ -428,7 +433,7 @@ export default {
   async created() {
     await this.getTableData();
     //加载近月合约信息
-    const deliveryInstrument = await getPositionDeliveryMonthInstrumentList({ page: 1, pageSize: 999 });
+    const deliveryInstrument = await getPositionDeliveryMonthInstrumentList({ page: 1, pageSize: 999 ,userid:this.userInfo.ID});
     this.setdeliveryInstrumentOptions(deliveryInstrument.data.list);
     // const benchmarkInstrument = await getBenchmarkInstrumentList({ page: 1, pageSize: 999 });
     // this.setInstrumentInfoOptions(benchmarkInstrument.data.list);

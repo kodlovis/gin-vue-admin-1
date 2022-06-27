@@ -10,6 +10,7 @@ type Us002FutureBasisOfInstrumentCloseSearch struct {
 type PositionDeliveryMonthInstrument struct {
 	future_data.PositionDeliveryMonthInstrument
 	PageInfo
+	UserID uint `json:"userid" form:"userid"`
 }
 
 type NoRiskValue struct {
