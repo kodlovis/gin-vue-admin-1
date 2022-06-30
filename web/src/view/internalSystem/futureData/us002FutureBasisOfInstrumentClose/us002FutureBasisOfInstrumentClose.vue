@@ -122,6 +122,7 @@
     <el-table-column label="无风险价差" prop="basisWithoutRisk" width="120"></el-table-column> 
     
     <el-table-column label="基差" prop="adjustBasis" width="120"></el-table-column> 
+    <el-table-column label="创建人" prop="userInfo.nickName" width="120"></el-table-column> 
     
     
       <el-table-column label="操作">
