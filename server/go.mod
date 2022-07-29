@@ -10,7 +10,7 @@ require (
 	github.com/baiyubin/aliyun-sts-go-sdk v0.0.0-20180326062324-cfa1a18b161f // indirect
 	github.com/casbin/casbin/v2 v2.11.0
 	github.com/casbin/gorm-adapter/v3 v3.0.2
-	github.com/cpuguy83/go-md2man/v2 v2.0.0 // indirect
+	// github.com/cpuguy83/go-md2man/v2 v2.0.0 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fastly/go-utils v0.0.0-20180712184237-d95a45783239 // indirect
 	github.com/fsnotify/fsnotify v1.4.9
@@ -24,9 +24,9 @@ require (
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/golang/protobuf v1.4.2 // indirect
 	github.com/gookit/color v1.3.1
-	github.com/jackc/pgconn v1.6.1 // indirect
+	// github.com/jackc/pgconn v1.6.1 // indirect
 	github.com/jehiah/go-strftime v0.0.0-20171201141054-1d33003b3869 // indirect
-	github.com/jinzhu/gorm v1.9.16 // indirect
+	// github.com/jinzhu/gorm v1.9.16 // indirect
 	github.com/jordan-wright/email v0.0.0-20200824153738-3f5bafa1cd84
 	github.com/json-iterator/go v1.1.10 // indirect
 	github.com/lestrrat-go/file-rotatelogs v2.3.0+incompatible
@@ -40,7 +40,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/qiniu/api.v7/v7 v7.4.1
 	github.com/robfig/cron/v3 v3.0.1
-	github.com/russross/blackfriday/v2 v2.1.0 // indirect
+	// github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/satori/go.uuid v1.2.0
 	github.com/shirou/gopsutil v3.21.1+incompatible
 	github.com/spf13/afero v1.2.2 // indirect
@@ -48,7 +48,7 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/spf13/viper v1.7.0
-	github.com/swaggo/files v0.0.0-20190704085106-630677cd5c14 // indirect
+	// github.com/swaggo/files v0.0.0-20190704085106-630677cd5c14 // indirect
 	github.com/swaggo/gin-swagger v1.2.0
 	github.com/swaggo/swag v1.7.0
 	github.com/tebeka/strftime v0.1.3 // indirect
@@ -62,6 +62,6 @@ require (
 	google.golang.org/protobuf v1.24.0 // indirect
 	gopkg.in/ini.v1 v1.55.0 // indirect
 	gorm.io/driver/mysql v1.0.1
-	gorm.io/driver/postgres v0.2.6 // indirect
+	gorm.io/driver/postgres v0.2.6
 	gorm.io/gorm v1.20.7
 )

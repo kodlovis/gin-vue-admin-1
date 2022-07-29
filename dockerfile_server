@@ -23,6 +23,6 @@ COPY --from=0 /go/src/gin-vue-admin/server ./
 COPY --from=0 /go/src/gin-vue-admin/config.yaml ./
 COPY --from=0 /go/src/gin-vue-admin/resource ./resource
 
-EXPOSE 8888
+EXPOSE 9999
 
 ENTRYPOINT ./server

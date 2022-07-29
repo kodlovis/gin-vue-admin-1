@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
-
+// import 'xe-utils'
+// import VXETable from 'vxe-table'
+// import 'vxe-table/lib/style.css'
 //  按需引入element
 import {
     Button,
@@ -53,9 +55,11 @@ import {
     Upload,
     Progress,
     MessageBox,
-    Image
+    Image,
+    Calendar,
 } from 'element-ui';
-
+// Vue.use(VXETable)
+Vue.use(Calendar);
 Vue.use(Button);
 Vue.use(Select);
 Vue.use(Dialog);

@@ -48,7 +48,7 @@ casbin:
 # system configuration
 system:
   env: 'public'  # Change to "develop" to skip authentication for development mode
-  addr: 8888
+  addr: 9999
   db-type: 'mysql'
   oss-type: 'local'
   use-multipoint: false
@@ -73,7 +73,7 @@ mysql:
 
 # pgsql connect configuration
 pgsql:
-  host: 192.168.11.251
+  host: 10.10.10.251
   port: 5432
   timeZone: Asia/Shanghai
   db-name: future

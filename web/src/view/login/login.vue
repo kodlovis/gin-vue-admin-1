@@ -86,6 +86,7 @@
 <script>
 import { mapActions } from "vuex";
 import { captcha } from "@/api/user";
+
 export default {
   name: "Login",
   data() {
@@ -147,6 +148,7 @@ export default {
         }
       });
     },
+
     changeLock() {
       this.lock === "lock" ? (this.lock = "unlock") : (this.lock = "lock");
     },
@@ -156,6 +158,7 @@ export default {
         this.loginForm.captchaId = ele.data.captchaId;
       });
     },
+
   },
 };
 </script>

@@ -51,7 +51,7 @@ mysql:
   log-mode: false
   log-zap: ""
 pgsql:
-  host: 192.168.11.251
+  host: 10.10.10.251
   port: 5432
   timeZone: Asia/Shanghai
   db-name: future
@@ -76,7 +76,7 @@ redis:
   password: ""
 system:
   env: public
-  addr: 8888
+  addr: 9999
   db-type: mysql
   oss-type: local
   use-multipoint: false
