@@ -40,20 +40,21 @@ func Gorm() *gorm.DB {
 
 func MysqlTables(db *gorm.DB) {
 	err := db.AutoMigrate(
-		model.SysUser{},
-		model.SysAuthority{},
-		model.SysApi{},
-		model.SysBaseMenu{},
-		model.SysBaseMenuParameter{},
-		model.JwtBlacklist{},
-		model.SysDictionary{},
-		model.SysDictionaryDetail{},
-		model.ExaFileUploadAndDownload{},
-		model.ExaFile{},
-		model.ExaFileChunk{},
-		model.ExaSimpleUploader{},
-		model.ExaCustomer{},
-		model.SysOperationRecord{},
+
+		// model.SysUser{},
+		// model.SysAuthority{},
+		// model.SysApi{},
+		// model.SysBaseMenu{},
+		// model.SysBaseMenuParameter{},
+		// model.JwtBlacklist{},
+		// model.SysDictionary{},
+		// model.SysDictionaryDetail{},
+		// model.ExaFileUploadAndDownload{},
+		// model.ExaFile{},
+		// model.ExaFileChunk{},
+		// model.ExaSimpleUploader{},
+		// model.ExaCustomer{},
+		// model.SysOperationRecord{},
 		rms.RiskSetting{},
 		rms.Role{},
 		rms.Mac{},
@@ -138,7 +139,7 @@ func GormMysql() *gorm.DB {
 }
 func GormPostgresql() *gorm.DB {
 	m := global.GVA_CONFIG.Pgsql
-	//dsn := "host=192.168.11.251 user=postgres password=shan3353 dbname=future port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+	//dsn := "host=10.10.10.251 user=postgres password=shan3353 dbname=future port=5432 sslmode=disable TimeZone=Asia/Shanghai"
 	dsn := "host=" + m.Host + " user=" + m.Username + " password=" + m.Password + " dbname=" + m.Dbname + " port=" + m.Port + " sslmode=" + m.Sslmode + " TimeZone=" + m.TimeZone
 
 	fmt.Println(dsn)
