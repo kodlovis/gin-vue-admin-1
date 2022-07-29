@@ -73,7 +73,7 @@ mysql:
 
 # pgsql connect configuration
 pgsql:
-  host: 10.10.10.251
+  host: 192.168.11.251
   port: 5432
   timeZone: Asia/Shanghai
   db-name: future
