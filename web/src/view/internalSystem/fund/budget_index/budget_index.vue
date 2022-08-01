@@ -30,6 +30,10 @@
                             <el-table-column prop="黑色事业部-交易员" label="交易员"></el-table-column>
                             <el-table-column prop="黑色事业部-商务员" label="商务员"></el-table-column>
                         </el-table-column>
+                                     <el-table-column label="钢材事业部">
+                            <el-table-column prop="钢材事业部-交易员" label="交易员"></el-table-column>
+                            <el-table-column prop="钢材事业部-商务员" label="商务员"></el-table-column>
+                        </el-table-column>
                         <el-table-column label="农产事业部">
                             <el-table-column prop="农产事业部-交易员" label="交易员"></el-table-column>
                             <el-table-column prop="农产事业部-商务员" label="商务员"></el-table-column>
@@ -55,8 +59,8 @@
                 </el-table-column>
                 <el-table-column label="智维">
                     <el-table-column label="钢材事业部">
-                        <el-table-column prop="钢材事业部-交易员" label="交易员"></el-table-column>
-                        <el-table-column prop="钢材事业部-商务员" label="商务员"></el-table-column>
+                        <el-table-column prop="智维钢材-交易员" label="交易员"></el-table-column>
+                        <el-table-column prop="智维钢材-商务员" label="商务员"></el-table-column>
                     </el-table-column>
                     <el-table-column label="智维本部">
                         <el-table-column prop="智维本部-资金助理" label="资金助理"></el-table-column>
@@ -156,6 +160,7 @@ export default {
             let res = await upConfirmSetting(setting_value)
             console.log(res)
         },
+
         listConfirm(data) {
             const listConfirmData = [{}]
             listConfirmData[0]['date'] = formatTimeToStr(this.setInfo.chose_date, "yyyy-MM-dd")

@@ -82,6 +82,9 @@ import {
   findRemainingSum,
   getRemainingSumList
 } from "@/api/internalSystem/fund/remainingSum";
+import {
+    getFundRole
+} from "@/api/internalSystem/fund/remainingSum";
 import { formatTimeToStr } from "@/utils/date";
 import infoList from "@/mixins/infoList";
 export default {
@@ -89,6 +92,7 @@ export default {
   mixins: [infoList],
   data() {
     return {
+      company:"",
       style_options: [{
         value: '资金余额',
         label: '资金余额'
@@ -103,7 +107,7 @@ export default {
       multipleSelection: [],
       formData: {
         inValue: 0,
-        company: "杉贸",
+        company: "",
         createUser: JSON.parse( localStorage.getItem("vuex"))['user']['userInfo']['nickName']
       }
     };
@@ -126,6 +130,15 @@ export default {
     }
   },
   methods: {
+            async getfunduser() {
+            var dict = {
+                uid: JSON.parse(localStorage.getItem("vuex"))['user']['userInfo']['ID']
+            }
+            let res = await getFundRole(dict)
+            console.log(res)
+            this.company = res.data.list[0].companys
+            console.log(this.company)
+            },
     //条件搜索前端看此方法
     onSubmit() {
       this.page = 1
@@ -224,7 +237,7 @@ export default {
       this.type = "create";
             this.formData={
         inValue: 0,
-        company: "杉贸",
+        company:this.company,
         createUser: JSON.parse( localStorage.getItem("vuex"))['user']['userInfo']['nickName']
 
       }
@@ -238,6 +251,7 @@ export default {
   },
   async created() {
     await this.getTableData();
+    this.getfunduser()
   }
 };
 </script>
