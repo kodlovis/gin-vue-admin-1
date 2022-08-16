@@ -81,7 +81,7 @@ func GetUs002FutureBasisOfInstrumentCloseInfoList(info request.Us002FutureBasisO
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.GVA_DB.Model(&model.Us002FutureBasisOfInstrumentClose{}).Preload("UserInfo")
+	db := global.GVA_DB.Model(&model.Us002FutureBasisOfInstrumentClose{}).Preload("UserInfo").Order("time desc")
 	var us002FutureBasisOfInstrumentCloses []model.Us002FutureBasisOfInstrumentClose
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.Time != "" {
