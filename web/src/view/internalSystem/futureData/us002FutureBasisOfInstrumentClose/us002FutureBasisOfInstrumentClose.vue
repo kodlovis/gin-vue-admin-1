@@ -350,7 +350,7 @@ export default {
     async createBasisOfInstrumentCloseList(){
       var item=[]
       for (let index = 0; index < this.deliveryInstrumentOptions.length; index++) {
-        if (Number(this.deliveryInstrumentOptions[index].adjustBasis)!=0){
+        if ((this.deliveryInstrumentOptions[index].adjustBasis)!=''){
                 item.push({
                   adjustBasis:Number(this.deliveryInstrumentOptions[index].adjustBasis),
                   benchmarkInstrument:this.deliveryInstrumentOptions[index].selectedInstrument,
