@@ -97,7 +97,7 @@ func Routers() *gin.Engine {
 		future_data.InitUs002FutureBasisOfInstrumentCloseRouter(PrivateGroup)
 		future_data.InitUs002ForeignExchangeProfitRouter(PrivateGroup)
 		public.InitUs100CurrencyRouter(PrivateGroup)
-
+		future_data.InitLetterOfCreditDetailRouter(PrivateGroup)
 		fund.InitBudgetDataRouter(PrivateGroup)
 		fund.InitFundConfirmRouter(PrivateGroup)
 		fund.InitRemainingSumRouter(PrivateGroup)
