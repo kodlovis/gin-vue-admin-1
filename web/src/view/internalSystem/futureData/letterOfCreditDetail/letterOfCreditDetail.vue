@@ -180,7 +180,7 @@ export default {
       deleteVisible: false,
       currencyInfoOptions:[],
       multipleSelection: [],formData: {
-            CreatedAt:"",
+            CreatedAt:new Date(),
             createdUser:"",
             creditId:"",
             initialRate:"",
