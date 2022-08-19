@@ -84,7 +84,7 @@
     
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button class="table-button" @click="updateAccountPositionDaily(scope.row)" size="small" type="primary" icon="el-icon-edit">变更</el-button>
+          <el-button class="table-button" @click="updateAccountPositionDaily(scope.row)" size="small" type="primary" icon="el-icon-edit">编辑</el-button>
           <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteRow(scope.row)">删除</el-button>
         </template>
       </el-table-column>

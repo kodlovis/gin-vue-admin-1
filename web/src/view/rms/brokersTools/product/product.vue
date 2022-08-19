@@ -40,7 +40,7 @@
     
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button class="table-button" @click="updateProduct(scope.row)" size="small" type="primary" icon="el-icon-edit">变更</el-button>
+          <el-button class="table-button" @click="updateProduct(scope.row)" size="small" type="primary" icon="el-icon-edit">编辑</el-button>
           <el-popover placement="top" width="160" v-model="scope.row.visible">
             <p>确定要删除吗？</p>
             <div style="text-align: right; margin: 0">
