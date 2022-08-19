@@ -57,9 +57,14 @@
     
     <el-table-column label="币种" prop="currencys.currencyName" width="120"></el-table-column> 
 
-    <el-table-column label="品种" prop="productCode" width="120"></el-table-column> 
+    <el-table-column label="品种" prop="productInfo.productName" width="120"></el-table-column> 
 
     <el-table-column label="创建人" prop="userInfo.nickName" width="120"></el-table-column> 
+    
+    <el-table-column label="所属部门" prop="departmentInfo.departmentName" width="120"></el-table-column> 
+    
+    <el-table-column label="创建日期" prop="CreatedAt" width="160">
+        <template slot-scope="scope">{{scope.row.CreatedAt|formatDate}}</template></el-table-column> 
     
       <el-table-column label="操作">
         <template slot-scope="scope">
@@ -119,11 +124,24 @@
             <el-option
               :key="item.productName"
               :label="`${item.productName}(${item.productCode})`"
-              :value="item.productName"
+              :value="item.productCode"
               v-for="item in productInfoOptions">
             </el-option>
           </el-select>
       </el-form-item>
+         <el-form-item label="所属部门:" prop="departmentName">
+           <el-select v-model="formData.departmentCode" placeholder="请选择" clearable filterable >
+            <el-option
+              :key="item.departmentName"
+              :label="`${item.departmentName}(${item.departmentCode})`"
+              :value="item.departmentCode"
+              v-for="item in departmentInfoOptions">
+            </el-option>
+          </el-select>
+      </el-form-item>
+         <el-form-item label="日期:">
+              <el-date-picker type="datetime" placeholder="选择日期" v-model="formData.CreatedAt" clearable default-time="12:00:00"></el-date-picker>
+       </el-form-item>
        </el-form>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
@@ -145,6 +163,9 @@ import {
 import { formatTimeToStr } from "@/utils/date";
 import {getUs100CurrencyList} from "@/api/internalSystem/public/us100Currency"; 
 import {getExchangeProductInfoList} from "@/api/internalSystem/exchangeProductInfo"; 
+import {
+    getUserDepartmentListByID,
+} from "@/api/internalSystem/public/userDepartment";  //  此处请自行替换地址
 import infoList from "@/mixins/infoList";
 import { mapGetters } from "vuex";
 export default {
@@ -159,6 +180,7 @@ export default {
       deleteVisible: false,
       currencyInfoOptions:[],
       multipleSelection: [],formData: {
+            CreatedAt:"",
             createdUser:"",
             creditId:"",
             initialRate:"",
@@ -368,6 +390,26 @@ export default {
               ids.push(idOption)
           });
       },
+    //部门list
+    setDepartmentInfoOptions(departmentInfoData) {
+        this.departmentInfoOptions = [];
+        this.ids = [];
+        this.setDepartmentInfoOptionsData(departmentInfoData, this.departmentInfoOptions ,this.ids);
+      },
+      setDepartmentInfoOptionsData(DepartmentInfoData, optionsData ,ids) {
+        DepartmentInfoData &&
+          DepartmentInfoData.map(item => {
+              const option = {
+                departmentCode: item.departmentCode,
+                departmentName: item.departmentInfo.departmentName
+              };
+              optionsData.push(option);
+              const idOption = {
+                departmentId: item.departmentId,
+              };
+              ids.push(idOption)
+          });
+      },
   },
   async created() {
     await this.getTableData();
@@ -377,6 +419,11 @@ export default {
     //加载品种信息
     const productInfo = await getExchangeProductInfoList({ page: 1, pageSize: 999 });
     this.setProductInfoOptions(productInfo.data.list);
+
+    //根据用户获取部门信息
+    const departmentInfo = await getUserDepartmentListByID({ page: 1, pageSize: 999,userId:this.userInfo.ID });
+    this.setDepartmentInfoOptions(departmentInfo.data.list);
+    
   
 }
 };

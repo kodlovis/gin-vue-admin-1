@@ -2,6 +2,7 @@ package future_data
 
 import (
 	"gin-vue-admin/global"
+	"time"
 
 	uuid "github.com/satori/go.uuid"
 )
@@ -23,8 +24,10 @@ func (SysUser) TableName() string {
 
 type UserDepartment struct {
 	global.GVA_MODEL
-	Userid         string `json:"userid" form:"userid" gorm:"column:user_id;comment:;type:character varying;"`
-	DepartmentCode string `json:"departmentCode" form:"departmentCode" gorm:"column:department_code;comment:;type:character varying;"`
+	Userid         string    `json:"userid" form:"userid" gorm:"column:user_id;comment:;type:character varying;"`
+	DepartmentCode string    `json:"departmentCode" form:"departmentCode" gorm:"column:department_code;comment:;type:character varying;"`
+	EffectiveDate  time.Time `json:"effectiveDate" form:"effectiveDate" gorm:"column:effective_date;comment:;type:date;size:0;"`
+	ExpirationDate time.Time `json:"expirationDate" form:"expirationDate" gorm:"column:expiration_date;comment:;type:date;size:0;"`
 }
 
 func (UserDepartment) TableName() string {

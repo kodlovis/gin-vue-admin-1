@@ -71,7 +71,7 @@ func GetLetterOfCreditDetailInfoList(info request.LetterOfCreditDetailSearch) (e
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.GVA_DB.Model(&model.LetterOfCreditDetail{}).Preload("UserInfo").Preload("Currencys").Order("created_at")
+	db := global.GVA_DB.Model(&model.LetterOfCreditDetail{}).Preload("UserInfo").Preload("Currencys").Preload("DepartmentInfo").Preload("ProductInfo").Order("created_at desc")
 	var letterOfCreditDetails []model.LetterOfCreditDetail
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.CreatedUser != 0 {
