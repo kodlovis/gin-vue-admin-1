@@ -98,3 +98,18 @@ export const createLetterOfCreditDetail = (data) => {
          params
      })
  }
+//获取未填写购置汇率的信用证
+ export const getLetterOfCreditDetailListWithNoPurchaseRate = (params) => {
+    return service({
+        url: "/letterOfCreditDetail/getLetterOfCreditDetailListWithNoPurchaseRate",
+        method: 'get',
+        params
+    })
+}
+export const updateLetterOfCreditPurchaseRate = (data) => {
+    return service({
+        url: "/letterOfCreditDetail/updateLetterOfCreditPurchaseRate",
+        method: 'put',
+        data
+    })
+}

@@ -84,3 +84,25 @@ func GetLetterOfCreditDetailInfoList(info request.LetterOfCreditDetailSearch) (e
 	err = db.Limit(limit).Offset(offset).Find(&letterOfCreditDetails).Error
 	return err, letterOfCreditDetails, total
 }
+func GetLetterOfCreditDetailListWithNoPurchaseRate(info request.LetterOfCreditDetailSearch) (err error, list interface{}, total int64) {
+	limit := info.PageSize
+	offset := info.PageSize * (info.Page - 1)
+	// 创建db
+	db := global.GVA_DB.Model(&model.LetterOfCreditDetail{}).Preload("UserInfo").Preload("Currencys").Preload("DepartmentInfo").Preload("ProductInfo").Where("purchase_rate = 0").Order("created_at desc")
+	var letterOfCreditDetails []model.LetterOfCreditDetail
+	// 如果有条件搜索 下方会自动创建搜索语句
+	if info.CreatedUser != 0 {
+		db = db.Where("created_user = ?", info.CreatedUser)
+	}
+	if info.Currency != "" {
+		db = db.Where("currency = ?", info.Currency)
+	}
+	err = db.Count(&total).Error
+	err = db.Limit(limit).Offset(offset).Find(&letterOfCreditDetails).Error
+	return err, letterOfCreditDetails, total
+}
+
+func UpdateLetterOfCreditPurchaseRate(letterOfCreditDetail model.LetterOfCreditDetail) (err error) {
+	err = global.GVA_DB.Model(&letterOfCreditDetail).Where("id = ?", letterOfCreditDetail.ID).Select("purchase_rate").Updates(map[string]interface{}{"purchase_rate": letterOfCreditDetail.PurchaseRate}).Error
+	return err
+}

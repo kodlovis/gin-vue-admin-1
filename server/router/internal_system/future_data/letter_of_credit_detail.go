@@ -16,5 +16,8 @@ func InitLetterOfCreditDetailRouter(Router *gin.RouterGroup) {
 		LetterOfCreditDetailRouter.PUT("updateLetterOfCreditDetail", v1.UpdateLetterOfCreditDetail)              // 更新LetterOfCreditDetail
 		LetterOfCreditDetailRouter.GET("findLetterOfCreditDetail", v1.FindLetterOfCreditDetail)                  // 根据ID获取LetterOfCreditDetail
 		LetterOfCreditDetailRouter.GET("getLetterOfCreditDetailList", v1.GetLetterOfCreditDetailList)            // 获取LetterOfCreditDetail列表
+		LetterOfCreditDetailRouter.GET("getLetterOfCreditDetailListWithNoPurchaseRate", v1.GetLetterOfCreditDetailListWithNoPurchaseRate)
+		LetterOfCreditDetailRouter.PUT("updateLetterOfCreditPurchaseRate", v1.UpdateLetterOfCreditPurchaseRate)
+
 	}
 }

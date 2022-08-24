@@ -129,3 +129,30 @@ func GetLetterOfCreditDetailList(c *gin.Context) {
 		}, "获取成功", c)
 	}
 }
+
+//获取未填写购置汇率的信用证
+func GetLetterOfCreditDetailListWithNoPurchaseRate(c *gin.Context) {
+	var pageInfo request.LetterOfCreditDetailSearch
+	_ = c.ShouldBindQuery(&pageInfo)
+	if err, list, total := service.GetLetterOfCreditDetailListWithNoPurchaseRate(pageInfo); err != nil {
+		global.GVA_LOG.Error("获取失败", zap.Any("err", err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
+}
+func UpdateLetterOfCreditPurchaseRate(c *gin.Context) {
+	var letterOfCreditDetail model.LetterOfCreditDetail
+	_ = c.ShouldBindJSON(&letterOfCreditDetail)
+	if err := service.UpdateLetterOfCreditPurchaseRate(letterOfCreditDetail); err != nil {
+		global.GVA_LOG.Error("更新失败!", zap.Any("err", err))
+		response.FailWithMessage("更新失败", c)
+	} else {
+		response.OkWithMessage("更新成功", c)
+	}
+}

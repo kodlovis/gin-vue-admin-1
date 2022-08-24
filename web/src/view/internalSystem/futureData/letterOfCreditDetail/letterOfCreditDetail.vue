@@ -22,6 +22,9 @@
           <el-button @click="openDialog('create')" type="primary">新增信用证</el-button>
         </el-form-item>
         <el-form-item>
+          <el-button @click="inputPurchaseRate" type="primary">录入购置汇率</el-button>
+        </el-form-item>
+        <el-form-item>
           <el-popover placement="top" v-model="deleteVisible" width="160">
             <p>确定要删除吗？</p>
               <div style="text-align: right; margin: 0">
@@ -148,6 +151,48 @@
         <el-button @click="enterDialog" type="primary" :disabled="isDisable">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 展示未填写购置汇率的信用证号 -->
+    <el-dialog :before-close="closeCpDialog" :visible.sync="cpDialogFormVisible" title="录入购置汇率" width="80%" :lock-scroll="true"  :append-to-body="true">
+      <div>
+        <el-table
+          :data="creditWithNoPurchaseRateData"
+          @selection-change="handleSelectionChange"
+          border
+          ref="multipleTable"
+          stripe
+          style="width: 100%"
+          tooltip-effect="dark">
+
+          <el-table-column label="信用证号" prop="creditId" width="220"></el-table-column> 
+
+          <el-table-column label="购置汇率" width="220">
+            <template slot-scope="scope">
+                <el-input v-model="scope.row.purchaseRate" clearable placeholder="请输入" ></el-input>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button class="table-button" @click="updateLetterOfCreditPurchaseRate(scope.row)" size="small" type="primary" icon="el-icon-edit">录入</el-button>
+          </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+        background
+          :current-page="cpPage"
+          :page-size="cpPageSize"
+          :page-sizes="[3,5,10,15]"
+          :style="{float:'right',padding:'20px'}"
+          :total="cpTotal"
+          @current-change="cpCurrentChange"
+          @size-change="cpSizeChange"
+          layout="total, sizes, prev, pager, next, jumper"
+        ></el-pagination>
+      </div>
+      <div>
+        <br /><br />
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -158,7 +203,9 @@ import {
     deleteLetterOfCreditDetailByIds,
     updateLetterOfCreditDetail,
     findLetterOfCreditDetail,
-    getLetterOfCreditDetailList
+    getLetterOfCreditDetailList,
+    getLetterOfCreditDetailListWithNoPurchaseRate,
+    updateLetterOfCreditPurchaseRate
 } from "@/api/internalSystem/futureData/letterOfCreditDetail";  //  此处请自行替换地址
 import { formatTimeToStr } from "@/utils/date";
 import {getUs100CurrencyList} from "@/api/internalSystem/public/us100Currency"; 
@@ -175,10 +222,15 @@ export default {
     return {
       listApi: getLetterOfCreditDetailList,
       dialogFormVisible: false,
+      cpDialogFormVisible: false,
       isDisable:false,
       type: "",
       deleteVisible: false,
       currencyInfoOptions:[],
+      cpTotal:5,
+      cpPage:1,
+      cpPageSize:5,
+      creditWithNoPurchaseRateData:[],
       multipleSelection: [],formData: {
             CreatedAt:new Date(),
             createdUser:"",
@@ -264,6 +316,37 @@ export default {
         this.formData = res.data.reletterOfCreditDetail;
         this.openDialog("update");
       }
+    },
+    //打开录入购置汇率的弹窗
+    async inputPurchaseRate(val){
+      this.cpPage = val
+      const res = await getLetterOfCreditDetailListWithNoPurchaseRate({ page: this.cpPage, pageSize: this.cpPageSize });
+      this.creditWithNoPurchaseRateData = res.data.list
+      this.crTotal = res.data.total
+      this.crPage = res.data.page
+      this.crPageSize = res.data.pageSize
+      this.cpDialogFormVisible = true;
+    },
+    async cpSizeChange(val) {
+        this.cpPageSize = val
+        const res = await getLetterOfCreditDetailListWithNoPurchaseRate({ page: this.cpPage, pageSize: this.cpPageSize });
+        this.creditWithNoPurchaseRateData = res.data.list
+    },
+    async cpCurrentChange(val) {
+        this.cpPage = val
+        const res = await getLetterOfCreditDetailListWithNoPurchaseRate({ page: this.cpPage, pageSize: this.cpPageSize });
+        this.creditWithNoPurchaseRateData = res.data.list
+    },
+    async updateLetterOfCreditPurchaseRate(row){
+      const res = await updateLetterOfCreditPurchaseRate({ ID: row.ID,purchaseRate:Number(row.purchaseRate) });
+      if (res.code == 0) {
+        this.$message({
+          type: "success",
+          message: "录入成功"
+        });
+        this.cpDialogFormVisible = false;
+        this.getTableData()
+        }
     },
     closeDialog() {
       this.dialogFormVisible = false;
